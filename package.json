@@ -1,0 +1,11 @@
+{
+  "name": "PrimeImage",
+  "version": "0.0.1",
+  "description": "Turn any image into an prime number.",
+  "main": "main.js",
+  "private": true,
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "~1.2.1"
+  }
+}
