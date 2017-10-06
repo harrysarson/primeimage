@@ -3,9 +3,21 @@
   "version": "0.0.1",
   "description": "Turn any image into an prime number.",
   "main": "main.js",
+  "scripts": {
+    "start": "node ./server"
+  },
   "private": true,
   "gypfile": true,
   "dependencies": {
-    "bindings": "~1.2.1"
+    "bindings": "~1.2.1",
+    "debug": "^3.1.0",
+    "koa": "^2.3.0",
+    "koa-body": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-route": "^3.2.0",
+    "koa-router": "^7.2.1",
+    "koa-static": "^4.0.1",
+    "pkg-dir": "^2.0.0",
+    "raw-body": "^2.3.2"
   }
 }

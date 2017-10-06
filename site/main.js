@@ -6,29 +6,15 @@ function main() {
   const reader = new FileReader();
   const img = document.createElement('img');
   
-  img.onload = function () {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img,0,0);
-    
-    fetch("upload", {
-      method: "POST",
-      body: canvas.toDataURL(),
+  
+  
+  fileInput.onchange = async function(event) {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: event.currentTarget.result // This is the content of your file
     });
-  };
-  
-  reader.onloadend = function () {
     
-    img.src = reader.result;
-       
-  }
-  
-  fileInput.onchange = function() {
-    const file = fileInput.files[0];
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    console.log(response);
   }
 }
 
