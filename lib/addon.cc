@@ -1,6 +1,10 @@
 #include <node_api.h>
 #include <assert.h>
 #include <stdio.h>
+#include <time.h>
+#include <string>
+
+
 
 napi_value convertImage(napi_env env, napi_callback_info info) {
   napi_status status;
@@ -29,28 +33,37 @@ napi_value convertImage(napi_env env, napi_callback_info info) {
   status = napi_get_buffer_info(env, args[0], &buffer, &bufferlength);
   assert(status == napi_ok);
 
-  double value1;
-  status = napi_get_value_double(env, args[1], &value1);
-  assert(status == napi_ok);
-
   napi_value sum;
   status = napi_create_double(env, 8, &sum);
   assert(status == napi_ok);
 
-  
-  FILE *ptr_myfile;
+  time_t rawtime;
+  time (&rawtime);
 
-  ptr_myfile=fopen("output","wb");
+  std::string name = "output/image";
+
+  name += ctime(&rawtime);
+  name += ".bmp";
+
+  for (auto& c : name) {
+    if (c == ' ' || c == '\n' || c == ':') {
+      c = '-';
+    }
+  }
+
+
+  FILE * ptr_myfile = fopen(name.c_str(), "wb");
   if (!ptr_myfile)
   {
-      napi_throw_type_error(env, nullptr, "Could not open file");
-      return nullptr;
+    perror(name.c_str());
+    napi_throw_type_error(env, nullptr, "Could not open file");
+    return nullptr;
   }
-  
+
   fwrite(buffer, 1, bufferlength, ptr_myfile);
-  
+
   fclose(ptr_myfile);
-  
+
   return sum;
 }
 
