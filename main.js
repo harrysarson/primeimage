@@ -5,6 +5,4 @@ var image = "Qk22JgMAAAAAADYEAAAoAAAAVQMAAPAAAAABAAgAAAAAAIAiAwAAAAAAAAAAAAAAAAA
 
 var buffer = new Buffer(image, 'base64');
 
-require('fs').writeFileSync('js.output.bmp', buffer);
-
 console.log('This should be eight:', addon.convertImage(buffer))
