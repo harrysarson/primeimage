@@ -7,8 +7,8 @@ const pages = [
 
 
 
-const displays = document.querySelectorAll('.display-panel');
-const changeStageButtons = document.getElementsByClassName('change-stage');
+const displays = [...document.querySelectorAll('.display-panel')];
+const changeStageButtons = [...document.getElementsByClassName('change-stage')];
 
 const interaction = document.getElementById('interaction');
 
