@@ -10,9 +10,9 @@ stages:
 }
 
 @mixin nice-button($psuedo: '') {
-  
+
   pointer-events: none;
-  
+
   &#{$psuedo} {
     pointer-events: auto;
     border: 3px solid grey;
@@ -20,7 +20,7 @@ stages:
     color: grey;
     font: inherit;
   }
-  
+
   &:not([disabled]) {
     &#{$psuedo} {
       color: black;
@@ -131,8 +131,8 @@ button {
         100% / var(--stages-to-show-at-a-time) - var(--spacing-between-stages) * (1 -
               1 / var(--stages-to-show-at-a-time))
       );
-    
-    flex: 0 0 var(--height);      
+
+    flex: 0 0 var(--height);
     transition-property: flex-basis;
     transition-duration: inherit;
     transition-timing-function: inherit;
@@ -144,7 +144,7 @@ button {
 
     background: grey;
     overflow: visible;
-    
+
     > * {
       margin: 1em auto;
       display: block;
