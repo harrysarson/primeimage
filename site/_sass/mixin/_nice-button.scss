@@ -1,0 +1,23 @@
+@mixin nice-button($psuedo: '') {
+
+  pointer-events: none;
+
+  &#{$psuedo} {
+    pointer-events: auto;
+    border: 3px solid grey;
+    background: white;
+    color: grey;
+    font: inherit;
+  }
+
+  &:not([disabled]) {
+    &#{$psuedo} {
+      color: black;
+    }
+    &:hover#{$psuedo} {
+      background-color: black;
+      color: grey;
+      cursor: pointer;
+    }
+  }
+}

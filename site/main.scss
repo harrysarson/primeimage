@@ -1,36 +1,8 @@
 ---
-
-stages:
-  - intro
-  - image-load
 ---
 
 * {
   box-sizing: border-box;
-}
-
-@mixin nice-button($psuedo: '') {
-
-  pointer-events: none;
-
-  &#{$psuedo} {
-    pointer-events: auto;
-    border: 3px solid grey;
-    background: white;
-    color: grey;
-    font: inherit;
-  }
-
-  &:not([disabled]) {
-    &#{$psuedo} {
-      color: black;
-    }
-    &:hover#{$psuedo} {
-      background-color: black;
-      color: grey;
-      cursor: pointer;
-    }
-  }
 }
 
 html,
@@ -65,21 +37,27 @@ main {
   display: flex;
   padding: calc(var(--horizontal-spacing) / 2);
   overflow: hidden;
-}
+  > * {
+    background: black;
 
-main > * {
-  background: black;
-
-  flex: 3 0 auto;
-  margin: calc(var(--horizontal-spacing) / 2);
-  overflow: hidden;
+    flex: 3 0 auto;
+    margin: calc(var(--horizontal-spacing) / 2);
+    overflow: hidden;
+  }
 }
 
 button {
+  @import 'mixin/nice-button';
   @include nice-button;
 }
 
 .interaction-panel {
+  --panel-width: 20em;
+
+  flex: 0 0 var(--panel-width);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: calc(var(--padding)/2);
 
   & > * {
@@ -87,108 +65,6 @@ button {
     overflow: hidden;
   }
 }
-
-.interaction-panel {
-  --panel-width: 20em;
-  flex: 0 0 var(--panel-width);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.display-panel {
-  --show-stage: 0;
-  --stages-to-show-at-a-time: 2;
-  --position-of-selected-stage: 0.5;
-
-  --arrow-size: 20px;
-  --padding-between-stages: calc(var(--padding) * 1.1);
-  --spacing-between-stages: calc(
-    var(--arrow-size) + 2 * var(--padding-between-stages)
-  );
-
-  transform: translateY(
-    calc(
-      -1 / var(--stages-to-show-at-a-time) *
-        (
-          100% - 2 * var(--padding) + var(--spacing-between-stages)
-        ) * (var(--show-stage) - var(--position-of-selected-stage))
-    )
-  );
-  transition: transform 0.5s linear;
-  display: flex;
-  flex-direction: column;
-  padding: var(--padding);
-  height: 100%;
-  overflow: visible;
-
-  > .current-stage {
-    background: #ddd;
-  }
-
-  > * {
-    --height: calc(
-        100% / var(--stages-to-show-at-a-time) - var(--spacing-between-stages) * (1 -
-              1 / var(--stages-to-show-at-a-time))
-      );
-
-    flex: 0 0 var(--height);
-    transition-property: flex-basis;
-    transition-duration: inherit;
-    transition-timing-function: inherit;
-
-    font-size: 2em;
-    max-height: var(--height);
-    position: relative;
-    width: 100%;
-
-    background: grey;
-    overflow: visible;
-
-    > * {
-      margin: 1em auto;
-      display: block;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: var(--spacing-between-stages);
-      @include nice-button(':after');
-      &:after {
-        position: absolute;
-        bottom: calc(
-          var(--padding-between-stages) - var(--spacing-between-stages)
-        );
-        left: calc(50% - var(--arrow-size) / 2);
-
-        display: block;
-        width: var(--arrow-size);
-        height: var(--arrow-size);
-        font-size: var(--arrow-size);
-        line-height: var(--arrow-size);
-
-        content: "⯆";
-      }
-    }
-  }
-}
-
-.interaction-instructions {
-  flex: 1 1 15em;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.interaction-interface {
-  --side-length: calc(var(--panel-width) - 2 * var(--padding));
-
-  flex: 0 0 var(--side-length);
-  width: calc(var(--panel-width) - 2 * var(--padding));
-  margin-left: auto;
-  margin-right: auto;
-
-  background: white;
-}
-
 
 .interaction-control {
   flex: 0 0 auto;
@@ -218,10 +94,3 @@ button {
 .show-only-selected > *:not(.current-stage) {
   display: none;
 }
-
-
-{% for stage in page.stages %}
-.display-panel > *:nth-child({{ forloop.index }}) {
-  {% include_relative stages/{{stage}}/style %}
-}
-{% endfor %}

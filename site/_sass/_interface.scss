@@ -1,3 +1,14 @@
+& {
+  --side-length: calc(var(--panel-width) - 2 * var(--padding));
+
+  flex: 0 0 var(--side-length);
+  width: calc(var(--panel-width) - 2 * var(--padding));
+  margin-left: auto;
+  margin-right: auto;
+
+  background: white;
+}
+
 .image-pick {
   --outline-inset: 20px;
   position: relative;
