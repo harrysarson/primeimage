@@ -61,9 +61,8 @@
       margin-bottom: var(--spacing-between-stages);
       &:after {
         position: absolute;
-        bottom: calc(
-          var(--padding-between-stages) - var(--spacing-between-stages)
-        );
+        box-sizing: content-box;
+        top: calc(100% + var(--padding-between-stages) - var(--border-width));
         left: calc(50% - var(--arrow-size) / 2);
 
         display: block;
