@@ -25,7 +25,6 @@ for(const display of displays) {
   }
 }
 
-
 let state = updateStage({
   currentStage: 0,
   selectedElements: new Set(),
@@ -97,4 +96,3 @@ for (const button of changeStageButtons) {
     moveStage(stageChange);
   });
 }
-

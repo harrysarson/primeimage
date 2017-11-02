@@ -5,7 +5,7 @@
 
     instructions: |
         <h1> Welcome to Prime Image </h1>
-        
+
         <p> Click <button class="change-stage" data-stage-change="1">Next</button> to begin. </p>
     interface: ''
     display: |
@@ -55,13 +55,13 @@
     name: image-load
     instructions: |
         <h1> Select Image </h1>
-        
+
         <p> First you must select an image to turn into a prime number. </p>
-        
+
         <p> Use the box below to open an image. </p>
     display: |
         <canvas></canvas>
-    
+
     interface: |
       <form class="image-pick">
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
@@ -72,4 +72,3 @@
         <label for="file"><strong>Choose a file</strong> or drag it here.</label>
       </form>
 ---
-    

@@ -4,22 +4,22 @@ export default function({input, output, onChange = () => {} }) {
   const canvas = output.querySelector('canvas');
   const reader = new FileReader();
   const img = document.createElement('img');
-  
+
   let imageData = null;
-  
+
   img.onload = function () {
     const aspectRatio = img.width / img.height;
 
-    canvas.style.height = '100%';  
+    canvas.style.height = '100%';
     canvas.style.width = '100%';
 
     const maxHeight = canvas.offsetHeight;
     const maxWidth = canvas.offsetWidth;
     canvas.style.height = '';
     canvas.style.width = '';
-    
+
     let height, width;
-    
+
     if (maxHeight * aspectRatio > maxWidth) {
       height = maxWidth / aspectRatio;
       width = maxWidth;
@@ -27,13 +27,13 @@ export default function({input, output, onChange = () => {} }) {
       height = maxHeight;
       width = maxHeight * aspectRatio;
     }
-    
+
     canvas.width  = width;
     canvas.height = height;
-    
+
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
-    
+
     ctx.drawImage(img, 0, 0, width, height);
   };
 
@@ -47,12 +47,12 @@ export default function({input, output, onChange = () => {} }) {
       reader.readAsDataURL(file);
     }
   });
-  
+
   return {
     get isStageComplete() {
       return imageData == null;
     },
-    
+
     process() {
       return imageData;
     },
