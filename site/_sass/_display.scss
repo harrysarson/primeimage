@@ -53,8 +53,10 @@
     }
 
     &:not(:last-child) {
+      --border-width: 2px;
       @import 'mixin/nice-button';
-      @include nice-button(':after');
+      @include nice-button(':after', var(--border-width));
+
 
       margin-bottom: var(--spacing-between-stages);
       &:after {
@@ -69,6 +71,7 @@
         height: var(--arrow-size);
         font-size: var(--arrow-size);
         line-height: var(--arrow-size);
+        text-align: center;
 
         content: "⯆";
       }
