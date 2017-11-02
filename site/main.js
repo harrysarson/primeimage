@@ -1,4 +1,4 @@
-import imageLoad from './stages/image-load/script.js';
+import imageLoad from './scripts/image-load.js';
 
 
 const pages = [
