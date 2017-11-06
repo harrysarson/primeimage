@@ -25,15 +25,11 @@
   overflow: visible;
 
   > .current-stage {
-    background: #ddd;
+    background-color: #ddd;
   }
 
   > * {
-    --height: calc(
-        100% / var(--stages-to-show-at-a-time) - var(--spacing-between-stages) * (1 -
-              1 / var(--stages-to-show-at-a-time))
-      );
-
+    --height: calc((100% + var(--spacing-between-stages))/ var(--stages-to-show-at-a-time));
     flex: 0 0 var(--height);
     transition-property: flex-basis;
     transition-duration: inherit;
@@ -44,7 +40,7 @@
     position: relative;
     width: 100%;
 
-    background: grey;
+    background: grey content-box;
     overflow: visible;
 
     > * {
@@ -57,8 +53,8 @@
       @import 'mixin/nice-button';
       @include nice-button(':after', var(--border-width));
 
-
-      margin-bottom: var(--spacing-between-stages);
+      border: 0px solid transparent;
+      border-bottom-width: var(--spacing-between-stages);
       &:after {
         position: absolute;
         box-sizing: content-box;
