@@ -8,7 +8,7 @@ const pages = [
 
 
 const displays = document.querySelectorAll('.display-panel');
-const changeStageButtons = document.querySelectorAll('.change-stage');
+const changeStageButtons = document.querySelectorAll('[data-stage-change]');
 
 const interaction = document.getElementById('interaction');
 
@@ -81,9 +81,7 @@ function moveStage(amount = 1) {
 for (const button of changeStageButtons) {
   button.addEventListener('click', (e) => {
 
-    const stageChange = {}.hasOwnProperty.call(button.dataset, 'stageChange')
-      ? +button.dataset.stageChange
-      : 1;
+    const stageChange = +button.dataset.stageChange;
 
     if (Number.isNaN(stageChange) || stageChange % 1 !== 0) {
       throw new Error(`Element ${button}'s "data-stage-change" property must be an integer`)

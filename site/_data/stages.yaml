@@ -6,7 +6,7 @@
     instructions: |
         <h1> Welcome to Prime Image </h1>
 
-        <p> Click <button class="change-stage" data-stage-change="1">Next</button> to begin. </p>
+        <p> Click <button data-stage-change="1">Next</button> to begin. </p>
     interface: ''
     display: |
         <span class="image-number">1001010777777777777770777777777777777777770777777777777777777777

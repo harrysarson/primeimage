@@ -26,12 +26,12 @@ title: Prime Image
       {% endfor %}
     </div>
     <div class="interaction-control">
-      <button disabled class="fake-button change-stage" data-stage-change="-1">Back</button>
-      <button class="change-stage" data-stage-change="1">Next</button>
+      <button disabled data-stage-change="-1">Back</button>
+      <button data-stage-change="1">Next</button>
     </div>
   </div>
   <div>
-    <div class="display-panel stage-selecting change-stage" data-stage-change="1">
+    <div class="display-panel stage-selecting" data-stage-change="1">
       {% for stage in   stages %}
       <div>
         {{ stage.display }}
