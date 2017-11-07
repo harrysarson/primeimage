@@ -17,14 +17,6 @@ imageLoad({
   output: displays[0].children[1],
 });
 
-for(const display of displays) {
-  for (let i = 0;  i < 10; ++i) {
-    const div = document.createElement('div');
-    div.textContent = i;
-    display.appendChild(div);
-  }
-}
-
 let state = updateStage({
   currentStage: 0,
   selectedElements: new Set(),
