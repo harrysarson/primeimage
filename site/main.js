@@ -7,8 +7,8 @@ const pages = [
 
 
 
-const displays = [...document.querySelectorAll('.display-panel')];
-const changeStageButtons = [...document.getElementsByClassName('change-stage')];
+const displays = document.querySelectorAll('.display-panel');
+const changeStageButtons = document.querySelectorAll('.change-stage');
 
 const interaction = document.getElementById('interaction');
 
@@ -36,6 +36,10 @@ function buttonGoesBack(button) {
 
 function updateStage(state, newStage) {
 
+  if (newStage < 0) {
+    throw new Error('Cannot set negative stage');
+  }
+
   const newState = Object.assign({}, state, { currentStage: newStage });
 
   for (const oldSelectedElement of state.selectedElements) {
@@ -44,7 +48,7 @@ function updateStage(state, newStage) {
 
   newState.selectedElements = new Set();
 
-  for (const container of [...document.getElementsByClassName('stage-selecting')]) {
+  for (const container of document.getElementsByClassName('stage-selecting')) {
       container
         .style
         .setProperty('--show-stage', newStage);
@@ -74,9 +78,9 @@ function updateStage(state, newStage) {
 
 function moveStage(amount = 1) {
   const oldStage = state.currentStage;
-  const newStage = oldStage + amount;
+  const newStage = Math.max(0, oldStage + amount);
 
-  if (oldStage === newStage || newStage < 0) return;
+  if (oldStage === newStage) return;
 
   state = updateStage(state, newStage);
 }
