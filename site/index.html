@@ -12,12 +12,18 @@ title: Prime Image
 <main>
   <div class="interaction-panel" id="interaction">
     <section class="interaction-instructions stage-selecting show-only-selected">
-      {% assign instructions = stages | map: "instructions" %}
-      {% include stage-content.html stages=instructions element="span" %}
+      {% for stage in stages %}
+      <span>
+        {{ stage.instructions }}
+      </span>
+      {% endfor %}
     </section>
     <div class="interaction-interface stage-selecting show-only-selected">
-      {% assign interface = stages | map: "interface" %}
-      {% include stage-content.html stages=interface element="span" %}
+      {% for stage in stages %}
+      <span>
+        {{ stage.interface }}
+      </span>
+      {% endfor %}
     </div>
     <div class="interaction-control">
       <button disabled class="fake-button change-stage" data-stage-change="-1">Back</button>
@@ -26,8 +32,11 @@ title: Prime Image
   </div>
   <div>
     <div class="display-panel stage-selecting change-stage" data-stage-change="1">
-      {% assign display = stages | map: "display" %}
-      {% include stage-content.html stages=display element="div" %}
+      {% for stage in   stages %}
+      <div>
+        {{ stage.display }}
+      </div>
+      {% endfor %}
     </div>
   </div>
 </main>
