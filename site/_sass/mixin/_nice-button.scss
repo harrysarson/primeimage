@@ -10,6 +10,10 @@
     font: inherit;
   }
 
+  &[disabled]#{$psuedo} {
+    pointer-events: none;
+  }
+
   &:not([disabled]) {
     &#{$psuedo} {
       color: black;

@@ -14,6 +14,10 @@ const changeStageButtons = document.querySelectorAll('[data-stage-change]');
 
 const interaction = document.getElementById('interaction');
 
+const configuration = {
+  stage_count: 2,
+};
+
 imageLoad({
   input: interaction.querySelector('.interaction-interface').children[1],
   output: displays[0].children[1],
@@ -24,6 +28,8 @@ function buttonGoesBack(button) {
   return {}.hasOwnProperty.call(button.dataset, 'stageChange') && button.dataset.stageChange < 0;
 }
 
+// todo replace with rx
+let oldStage = 0;
 
 store.subscribe(function() {
 
@@ -43,19 +49,37 @@ store.subscribe(function() {
         newSelectedElement.classList.add('current-stage');
       }
   }
-  if (newStage === 0) {
+
+  if (newStage === 0 && oldStage !== 0) {
     for (const button of changeStageButtons) {
-      if (buttonGoesBack(button)) {
+      if (button.dataset.stageChange < 0) {
         button.setAttribute('disabled', '');
       }
     }
-  } else {
+  } else if (newStage !== 0 && oldStage === 0) {
     for (const button of changeStageButtons) {
-      if (buttonGoesBack(button)) {
+      if (button.dataset.stageChange < 0) {
         button.removeAttribute('disabled', '');
       }
     }
   }
+
+  if (newStage === configuration.stage_count-1 && oldStage !== configuration.stage_count-1) {
+    for (const button of changeStageButtons) {
+      if (button.dataset.stageChange > 0) {
+        button.setAttribute('disabled', '');
+      }
+    }
+  } else if (newStage !== configuration.stage_count-1 && oldStage === configuration.stage_count-1) {
+    for (const button of changeStageButtons) {
+      if (button.dataset.stageChange > 0) {
+        button.removeAttribute('disabled', '');
+      }
+    }
+  }
+
+
+  oldStage = newStage;
 
 });
 
