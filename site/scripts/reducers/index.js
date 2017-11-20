@@ -8,7 +8,6 @@ const initialState = IMap({
 });
 
 const app = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case action_type.move_stage:
       return state.update('current_stage', stage => Math.max(0, stage + action.change));
