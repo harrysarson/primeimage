@@ -1,11 +1,13 @@
 import imageLoad from './scripts/image-load.js';
+import createStore from './scripts/store/create.js';
 
+import { creators as action_creators } from './scripts/actions/index.js';
 
 const pages = [
   imageLoad
 ];
 
-
+const store = createStore();
 
 const displays = document.querySelectorAll('.display-panel');
 const changeStageButtons = document.querySelectorAll('[data-stage-change]');
@@ -17,28 +19,19 @@ imageLoad({
   output: displays[0].children[1],
 });
 
-let state = updateStage({
-  currentStage: 0,
-  selectedElements: new Set(),
-}, 0);
 
 function buttonGoesBack(button) {
   return {}.hasOwnProperty.call(button.dataset, 'stageChange') && button.dataset.stageChange < 0;
 }
 
-function updateStage(state, newStage) {
 
-  if (newStage < 0) {
-    throw new Error('Cannot set negative stage');
-  }
+store.subscribe(function() {
 
-  const newState = Object.assign({}, state, { currentStage: newStage });
-
-  for (const oldSelectedElement of state.selectedElements) {
+  for (const oldSelectedElement of document.getElementsByClassName('current-stage')) {
     oldSelectedElement.classList.remove('current-stage');
   }
 
-  newState.selectedElements = new Set();
+  const newStage = store.getState().get('current_stage');
 
   for (const container of document.getElementsByClassName('stage-selecting')) {
       container
@@ -48,7 +41,6 @@ function updateStage(state, newStage) {
       const newSelectedElement = container.children[newStage];
       if (newSelectedElement != null) {
         newSelectedElement.classList.add('current-stage');
-        newState.selectedElements.add(newSelectedElement);
       }
   }
   if (newStage === 0) {
@@ -65,17 +57,7 @@ function updateStage(state, newStage) {
     }
   }
 
-  return newState;
-}
-
-function moveStage(amount = 1) {
-  const oldStage = state.currentStage;
-  const newStage = Math.max(0, oldStage + amount);
-
-  if (oldStage === newStage) return;
-
-  state = updateStage(state, newStage);
-}
+});
 
 
 for (const button of changeStageButtons) {
@@ -87,6 +69,6 @@ for (const button of changeStageButtons) {
       throw new Error(`Element ${button}'s "data-stage-change" property must be an integer`)
     }
 
-    moveStage(stageChange);
+    store.dispatch(action_creators.move_stage(stageChange));
   });
 }
