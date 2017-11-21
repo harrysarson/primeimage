@@ -46,8 +46,6 @@ export default function({
 
       const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
 
-      // todo newStage > stageChange-1
-
       if (newStage <= 0 && oldStage > 0) {
         for (const button of changeStageButtons) {
           if (button.dataset.stageChange < 0) {
