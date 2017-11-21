@@ -1,6 +1,6 @@
-@mixin nice-button($psuedo: '', $border-width: 3px) {
+@mixin nice-button($selector: '', $border-width: 3px) {
 
-  &#{$psuedo} {
+  &#{$selector} {
     border: $border-width solid grey;
     background: white;
     color: grey;
@@ -8,10 +8,10 @@
   }
 
   &:not([disabled]) {
-    &#{$psuedo} {
+    &#{$selector} {
       color: black;
     }
-    &:hover#{$psuedo} {
+    &:hover#{$selector} {
       background-color: black;
       color: grey;
       cursor: pointer;
