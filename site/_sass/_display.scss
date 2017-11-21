@@ -35,6 +35,8 @@
     transition-duration: inherit;
     transition-timing-function: inherit;
 
+    pointer-events: none;
+
     font-size: 2em;
     max-height: var(--height);
     position: relative;
@@ -66,8 +68,10 @@
         height: var(--arrow-size);
         font-size: var(--arrow-size);
         line-height: var(--arrow-size);
-        text-align: center;
 
+        pointer-events: auto;
+
+        text-align: center;
         content: "⯆";
       }
     }
