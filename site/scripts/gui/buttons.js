@@ -36,9 +36,6 @@ export default function({
     }
   });
 
-  // todo replace with rx
-  let oldStage = 0;
-
   store
     .map(state => state.get('current_stage'))
     .pairwise()
