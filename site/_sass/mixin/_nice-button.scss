@@ -1,17 +1,10 @@
 @mixin nice-button($psuedo: '', $border-width: 3px) {
 
-  pointer-events: none;
-
   &#{$psuedo} {
-    pointer-events: auto;
     border: $border-width solid grey;
     background: white;
     color: grey;
     font: inherit;
-  }
-
-  &[disabled]#{$psuedo} {
-    pointer-events: none;
   }
 
   &:not([disabled]) {
