@@ -36,13 +36,13 @@ function buttonGoesBack(button) {
 }
 
 
-store.subscribe(function() {
+store.subscribe(function(state) {
 
   for (const oldSelectedElement of document.getElementsByClassName('current-stage')) {
     oldSelectedElement.classList.remove('current-stage');
   }
 
-  const newStage = store.getState().get('current_stage');
+  const newStage = state.get('current_stage');
 
   for (const container of document.getElementsByClassName('stage-selecting')) {
       container

@@ -1,3 +1,8 @@
+
+
+const Rx = window.Rx;
+
+
 import { creators as action_creators } from '../actions/index.js';
 
 function dashed2camel(dashed_attribute_name) {
@@ -34,43 +39,42 @@ export default function({
   // todo replace with rx
   let oldStage = 0;
 
-  store.subscribe(function () {
+  store
+    .map(state => state.get('current_stage'))
+    .pairwise()
+    .subscribe(function ([oldStage, newStage]) {
 
-    const newStage = store.getState().get('current_stage');
+      const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
 
-    const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
+      // todo newStage > stageChange-1
 
-    // todo newStage > stageChange-1
-
-    if (newStage === 0 && oldStage !== 0) {
-      for (const button of changeStageButtons) {
-        if (button.dataset.stageChange < 0) {
-          button.setAttribute('disabled', '');
+      if (newStage === 0 && oldStage !== 0) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange < 0) {
+            button.setAttribute('disabled', '');
+          }
+        }
+      } else if (newStage !== 0 && oldStage === 0) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange < 0) {
+            button.removeAttribute('disabled', '');
+          }
         }
       }
-    } else if (newStage !== 0 && oldStage === 0) {
-      for (const button of changeStageButtons) {
-        if (button.dataset.stageChange < 0) {
-          button.removeAttribute('disabled', '');
-        }
-      }
-    }
 
-    if (newStage === stage_count-1 && oldStage !== stage_count-1) {
-      for (const button of changeStageButtons) {
-        if (button.dataset.stageChange > 0) {
-          button.setAttribute('disabled', '');
+      if (newStage === stage_count-1 && oldStage !== stage_count-1) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange > 0) {
+            button.setAttribute('disabled', '');
+          }
+        }
+      } else if (newStage !== stage_count-1 && oldStage === stage_count-1) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange > 0) {
+            button.removeAttribute('disabled', '');
+          }
         }
       }
-    } else if (newStage !== stage_count-1 && oldStage === stage_count-1) {
-      for (const button of changeStageButtons) {
-        if (button.dataset.stageChange > 0) {
-          button.removeAttribute('disabled', '');
-        }
-      }
-    }
-
-    oldStage = newStage;
-  });
+    });
 
 }
