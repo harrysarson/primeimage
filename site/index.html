@@ -31,9 +31,9 @@ title: Prime Image
     </div>
   </div>
   <div>
-    <div class="display-panel stage-selecting" data-stage-change="1">
+    <div class="display-panel stage-selecting">
       {% for stage in   stages %}
-      <div>
+      <div data-stage-change="1">
         {{ stage.display }}
       </div>
       {% endfor %}
