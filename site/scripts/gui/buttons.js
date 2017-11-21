@@ -48,13 +48,13 @@ export default function({
 
       // todo newStage > stageChange-1
 
-      if (newStage === 0 && oldStage !== 0) {
+      if (newStage <= 0 && oldStage > 0) {
         for (const button of changeStageButtons) {
           if (button.dataset.stageChange < 0) {
             button.setAttribute('disabled', '');
           }
         }
-      } else if (newStage !== 0 && oldStage === 0) {
+      } else if (newStage > 0 && oldStage <= 0) {
         for (const button of changeStageButtons) {
           if (button.dataset.stageChange < 0) {
             button.removeAttribute('disabled', '');
@@ -62,13 +62,13 @@ export default function({
         }
       }
 
-      if (newStage === stage_count-1 && oldStage !== stage_count-1) {
+      if (newStage >= stage_count-1 && oldStage < stage_count-1) {
         for (const button of changeStageButtons) {
           if (button.dataset.stageChange > 0) {
             button.setAttribute('disabled', '');
           }
         }
-      } else if (newStage !== stage_count-1 && oldStage === stage_count-1) {
+      } else if (newStage < stage_count-1 && oldStage >= stage_count-1) {
         for (const button of changeStageButtons) {
           if (button.dataset.stageChange > 0) {
             button.removeAttribute('disabled', '');
