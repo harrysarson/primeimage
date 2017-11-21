@@ -1,6 +1,4 @@
 & {
-  @import 'mixin/nice-button';
-
   --show-stage: 0;
   --stages-to-show-at-a-time: 2;
   --position-of-selected-stage: 0.5;
@@ -25,9 +23,6 @@
   padding: var(--padding);
   height: 100%;
   overflow: visible;
-
-
-  @include nice-button('> *:not(:last-child):after', var(--border-width));
 
   > .current-stage {
     background-color: #ddd;
@@ -55,6 +50,8 @@
 
     &:not(:last-child) {
       --border-width: 2px;
+      @import 'mixin/nice-button';
+      @include nice-button(':after', var(--border-width));
 
       border: 0px solid transparent;
       border-bottom-width: var(--spacing-between-stages);
