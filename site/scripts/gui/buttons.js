@@ -35,6 +35,27 @@ export default function({
   });
 
   stage_observer
+    .first()
+    .subscribe(function(initialStage) {
+      const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
+
+      if (initialStage <= 0) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange < 0) {
+            button.setAttribute('disabled', '');
+          }
+        }
+      } else if (initialStage >= stage_count-1) {
+        for (const button of changeStageButtons) {
+          if (button.dataset.stageChange > 0) {
+            button.setAttribute('disabled', '');
+          }
+        }
+      }
+    })
+  ;
+
+  stage_observer
     .pairwise()
     .subscribe(function ([oldStage, newStage]) {
 
