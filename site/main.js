@@ -23,7 +23,7 @@ createButtons({
   attributename: 'stage-change',
   stage_count: configuration.stage_count,
   stage_observer: store
-    .map(state => state.get('current_stage')))
+    .map(state => state.get('current_stage'))
     .distinctUntilChanged(),
   move_stage(change) { store.dispatch(action_creators.move_stage(change)); }
 });
