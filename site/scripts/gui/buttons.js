@@ -2,9 +2,6 @@
 
 const Rx = window.Rx;
 
-
-import { creators as action_creators } from '../actions/index.js';
-
 function dashed2camel(dashed_attribute_name) {
 
   // check that dashed_attribute_name is valid
@@ -19,7 +16,8 @@ function dashed2camel(dashed_attribute_name) {
 export default function({
   $root,
   attributename,
-  store,
+  stage_observer,
+  move_stage,
   stage_count = Infinity,
 }) {
   const camelCasedAttributeName = dashed2camel(attributename);
@@ -32,12 +30,11 @@ export default function({
         throw new Error(`Element ${button}'s "data-${attributename}" property must be an integer`)
       }
 
-      store.dispatch(action_creators.move_stage(stageChange));
+      move_stage(stageChange);
     }
   });
 
-  store
-    .map(state => state.get('current_stage'))
+  stage_observer
     .pairwise()
     .subscribe(function ([oldStage, newStage]) {
 

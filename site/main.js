@@ -22,7 +22,10 @@ createButtons({
   $root: document,
   attributename: 'stage-change',
   stage_count: configuration.stage_count,
-  store,
+  stage_observer: store
+    .map(state => state.get('current_stage')))
+    .distinctUntilChanged(),
+  move_stage(change) { store.dispatch(action_creators.move_stage(change)); }
 });
 
 imageLoad({
