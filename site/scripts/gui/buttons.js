@@ -18,7 +18,7 @@ export default function({
   attributename,
   stage_observer,
   move_stage,
-  stage_count = Infinity,
+  max_stage = Infinity,
 }) {
   const camelCasedAttributeName = dashed2camel(attributename);
 
