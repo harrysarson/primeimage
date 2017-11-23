@@ -17,9 +17,9 @@ function disableButtonsMatchingWhenTrue(Ocan_move, predicate) {
     .startWith(false)
     .distinctUntilChanged()
     .pairwise()
-    .subscribe(function([last_value, cannot_go_back]) {
-      if (cannot_go_back || last_value) {
-        const toggleDisabledAttribute = cannot_go_back
+    .subscribe(function([was_previously_disabled, is_button_disabled]) {
+      if (is_button_disabled || was_previously_disabled) {
+        const toggleDisabledAttribute = is_button_disabled
           ? function(button) { button.setAttribute('disabled', ''); }
           : function(button) { button.removeAttribute('disabled', ''); };
 
