@@ -32,7 +32,7 @@ createButtons({
   $root: document,
   attributename: 'stage-change',
   max_stage: configuration.stage_count - 1,
-  Ocan_move: new Chain(store)
+  OcanMove: new Chain(store)
     .map(Ostore => (Ostore
       .map(state => state.get('current_stage'))
       .distinctUntilChanged()
