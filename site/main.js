@@ -18,13 +18,22 @@ const configuration = {
   stage_count: 2,
 };
 
+const wrap = (...args) => ({
+  map(func) => func(...args),
+});
+
 createButtons({
   $root: document,
   attributename: 'stage-change',
   max_stage: configuration.stage_count - 1,
-  stage_observer: store
-    .map(state => state.get('current_stage'))
-    .distinctUntilChanged(),
+  Ocan_move: wrap(store
+      .map(state => state.get('current_stage'))
+      .distinctUntilChanged()
+    )
+    .map(Ostage => ({
+      back: Ostage.map(stage => (stage <= 0)),
+      forward: Ostage.map(stage => (stage <= 0)),
+    })),
   move_stage(change) { store.dispatch(action_creators.move_stage(change)); }
 });
 

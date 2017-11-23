@@ -12,8 +12,8 @@ function dashed2camel(dashed_attribute_name) {
   return ''.replace.call(dashed_attribute_name, /-[a-z]/g, chr => chr.substring(1).toUpperCase());
 }
 
-function disableButtonsMatchingWhenTrue(predicate) {
-  return this
+function disableButtonsMatchingWhenTrue(Ocan_move, predicate) {
+  return Ocan_move
     .startWith(false)
     .distinctUntilChanged()
     .pairwise()
@@ -36,7 +36,7 @@ function disableButtonsMatchingWhenTrue(predicate) {
 export default function({
   $root,
   attributename,
-  stage_observer,
+  Ocan_move,
   move_stage,
   max_stage = Infinity,
 }) {
@@ -54,15 +54,13 @@ export default function({
     }
   });
 
-  disableButtonsMatchingWhenTrue.call(
-    stage_observer
-      .map(stage => (stage <= 0)),
+  disableButtonsMatchingWhenTrue(
+    Ocan_move.back,
     button => button.dataset.stageChange < 0,
   );
 
-  disableButtonsMatchingWhenTrue.call(
-    stage_observer
-      .map(stage => (stage >= maxStage)),
+  disableButtonsMatchingWhenTrue(
+    Ocan_move.forward,
     button => button.dataset.stageChange > 0,
   );
 
