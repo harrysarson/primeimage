@@ -12,6 +12,26 @@ function dashed2camel(dashed_attribute_name) {
   return ''.replace.call(dashed_attribute_name, /-[a-z]/g, chr => chr.substring(1).toUpperCase());
 }
 
+function disableButtonsMatchingWhenTrue(predicate) {
+  return this
+    .startWith(false)
+    .distinctUntilChanged()
+    .pairwise()
+    .subscribe(function([last_value, cannot_go_back]) {
+      if (cannot_go_back || last_value) {
+        const toggleDisabledAttribute = cannot_go_back
+          ? function(button) { button.setAttribute('disabled', ''); }
+          : function(button) { button.removeAttribute('disabled', ''); };
+
+        [...$root.querySelectorAll(`[data-${attributename}]`)]
+          .filter(predicate)
+          .forEach(toggleDisabledAttribute);
+      }
+    });
+}
+
+
+
 
 export default function({
   $root,
@@ -34,60 +54,17 @@ export default function({
     }
   });
 
-  stage_observer
-    .first()
-    .subscribe(function(initialStage) {
-      const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
+  disableButtonsMatchingWhenTrue.call(
+    stage_observer
+      .map(stage => (stage <= 0)),
+    button => button.dataset.stageChange < 0,
+  );
 
-      if (initialStage <= 0) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange < 0) {
-            button.setAttribute('disabled', '');
-          }
-        }
-      } else if (initialStage >= stage_count-1) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange > 0) {
-            button.setAttribute('disabled', '');
-          }
-        }
-      }
-    })
-  ;
+  disableButtonsMatchingWhenTrue.call(
+    stage_observer
+      .map(stage => (stage >= maxStage)),
+    button => button.dataset.stageChange > 0,
+  );
 
-  stage_observer
-    .pairwise()
-    .subscribe(function ([oldStage, newStage]) {
-
-      const changeStageButtons = $root.querySelectorAll(`[data-${attributename}]`);
-
-      if (newStage <= 0 && oldStage > 0) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange < 0) {
-            button.setAttribute('disabled', '');
-          }
-        }
-      } else if (newStage > 0 && oldStage <= 0) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange < 0) {
-            button.removeAttribute('disabled', '');
-          }
-        }
-      }
-
-      if (newStage >= stage_count-1 && oldStage < stage_count-1) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange > 0) {
-            button.setAttribute('disabled', '');
-          }
-        }
-      } else if (newStage < stage_count-1 && oldStage >= stage_count-1) {
-        for (const button of changeStageButtons) {
-          if (button.dataset.stageChange > 0) {
-            button.removeAttribute('disabled', '');
-          }
-        }
-      }
-    });
 
 }
