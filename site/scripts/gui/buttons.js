@@ -1,29 +1,24 @@
 
+function dashed2camel(dashedAttributeName) {
+  // check that dashedAttributeName is valid
 
-const Rx = window.Rx;
+  if (''.match.call(dashedAttributeName, /[^a-z-.:_]/) != null) { throw new Error(`${dashedAttributeName} is not a valid dash-style attribute name`); }
 
-function dashed2camel(dashed_attribute_name) {
-
-  // check that dashed_attribute_name is valid
-
-  if (''.match.call(dashed_attribute_name, /[^a-z-.:_]/) != null)
-    throw new Error(`${dashed_attribute_name} is not a valid dash-style attribute name`);
-
-  return ''.replace.call(dashed_attribute_name, /-[a-z]/g, chr => chr.substring(1).toUpperCase());
+  return ''.replace.call(dashedAttributeName, /-[a-z]/g, chr => chr.substring(1).toUpperCase());
 }
 
-function disableButtonsMatchingWhenTrue(Ocan_move, predicate) {
-  return Ocan_move
+function disableButtonsMatchingWhenTrue($elements, OcanMove, predicate) {
+  return OcanMove
     .startWith(false)
     .distinctUntilChanged()
     .pairwise()
-    .subscribe(function([was_previously_disabled, is_button_disabled]) {
-      if (is_button_disabled || was_previously_disabled) {
-        const toggleDisabledAttribute = is_button_disabled
-          ? function(button) { button.setAttribute('disabled', ''); }
-          : function(button) { button.removeAttribute('disabled', ''); };
+    .subscribe(function onNext([wasPreviouslyDisabled, isButtonDisabled]) {
+      if (isButtonDisabled || wasPreviouslyDisabled) {
+        const toggleDisabledAttribute = isButtonDisabled
+          ? function setDisabledAttribute(button) { button.setAttribute('disabled', ''); }
+          : function removeDisabledAttribute(button) { button.removeAttribute('disabled', ''); };
 
-        [...$root.querySelectorAll(`[data-${attributename}]`)]
+        [...$elements]
           .filter(predicate)
           .forEach(toggleDisabledAttribute);
       }
@@ -31,38 +26,39 @@ function disableButtonsMatchingWhenTrue(Ocan_move, predicate) {
 }
 
 
-
-
-export default function({
+export default function ({
   $root,
   attributename,
-  Ocan_move,
+  OcanMove,
   move_stage,
-  max_stage = Infinity,
 }) {
   const camelCasedAttributeName = dashed2camel(attributename);
 
-  $root.addEventListener('click', function(event) {
+  $root.addEventListener('click', function onClick(event) {
     if ({}.hasOwnProperty.call(event.target.dataset, camelCasedAttributeName)) {
       const stageChange = +event.target.dataset[camelCasedAttributeName];
 
       if (Number.isNaN(stageChange) || stageChange % 1 !== 0) {
-        throw new Error(`Element ${button}'s "data-${attributename}" property must be an integer`)
+        throw new Error(`Element ${event.target}'s "data-${attributename}" property must be an integer`);
       }
 
       move_stage(stageChange);
     }
   });
 
+  function* getElements() {
+    yield* $root.querySelectorAll(`[data-${attributename}]`);
+  }
+
   disableButtonsMatchingWhenTrue(
-    Ocan_move.back,
+    getElements,
+    OcanMove.back,
     button => button.dataset.stageChange < 0,
   );
 
   disableButtonsMatchingWhenTrue(
-    Ocan_move.forward,
+    getElements,
+    OcanMove.forward,
     button => button.dataset.stageChange > 0,
   );
-
-
 }
