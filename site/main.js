@@ -2,11 +2,7 @@ import imageLoad from './scripts/image-load.js';
 import createStore from './scripts/store/create.js';
 
 import createButtons from './scripts/gui/buttons.js';
-import { creators as action_creators } from './scripts/actions/index.js';
-
-const pages = [
-  imageLoad
-];
+import { creators as actionCreators } from './scripts/actions/index.js';
 
 const store = createStore();
 
@@ -19,7 +15,7 @@ const configuration = {
 };
 
 const wrap = (...args) => ({
-  map(func) => func(...args),
+  map: func => func(...args),
 });
 
 createButtons({
@@ -27,14 +23,13 @@ createButtons({
   attributename: 'stage-change',
   max_stage: configuration.stage_count - 1,
   Ocan_move: wrap(store
-      .map(state => state.get('current_stage'))
-      .distinctUntilChanged()
-    )
+    .map(state => state.get('current_stage'))
+    .distinctUntilChanged())
     .map(Ostage => ({
       back: Ostage.map(stage => (stage <= 0)),
       forward: Ostage.map(stage => (stage <= 0)),
     })),
-  move_stage(change) { store.dispatch(action_creators.move_stage(change)); },
+  move_stage(change) { store.dispatch(actionCreators.move_stage(change)); },
 });
 
 imageLoad({
@@ -42,14 +37,7 @@ imageLoad({
   output: displays[0].children[1],
 });
 
-
-function buttonGoesBack(button) {
-  return {}.hasOwnProperty.call(button.dataset, 'stageChange') && button.dataset.stageChange < 0;
-}
-
-
-store.subscribe(function(state) {
-
+store.subscribe(function onNext(state) {
   for (const oldSelectedElement of document.getElementsByClassName('current-stage')) {
     oldSelectedElement.classList.remove('current-stage');
   }
@@ -57,16 +45,13 @@ store.subscribe(function(state) {
   const newStage = state.get('current_stage');
 
   for (const container of document.getElementsByClassName('stage-selecting')) {
-      container
-        .style
-        .setProperty('--show-stage', newStage);
+    container
+      .style
+      .setProperty('--show-stage', newStage);
 
-      const newSelectedElement = container.children[newStage];
-      if (newSelectedElement != null) {
-        newSelectedElement.classList.add('current-stage');
-      }
+    const newSelectedElement = container.children[newStage];
+    if (newSelectedElement != null) {
+      newSelectedElement.classList.add('current-stage');
+    }
   }
-
 });
-
-
