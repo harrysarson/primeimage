@@ -1,7 +1,7 @@
+import reducers from '../reducers/index.js';
 
-const { createStore } = Redux;
-
-import reducers from '../reducers/index.js'
+const { Redux: { createStore } } = window;
+const { Rx } = window;
 
 export default function () {
   const store = createStore(
@@ -14,15 +14,15 @@ export default function () {
   subject.next(store.getState);
 
   const observable = Rx.Observable.create(function subscribe(observer) {
-    const unsubscribe_redux = store.subscribe(function() {
+    const unsubscribeRedux = store.subscribe(() => {
       observer.next(store.getState());
     });
 
     observer.next(store.getState());
 
     return function unsubscribe() {
-      unsubscribe_redux();
-    }
+      unsubscribeRedux();
+    };
   });
 
   // todo find way to avoid monkey patch
