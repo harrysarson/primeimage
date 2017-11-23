@@ -21,7 +21,7 @@ const configuration = {
 createButtons({
   $root: document,
   attributename: 'stage-change',
-  stage_count: configuration.stage_count,
+  max_stage: configuration.stage_count - 1,
   stage_observer: store
     .map(state => state.get('current_stage'))
     .distinctUntilChanged(),
