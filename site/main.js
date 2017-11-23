@@ -34,7 +34,7 @@ createButtons({
       back: Ostage.map(stage => (stage <= 0)),
       forward: Ostage.map(stage => (stage <= 0)),
     })),
-  move_stage(change) { store.dispatch(action_creators.move_stage(change)); }
+  move_stage(change) { store.dispatch(action_creators.move_stage(change)); },
 });
 
 imageLoad({
