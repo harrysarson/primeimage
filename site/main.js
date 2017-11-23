@@ -14,17 +14,29 @@ const configuration = {
   stage_count: 2,
 };
 
-const wrap = (...args) => ({
-  map: func => func(...args),
-});
+
+class Chain {
+  constructor(value) {
+    Object.defineProperty(this, 'value', {
+      enumerable: true,
+      value,
+    });
+  }
+
+  map(func) {
+    return new Chain(func(this.value));
+  }
+}
 
 createButtons({
   $root: document,
   attributename: 'stage-change',
   max_stage: configuration.stage_count - 1,
-  Ocan_move: wrap(store
-    .map(state => state.get('current_stage'))
-    .distinctUntilChanged())
+  Ocan_move: new Chain(store)
+    .map(Ostore => (Ostore
+      .map(state => state.get('current_stage'))
+      .distinctUntilChanged()
+    ))
     .map(Ostage => ({
       back: Ostage.map(stage => (stage <= 0)),
       forward: Ostage.map(stage => (stage <= 0)),
