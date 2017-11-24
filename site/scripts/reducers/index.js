@@ -9,9 +9,9 @@ const initialState = Immutable.Map({
 
 const app = (state = initialState, action) => {
   switch (action.type) {
-    case actionType.move_stage:
+    case actionType.moveStage:
       return state.update('current_stage', stage => Math.max(0, stage + action.change));
-    case actionType.set_stage:
+    case actionType.setStage:
       return state.set('current_stage', action.new_stage);
     default:
       return state;
