@@ -31,7 +31,6 @@ class Chain {
 createButtons({
   $root: document,
   attributename: 'stage-change',
-  max_stage: configuration.stage_count - 1,
   OcanMove: new Chain(store)
     .map(Ostore => (Ostore
       .map(state => state.get('current_stage'))
@@ -39,9 +38,10 @@ createButtons({
     ))
     .map(Ostage => ({
       back: Ostage.map(stage => (stage <= 0)),
-      forward: Ostage.map(stage => (stage <= 0)),
-    })),
-  move_stage(change) { store.dispatch(actionCreators.move_stage(change)); },
+      forward: Ostage.map(stage => (stage >= configuration.stage_count - 1)),
+    }))
+    .value,
+  move_stage(change) { store.dispatch(actionCreators.moveStage(change)); },
 });
 
 imageLoad({
