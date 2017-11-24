@@ -1,6 +1,6 @@
 
 import FileRead from './lib/ReadFile.js';
-import loadImg from './lib/$element.js';
+import loadImg from './lib/loadImg.js';
 
 const { Rx } = window;
 
@@ -63,7 +63,7 @@ export default function ({ input, output }) {
 
       const dataUrl = await new FileRead(file).asDataURL(file);
 
-      const img = await loadImg(dataUrl);
+      const img = await loadAsImage(dataUrl);
 
 
       const aspectRatio = img.width / img.height;
