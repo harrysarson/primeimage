@@ -1,23 +1,21 @@
+const { Immutable } = window;
 
-
-export const types = Object.freeze(
-  Immutable.Set([
-    'move_stage',
-    'set_stage',
-  ])
+export const types = Immutable.Set([
+  'moveStage',
+  'setStage',
+])
   .toMap()
-  .toObject()
-);
+  .toObject();
 
-export const creators = Object.freeze(
-  Immutable.Map({
-    move_stage: change => ({ change }),
-    set_stage: new_stage => ({ new_stage }),
-  })
+export const creators = Immutable.Map({
+  moveStage: change => ({ change }),
+  setStage: newStage => ({ newStage }),
+})
   .map((creator, action) => (...args) => Object.assign(
     creator(...args),
     { type: types[action] },
   ))
-  .toObject()
-);
+  .toObject();
 
+Object.freeze(types);
+Object.freeze(creators);
