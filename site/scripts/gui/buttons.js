@@ -1,3 +1,4 @@
+import Iterable from '../lib/Iterable.js';
 
 function dashed2camel(dashedAttributeName) {
   // check that dashedAttributeName is valid
@@ -7,7 +8,7 @@ function dashed2camel(dashedAttributeName) {
   return ''.replace.call(dashedAttributeName, /-[a-z]/g, chr => chr.substring(1).toUpperCase());
 }
 
-function disableButtonsMatchingWhenTrue($elements, OcanMove, predicate) {
+function disableButtonsMatchingWhenTrue($elements, OcanMove) {
   return OcanMove
     .startWith(false)
     .distinctUntilChanged()
@@ -18,9 +19,9 @@ function disableButtonsMatchingWhenTrue($elements, OcanMove, predicate) {
           ? function setDisabledAttribute(button) { button.setAttribute('disabled', ''); }
           : function removeDisabledAttribute(button) { button.removeAttribute('disabled', ''); };
 
-        [...$elements]
-          .filter(predicate)
-          .forEach(toggleDisabledAttribute);
+        for (const $element of $elements) {
+          toggleDisabledAttribute($element);
+        }
       }
     });
 }
@@ -46,19 +47,17 @@ export default function ({
     }
   });
 
-  function* getElements() {
+  const $elements = new Iterable(function* getElements() {
     yield* $root.querySelectorAll(`[data-${attributename}]`);
-  }
+  });
 
   disableButtonsMatchingWhenTrue(
-    getElements,
+    $elements.filter(button => button.dataset.stageChange < 0),
     OcanMove.back,
-    button => button.dataset.stageChange < 0,
   );
 
   disableButtonsMatchingWhenTrue(
-    getElements,
+    $elements.filter(button => button.dataset.stageChange > 0),
     OcanMove.forward,
-    button => button.dataset.stageChange > 0,
   );
 }
