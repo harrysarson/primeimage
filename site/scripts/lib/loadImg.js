@@ -11,4 +11,4 @@ export default function loadImg(src) {
 
     img.src = src;
   });
-};
+}
