@@ -1,65 +1,4 @@
 
-export default function({input, output, onChange = () => {} }) {
-
-  const canvas = output.querySelector('canvas');
-  const reader = new FileReader();
-  const img = document.createElement('img');
-
-  let imageData = null;
-
-  img.onload = function () {
-    const aspectRatio = img.width / img.height;
-
-    canvas.style.height = '100%';
-    canvas.style.width = '100%';
-
-    const maxHeight = canvas.offsetHeight;
-    const maxWidth = canvas.offsetWidth;
-    canvas.style.height = '';
-    canvas.style.width = '';
-
-    let height, width;
-
-    if (maxHeight * aspectRatio > maxWidth) {
-      height = maxWidth / aspectRatio;
-      width = maxWidth;
-    } else {
-      height = maxHeight;
-      width = maxHeight * aspectRatio;
-    }
-
-    canvas.width  = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
-
-    ctx.drawImage(img, 0, 0, width, height);
-  };
-
-  reader.onloadend = function () {
-    img.src = reader.result;
-  };
-
-  createDragDrop(input, (files) => {
-    const [file] = files;
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  });
-
-  return {
-    get isStageComplete() {
-      return imageData == null;
-    },
-
-    process() {
-      return imageData;
-    },
-
-  };
-}
-
 function createDragDrop(element, listener) {
   const input = element.querySelector('input[type="file"]');
 
@@ -103,4 +42,65 @@ function createDragDrop(element, listener) {
   element.addEventListener('drop', (e) => {
     listener(e.dataTransfer.files);
   });
+}
+
+export default function ({ input, output }) {
+  const canvas = output.querySelector('canvas');
+  const reader = new FileReader();
+  const img = document.createElement('img');
+
+  const imageData = null;
+
+  img.onload = function onImageLoad() {
+    const aspectRatio = img.width / img.height;
+
+    canvas.style.height = '100%';
+    canvas.style.width = '100%';
+
+    const maxHeight = canvas.offsetHeight;
+    const maxWidth = canvas.offsetWidth;
+    canvas.style.height = '';
+    canvas.style.width = '';
+
+    let height;
+    let width;
+
+    if (maxHeight * aspectRatio > maxWidth) {
+      height = maxWidth / aspectRatio;
+      width = maxWidth;
+    } else {
+      height = maxHeight;
+      width = maxHeight * aspectRatio;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+
+    ctx.drawImage(img, 0, 0, width, height);
+  };
+
+  reader.onloadend = function onReadLoadend() {
+    img.src = reader.result;
+  };
+
+  createDragDrop(input, (files) => {
+    const [file] = files;
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  });
+
+  return {
+    get isStageComplete() {
+      return imageData == null;
+    },
+
+    process() {
+      return imageData;
+    },
+
+  };
 }
