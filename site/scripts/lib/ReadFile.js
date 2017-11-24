@@ -16,7 +16,7 @@ const createReaderPromise = (file, func) => new Promise(function executor(resolv
   func.call(reader, file);
 });
 
-export default class FileRead {
+export default class ReadFile {
   constructor(file) {
     Object.defineProperties(this, {
       file: {
