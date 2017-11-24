@@ -4,6 +4,8 @@
   "description": "Turn any image into an prime number.",
   "main": "main.js",
   "scripts": {
+    "lint": "eslint .",
+    "test": "true",
     "start": "node ./server"
   },
   "private": true,
