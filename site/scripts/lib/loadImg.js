@@ -1,7 +1,7 @@
 
 // todo errors?
 
-export default (src) => {
+export default function loadImg(src) {
   const img = document.createElement('img');
 
   return new Promise(function executor(resolve) {
