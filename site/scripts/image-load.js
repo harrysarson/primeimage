@@ -1,27 +1,34 @@
 
-function createDragDrop(element, listener) {
-  const input = element.querySelector('input[type="file"]');
+import FileRead from './lib/file-read.js';
+import loadAsImage from './lib/load-as-img.js';
+
+const { Rx } = window;
+
+
+function createDragDrop($element) {
+  const input = $element.querySelector('input[type="file"]');
 
   function addListener(eventNames, cb) {
     for (const eventName of eventNames) {
-      element.addEventListener(eventName, cb);
+      $element.addEventListener(eventName, cb);
     }
   }
 
+  const subject = new Rx.Subject();
 
-  element.addEventListener('submit', (e) => {
-    element.preventDefault();
+  $element.addEventListener('submit', function onSubmit(e) {
+    $element.preventDefault();
 
-    listener(e.target.files);
+    subject.next(e.target.files);
   });
 
-  input.addEventListener('change', (e) => {
-    listener(e.target.files);
+  input.addEventListener('change', function onChange(e) {
+    subject.next(e.target.files);
   });
 
   addListener(
     ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
-    (e) => {
+    function onDragEvent(e) {
       // preventing the unwanted behaviours
       e.preventDefault();
       e.stopPropagation();
@@ -29,78 +36,63 @@ function createDragDrop(element, listener) {
   );
   addListener(
     ['dragover', 'dragenter'],
-    () => {
-      element.classList.add('is-dragover');
+    function onDragStart() {
+      $element.classList.add('is-dragover');
     },
   );
   addListener(
     ['dragleave', 'dragend', 'drop'],
-    () => {
-      element.classList.remove('is-dragover');
+    function onDragEnd() {
+      $element.classList.remove('is-dragover');
     },
   );
-  element.addEventListener('drop', (e) => {
-    listener(e.dataTransfer.files);
+  $element.addEventListener('drop', function onDrop(e) {
+    subject.next(e.dataTransfer.files);
   });
+
+  return subject;
 }
 
 export default function ({ input, output }) {
   const canvas = output.querySelector('canvas');
-  const reader = new FileReader();
-  const img = document.createElement('img');
 
-  const imageData = null;
+  createDragDrop(input)
+    .subscribe(async (files) => {
+      const [file] = files;
+      if (!file) return;
 
-  img.onload = function onImageLoad() {
-    const aspectRatio = img.width / img.height;
+      const dataUrl = await new FileRead(file).asDataURL(file);
 
-    canvas.style.height = '100%';
-    canvas.style.width = '100%';
+      const img = await loadAsImage(dataUrl);
 
-    const maxHeight = canvas.offsetHeight;
-    const maxWidth = canvas.offsetWidth;
-    canvas.style.height = '';
-    canvas.style.width = '';
 
-    let height;
-    let width;
+      const aspectRatio = img.width / img.height;
 
-    if (maxHeight * aspectRatio > maxWidth) {
-      height = maxWidth / aspectRatio;
-      width = maxWidth;
-    } else {
-      height = maxHeight;
-      width = maxHeight * aspectRatio;
-    }
+      canvas.style.height = '100%';
+      canvas.style.width = '100%';
 
-    canvas.width = width;
-    canvas.height = height;
+      const maxHeight = canvas.offsetHeight;
+      const maxWidth = canvas.offsetWidth;
+      canvas.style.height = '';
+      canvas.style.width = '';
 
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
+      let height;
+      let width;
 
-    ctx.drawImage(img, 0, 0, width, height);
-  };
+      if (maxHeight * aspectRatio > maxWidth) {
+        height = maxWidth / aspectRatio;
+        width = maxWidth;
+      } else {
+        height = maxHeight;
+        width = maxHeight * aspectRatio;
+      }
 
-  reader.onloadend = function onReadLoadend() {
-    img.src = reader.result;
-  };
+      canvas.width = width;
+      canvas.height = height;
 
-  createDragDrop(input, (files) => {
-    const [file] = files;
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  });
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
 
-  return {
-    get isStageComplete() {
-      return imageData == null;
-    },
-
-    process() {
-      return imageData;
-    },
-
-  };
+      ctx.drawImage(img, 0, 0, width, height);
+    });
 }
