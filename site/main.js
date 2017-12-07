@@ -50,13 +50,13 @@ imageLoad({
 });
 
 store.subscribe(function onNext(state) {
-  for (const oldSelectedElement of document.getElementsByClassName('current-stage')) {
+  for (const oldSelectedElement of document.querySelectorAll('.current-stage')) {
     oldSelectedElement.classList.remove('current-stage');
   }
 
   const newStage = state.get('current_stage');
 
-  for (const container of document.getElementsByClassName('stage-selecting')) {
+  for (const container of document.querySelectorAll('.stage-selecting')) {
     container
       .style
       .setProperty('--show-stage', newStage);
