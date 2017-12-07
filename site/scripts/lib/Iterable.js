@@ -15,7 +15,7 @@ export default class Iterable {
 
   filter(predicate) {
     const self = this;
-    return new Iterable(function* () {
+    return new Iterable(function* generator() {
       for (const value of self) {
         if (predicate(value)) {
           yield value;
