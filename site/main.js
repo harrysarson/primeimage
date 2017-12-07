@@ -2,7 +2,6 @@ import imageLoad from './scripts/image-load.js';
 import createStore from './scripts/store/create.js';
 
 import createButtons from './scripts/gui/buttons.js';
-import { creators as actionCreators } from './scripts/actions/index.js';
 
 const store = createStore();
 
@@ -13,7 +12,6 @@ const interaction = document.getElementById('interaction');
 const configuration = {
   stage_count: 2,
 };
-
 
 class Chain {
   constructor(value) {
@@ -26,23 +24,22 @@ class Chain {
   map(func) {
     return new Chain(func(this.value));
   }
+
+  do(func) {
+    func(this.value);
+  }
 }
 
-createButtons({
+
+new Chain(createButtons({
   $root: document,
-  attributename: 'stage-change',
-  OcanMove: new Chain(store)
-    .map(Ostore => (Ostore
-      .map(state => state.get('current_stage'))
-      .distinctUntilChanged()
-    ))
-    .map(Ostage => ({
-      back: Ostage.map(stage => (stage <= 0)),
-      forward: Ostage.map(stage => (stage >= configuration.stage_count - 1)),
-    }))
-    .value,
-  move_stage(change) { store.dispatch(actionCreators.moveStage(change)); },
-});
+  attributename: 'data-stage-change',
+  maxStage: configuration.stage_count - 1,
+}))
+  .do((buttons) => {
+    buttons.observable.subscribe(action => store.dispatch(action));
+    buttons.updater(store.map(state => state.get('current_stage')));
+  });
 
 imageLoad({
   input: interaction.querySelector('.interaction-interface').children[1],
