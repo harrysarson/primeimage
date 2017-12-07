@@ -1,5 +1,6 @@
 import imageLoad from './scripts/image-load.js';
 import createStore from './scripts/store/create.js';
+import Chain from './scripts/lib/Chain.js';
 
 import createButtons from './scripts/gui/buttons.js';
 
@@ -12,24 +13,6 @@ const interaction = document.getElementById('interaction');
 const configuration = {
   stage_count: 2,
 };
-
-class Chain {
-  constructor(value) {
-    Object.defineProperty(this, 'value', {
-      enumerable: true,
-      value,
-    });
-  }
-
-  map(func) {
-    return new Chain(func(this.value));
-  }
-
-  do(func) {
-    func(this.value);
-  }
-}
-
 
 new Chain(createButtons({
   $root: document,
