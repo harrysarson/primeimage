@@ -4,6 +4,9 @@ import Chain from './scripts/lib/Chain.js';
 
 import createButtons from './scripts/gui/buttons.js';
 
+const { Rx } = window;
+const { operators } = Rx;
+
 const store = createStore();
 
 const displays = document.querySelectorAll('.display-panel');
@@ -20,8 +23,12 @@ new Chain(createButtons({
   maxStage: configuration.stage_count - 1,
 }))
   .do((buttons) => {
-    buttons.observable.subscribe(action => store.dispatch(action));
-    buttons.updater(store.map(state => state.get('current_stage')));
+    buttons.observable(document).subscribe(action => store.dispatch(action));
+    store.pipe(
+      operators.map(state => state.get('current_stage')),
+      buttons.updater(document),
+    )
+      .subscribe();
   });
 
 imageLoad({

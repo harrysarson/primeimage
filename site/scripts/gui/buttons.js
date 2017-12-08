@@ -24,43 +24,61 @@ const attibuteUpdater = $elements =>
  *
  * @returns Object allowing buttons to be observed and updated.
  */
-export default ({ $root, attributename, maxStage }) => {
-  const $elements = new Iterable(function* getElements() {
-    yield* $root.querySelectorAll('[attributename]');
-  });
-
-  const { map, startWith, distinctUntilChanged } = Rx.operators;
+export default ({ attributename, maxStage }) => {
+  const {
+    tap, map, startWith, distinctUntilChanged,
+  } = Rx.operators;
 
   return Object.freeze({
-    observable: Rx.Observable.fromEvent($root, 'click')
-      .filter(event => event.target.hasAttribute(attributename))
-      .map((event) => {
-        const stageChange = +event.target.getAttribute(attributename);
+    /**
+     * Observe all buttons in `$input` for required changes in stage.
+     *
+     * @param {Element} $input Element to observe buttons within.
+     * @returns Observable Subscribe to recieve move stage actions.
+     */
+    observable($input) {
+      return Rx.Observable.fromEvent($input, 'click')
+        .filter(event => event.target.hasAttribute(attributename))
+        .map((event) => {
+          const stageChange = +event.target.getAttribute(attributename);
 
-        if (Number.isNaN(stageChange) || stageChange % 1 !== 0) {
-          throw new Error(`Element ${event.target}'s "attributename" property must be an integer`);
-        }
+          if (Number.isNaN(stageChange) || stageChange % 1 !== 0) {
+            throw new Error(`Element ${event.target}'s "attributename" property must be an integer`);
+          }
 
-        return stageChange;
-      })
-      .map(actionCreators.moveStage),
+          return stageChange;
+        })
+        .map(actionCreators.moveStage);
+    },
 
-    updater(stageStore) {
-      stageStore.pipe(
-        map(stage => (stage <= 0)),
-        startWith(false),
-        distinctUntilChanged(),
-      )
-        .subscribe(attibuteUpdater($elements.filter(button =>
-          button.getAttribute(attributename) < 0)));
+    /**
+     * Observe all buttons in `$input` for required changes in stage.
+     *
+     * @param {Element} Element to update buttons within.
+     * @returns {function(source: Observable): Observable} rxjs operator which updates buttons.
+     */
+    updater($output) {
+      const $elements = new Iterable(function* getElements() {
+        yield* $output.querySelectorAll('[attributename]');
+      });
 
-      stageStore.pipe(
-        map(stage => (stage >= maxStage)),
-        startWith(false),
-        distinctUntilChanged(),
-      )
-        .subscribe(attibuteUpdater($elements.filter(button =>
-          button.getAttribute(attributename) > 0)));
+      return (source) => {
+        const backButtons = source.pipe(
+          map(stage => (stage <= 0)),
+          startWith(false),
+          distinctUntilChanged(),
+          tap(attibuteUpdater($elements.filter(button => button.getAttribute(attributename) < 0))),
+        );
+
+        const forwardButtons = source.pipe(
+          map(stage => (stage >= maxStage)),
+          startWith(false),
+          distinctUntilChanged(),
+          tap(attibuteUpdater($elements.filter(button => button.getAttribute(attributename) > 0))),
+        );
+
+        return Rx.Observable.merge(backButtons, forwardButtons);
+      };
     },
   });
 };
