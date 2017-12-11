@@ -25,7 +25,7 @@ new Chain(createButtons({
   .do((buttons) => {
     buttons.observable(document).subscribe(action => store.dispatch(action));
     store.pipe(
-      operators.map(state => state.get('current_stage')),
+      operators.pluck('currentStage'),
       buttons.updater(document),
     )
       .subscribe();
@@ -41,7 +41,7 @@ store.subscribe(function onNext(state) {
     oldSelectedElement.classList.remove('current-stage');
   }
 
-  const newStage = state.get('current_stage');
+  const newStage = state.currentStage;
 
   for (const container of document.querySelectorAll('.stage-selecting')) {
     container

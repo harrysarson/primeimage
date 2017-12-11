@@ -1,21 +1,20 @@
 import { types as actionType } from '../actions/index.js';
 
-const { Immutable } = window;
+const { Redux } = window;
 
-const initialState = Immutable.Map({
-  current_stage: 0,
-  x: 9,
-});
-
-const app = (state = initialState, action) => {
+const currentStage = (state = 0, action) => {
   switch (action.type) {
     case actionType.moveStage:
-      return state.update('current_stage', stage => Math.max(0, stage + action.change));
+      return Math.max(0, state + action.change);
     case actionType.setStage:
-      return state.set('current_stage', action.new_stage);
+      return action.new_stage;
     default:
       return state;
   }
 };
 
-export default app;
+const rootReducer = Redux.combineReducers({
+  currentStage,
+});
+
+export default rootReducer;
