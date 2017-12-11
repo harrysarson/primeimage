@@ -59,7 +59,7 @@ export default ({ attributename, maxStage }) => {
      */
     updater($output) {
       const $elements = new Iterable(function* getElements() {
-        yield* $output.querySelectorAll('[attributename]');
+        yield* $output.querySelectorAll(`[${attributename}]`);
       });
 
       return (source) => {
