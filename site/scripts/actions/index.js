@@ -1,12 +1,10 @@
 
-export const types = Immutable.Set([
+export const types = [
   'moveStage',
   'setStage',
-])
-  .toMap()
-  .toObject();
+].reduce((obj, type) => Object.assign(obj, { [type]: type }), {});
 
-export const creators = Immutable.Map({
+export const creators = {
   moveStage: change => ({
     type: types.moveStage,
     change,
@@ -15,8 +13,7 @@ export const creators = Immutable.Map({
     type: types.setStage,
     newStage,
   }),
-})
-  .toObject();
+};
 
 Object.freeze(types);
 Object.freeze(creators);
