@@ -1,4 +1,3 @@
-const { Immutable } = window;
 
 export const types = Immutable.Set([
   'moveStage',
