@@ -8,13 +8,15 @@ export const types = Immutable.Set([
   .toObject();
 
 export const creators = Immutable.Map({
-  moveStage: change => ({ change }),
-  setStage: newStage => ({ newStage }),
+  moveStage: change => ({
+    type: types.moveStage,
+    change,
+  }),
+  setStage: newStage => ({
+    type: types.setStage,
+    newStage,
+  }),
 })
-  .map((creator, action) => (...args) => Object.assign(
-    creator(...args),
-    { type: types[action] },
-  ))
   .toObject();
 
 Object.freeze(types);
