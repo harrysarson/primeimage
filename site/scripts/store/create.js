@@ -1,20 +1,27 @@
+/* eslint no-underscore-dangle: ["warn"] */
+/* eslint import/no-extraneous-import: ["warn"] */
+import thunk from '../deps/redux-thunk.js';
+import { createStore, applyMiddleware, compose } from '../deps/redux.js';
+
+import { Observable } from '../deps/rxjs/Observable.js';
+import { Subject } from '../deps/rxjs/Subject.js';
+
 import reducers from '../reducers/index.js';
 
-const { Redux: { createStore } } = window;
-const { Rx } = window;
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function () {
-  /* eslint no-underscore-dangle: ["warn"] */
   const store = createStore(
     reducers,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    composeEnhancers(applyMiddleware(thunk)),
   );
 
-  const subject = new Rx.Subject();
+  const subject = new Subject();
 
   subject.next(store.getState);
 
-  const observable = Rx.Observable.create(function subscribe(observer) {
+  const observable = Observable.create(function subscribe(observer) {
     const unsubscribeRedux = store.subscribe(() => {
       observer.next(store.getState());
     });

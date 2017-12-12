@@ -1,7 +1,10 @@
+import { Observable } from '../deps/rxjs/Observable.js';
+import { fromEvent } from '../deps/rxjs/observable/fromEvent.js';
+import { merge } from '../deps/rxjs/observable/merge.js';
+import { tap, map, startWith, distinctUntilChanged, filter } from '../deps/rxjs/operators.js';
+
 import { creators as actionCreators } from '../actions/index.js';
 import Iterable from '../lib/Iterable.js';
-
-const { Rx } = window;
 
 const { setAttribute, removeAttribute } = Element.prototype;
 
@@ -25,9 +28,6 @@ const attibuteUpdater = $elements =>
  * @returns Object allowing buttons to be observed and updated.
  */
 export default ({ attributename, maxStage }) => {
-  const {
-    tap, map, startWith, distinctUntilChanged,
-  } = Rx.operators;
 
   return Object.freeze({
     /**
@@ -37,9 +37,9 @@ export default ({ attributename, maxStage }) => {
      * @returns Observable Subscribe to recieve move stage actions.
      */
     observable($input) {
-      return Rx.Observable.fromEvent($input, 'click')
-        .filter(event => event.target.hasAttribute(attributename))
-        .map((event) => {
+      return fromEvent($input, 'click').pipe(
+        filter(event => event.target.hasAttribute(attributename)),
+        map((event) => {
           const stageChange = +event.target.getAttribute(attributename);
 
           if (Number.isNaN(stageChange) || stageChange % 1 !== 0) {
@@ -47,8 +47,9 @@ export default ({ attributename, maxStage }) => {
           }
 
           return stageChange;
-        })
-        .map(actionCreators.moveStage);
+        }),
+        map(actionCreators.moveStage)
+      );
     },
 
     /**
@@ -77,7 +78,7 @@ export default ({ attributename, maxStage }) => {
           tap(attibuteUpdater($elements.filter(button => button.getAttribute(attributename) > 0))),
         );
 
-        return Rx.Observable.merge(backButtons, forwardButtons);
+        return merge(backButtons, forwardButtons);
       };
     },
   });
