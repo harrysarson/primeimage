@@ -1,6 +1,6 @@
 
 window.process = {
   env: {
-    NODE_ENV: 'development'
+    NODE_ENV: 'development',
   },
 };

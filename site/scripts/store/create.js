@@ -1,5 +1,4 @@
 /* eslint no-underscore-dangle: ["warn"] */
-/* eslint import/no-extraneous-import: ["warn"] */
 import thunk from '../deps/redux-thunk.js';
 import { createStore, applyMiddleware, compose } from '../deps/redux.js';
 
