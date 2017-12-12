@@ -23,16 +23,25 @@ new Chain(createButtons({
   .do((buttons) => {
     buttons.observable(document).subscribe(action => store.dispatch(action));
     store.pipe(
-      operators.pluck('currentStage'),
+      pluck('currentStage'),
       buttons.updater(document),
     )
       .subscribe();
   });
 
-imageLoad({
-  input: interaction.querySelector('.interaction-interface').children[1],
-  output: displays[0].children[1],
-});
+new Chain(imageLoad())
+  .do((image) => {
+    const $input = interaction.querySelector('.interaction-interface').children[1];
+    const $output = displays[0].children[1];
+
+    image.observable($input).subscribe(action => store.dispatch(action));
+
+    store.pipe(
+      pluck('image'),
+      image.updater($output),
+    )
+      .subscribe();
+  });
 
 store.subscribe(function onNext(state) {
   for (const oldSelectedElement of document.querySelectorAll('.current-stage')) {
