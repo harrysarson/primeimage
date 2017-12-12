@@ -16,4 +16,10 @@ module.exports = {
     }],
     'import/extensions': 'always',
   },
+  settings: {
+    'import/resolver': [
+      'url',
+      'node',
+    ]
+  }
 };
