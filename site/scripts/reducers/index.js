@@ -1,6 +1,6 @@
+import { combineReducers } from '../deps/redux.js';
 import { types as actionType } from '../actions/index.js';
 
-const { Redux } = window;
 
 const currentStage = (state = 0, action) => {
   switch (action.type) {
@@ -55,7 +55,7 @@ function image(
 }
 
 
-const rootReducer = Redux.combineReducers({
+const rootReducer = combineReducers({
   currentStage,
   image,
 });

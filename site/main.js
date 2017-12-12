@@ -1,11 +1,9 @@
-import imageLoad from './scripts/image-load.js';
+import { pluck } from './scripts/deps/rxjs/operators.js';
+
+import imageLoad from './scripts/gui/stage/imageLoad.js';
 import createStore from './scripts/store/create.js';
 import Chain from './scripts/lib/Chain.js';
-
 import createButtons from './scripts/gui/buttons.js';
-
-const { Rx } = window;
-const { operators } = Rx;
 
 const store = createStore();
 
