@@ -1,5 +1,5 @@
 
-export default class Iterable {
+export class Iterable {
   constructor(generator) {
     Object.defineProperties(this, {
       generator: {
@@ -24,3 +24,5 @@ export default class Iterable {
     });
   }
 }
+
+export default Iterable;

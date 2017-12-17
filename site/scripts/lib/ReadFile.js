@@ -16,7 +16,7 @@ const createReaderPromise = (file, func) => new Promise(function executor(resolv
   func.call(reader, file);
 });
 
-export default class ReadFile {
+export class ReadFile {
   constructor(file) {
     Object.defineProperties(this, {
       file: {
@@ -30,3 +30,5 @@ export default class ReadFile {
     return createReaderPromise(this.file, FileReader.prototype.readAsDataURL);
   }
 }
+
+export default ReadFile;

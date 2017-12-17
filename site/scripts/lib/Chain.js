@@ -1,5 +1,5 @@
 
-export default class Chain {
+export class Chain {
   constructor(value) {
     Object.defineProperty(this, 'value', {
       enumerable: true,
@@ -15,3 +15,5 @@ export default class Chain {
     func(this.value);
   }
 }
+
+export default Chain;
