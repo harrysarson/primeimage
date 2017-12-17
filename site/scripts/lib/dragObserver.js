@@ -3,23 +3,22 @@ import { merge } from '../deps/rxjs/observable/merge.js';
 import * as operators from '../deps/rxjs/operators.js';
 import { map as itblMap } from './Iterable.js';
 
-const fromMultipleEvents = ($element, eventNames) => {
-  return [
-    itblMap(eventName => fromEvent($element, eventName)),
-    observables => merge(...observables),
-  ].reduce((value, project) => project(value), eventNames);
-}
+const fromMultipleEvents = ($element, eventNames) => [
+  itblMap(eventName => fromEvent($element, eventName)),
+  observables => merge(...observables),
+].reduce((value, project) => project(value), eventNames);
 
 export function dragObserver($element) {
   fromMultipleEvents(
     $element,
-    [ 'drag'
-    , 'dragstart'
-    , 'dragend'
-    , 'dragover'
-    , 'dragenter'
-    , 'dragleave'
-    , 'drop'
+    [
+      'drag',
+      'dragstart',
+      'dragend',
+      'dragover',
+      'dragenter',
+      'dragleave',
+      'drop',
     ],
   )
     .subscribe(function onDragEvent(e) {
@@ -30,8 +29,9 @@ export function dragObserver($element) {
 
   fromMultipleEvents(
     $element,
-    [ 'dragover'
-    , 'dragenter'
+    [
+      'dragover',
+      'dragenter',
     ],
   )
     .subscribe(function onDragStart() {
@@ -40,9 +40,10 @@ export function dragObserver($element) {
 
   fromMultipleEvents(
     $element,
-    [ 'dragleave'
-    , 'dragend'
-    , 'drop'
+    [
+      'dragleave',
+      'dragend',
+      'drop',
     ],
   )
     .subscribe(function onDragEnd() {
@@ -50,22 +51,15 @@ export function dragObserver($element) {
     });
 
 
-  const subject = new Subject();
-  const input = $element.querySelector('input[type="file"]');
+  const $input = $element.querySelector('input[type="file"]');
 
   return merge(
     merge(
-      fromEvent($element, 'submit').pipe(
-        operators.tap(() => $element.preventDefault()),
-      ),
+      fromEvent($input, 'submit').pipe(operators.tap(() => $element.preventDefault())),
       fromEvent($element, 'change'),
-    ).pipe(
-      operators.pluck('target'),
-    ),
-    fromEvent($element, 'drop').pipe(
-      operators.pluck('dataTransfer'),
-    ),
-  ).pipe(
-    operators.pluck('files'),
-  );
+    ).pipe(operators.pluck('target')),
+    fromEvent($element, 'drop').pipe(operators.pluck('dataTransfer')),
+  ).pipe(operators.pluck('files'));
 }
+
+export default dragObserver;

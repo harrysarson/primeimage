@@ -1,4 +1,3 @@
-import { Subject } from '../../deps/rxjs/Subject.js';
 import { pluck, tap, map, filter } from '../../deps/rxjs/operators.js';
 
 import { creators as actionCreators } from '../../actions/index.js';
