@@ -3,7 +3,7 @@ import { merge } from '../deps/rxjs/observable/merge.js';
 import { tap, map, startWith, distinctUntilChanged, filter } from '../deps/rxjs/operators.js';
 
 import { creators as actionCreators } from '../actions/index.js';
-import Iterable from '../lib/Iterable.js';
+import { Iterable } from '../lib/Iterable.js';
 
 const { setAttribute, removeAttribute } = Element.prototype;
 

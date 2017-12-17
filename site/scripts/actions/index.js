@@ -1,5 +1,5 @@
-import ReadFile from '../lib/ReadFile.js';
-import loadImg from '../lib/loadImg.js';
+import { ReadFile } from '../lib/ReadFile.js';
+import { loadImg } from '../lib/loadImg.js';
 
 export const types = [
   'moveStage',
