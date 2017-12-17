@@ -2,57 +2,7 @@ import { Subject } from '../../deps/rxjs/Subject.js';
 import { pluck, tap, map, filter } from '../../deps/rxjs/operators.js';
 
 import { creators as actionCreators } from '../../actions/index.js';
-
-
-function createDragDrop($element) {
-  function addListener(eventNames, cb) {
-    for (const eventName of eventNames) {
-      $element.addEventListener(eventName, cb);
-    }
-  }
-
-  addListener(
-    ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
-    function onDragEvent(e) {
-      // preventing the unwanted behaviours
-      e.preventDefault();
-      e.stopPropagation();
-    },
-  );
-  addListener(
-    ['dragover', 'dragenter'],
-    function onDragStart() {
-      $element.classList.add('is-dragover');
-    },
-  );
-  addListener(
-    ['dragleave', 'dragend', 'drop'],
-    function onDragEnd() {
-      $element.classList.remove('is-dragover');
-    },
-  );
-
-  // todo replace with Rx.Observable.fromEvent
-
-  const subject = new Subject();
-  const input = $element.querySelector('input[type="file"]');
-
-  $element.addEventListener('submit', function onSubmit(e) {
-    $element.preventDefault();
-
-    subject.next(e.target.files);
-  });
-
-  input.addEventListener('change', function onChange(e) {
-    subject.next(e.target.files);
-  });
-
-  $element.addEventListener('drop', function onDrop(e) {
-    subject.next(e.dataTransfer.files);
-  });
-
-  return subject;
-}
+import { dragObserver } from '../../lib/dragObserver.js';
 
 const imgDrawer = canvas => function drawImgOnCanvas(img) {
   const aspectRatio = img.width / img.height;
@@ -95,7 +45,7 @@ const imgDrawer = canvas => function drawImgOnCanvas(img) {
  */
 export default () => Object.freeze({
   observable($input) {
-    return createDragDrop($input).pipe(
+    return dragObserver($input).pipe(
       map(files => files[0]),
       map(actionCreators.loadFile),
     );
