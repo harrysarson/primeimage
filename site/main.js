@@ -2,7 +2,7 @@ import { pluck } from './scripts/deps/rxjs/operators.js';
 
 import imageLoad from './scripts/gui/stage/imageLoad.js';
 import createStore from './scripts/store/create.js';
-import Chain from './scripts/lib/Chain.js';
+import { Chain } from './scripts/lib/Chain.js';
 import createButtons from './scripts/gui/buttons.js';
 
 const store = createStore();
