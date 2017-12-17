@@ -1,4 +1,21 @@
 
+export const filter = predicate => iterable =>
+  new Iterable(function* filterGenerator() {
+    for (const value of iterable) {
+      if (predicate(value)) {
+        yield value;
+      }
+    }
+  });
+
+export const map = project => iterable =>
+  new Iterable(function* filterGenerator() {
+    for (const value of iterable) {
+      yield project(value);
+    }
+  });
+
+
 export class Iterable {
   constructor(generator) {
     Object.defineProperties(this, {
@@ -14,14 +31,11 @@ export class Iterable {
   }
 
   filter(predicate) {
-    const self = this;
-    return new Iterable(function* generator() {
-      for (const value of self) {
-        if (predicate(value)) {
-          yield value;
-        }
-      }
-    });
+    return Iterable.filter(predicate)(this);
+  }
+
+  pipe(...projects) {
+    return projects.reduce((value, project) => project(value), this);
   }
 }
 
