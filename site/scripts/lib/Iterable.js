@@ -1,10 +1,14 @@
+function* emptyGenerator() {};
+
 
 export class Iterable {
   constructor(generator) {
     Object.defineProperties(this, {
       generator: {
         configurable: true,
-        value: generator,
+        value: generator != null
+          ? generator
+          : emptyGenerator,
       },
     });
   }
