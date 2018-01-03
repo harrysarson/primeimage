@@ -3,7 +3,7 @@ export class Iterable {
   constructor(generator) {
     Object.defineProperties(this, {
       generator: {
-        cofigurable: true,
+        configurable: true,
         value: generator,
       },
     });
