@@ -3,7 +3,8 @@ import { merge } from '../deps/rxjs/observable/merge.js';
 import { tap, map, startWith, distinctUntilChanged, filter } from '../deps/rxjs/operators.js';
 
 import { creators as actionCreators } from '../actions/index.js';
-import { Iterable } from '../lib/Iterable.js';
+import { Iterable, filter as itFilter } from '../lib/Iterable.js';
+import { pipe } from '../lib/pipe.js';
 
 const { setAttribute, removeAttribute } = Element.prototype;
 
@@ -65,14 +66,20 @@ export default ({ attributename, maxStage }) => Object.freeze({
         map(stage => (stage <= 0)),
         startWith(false),
         distinctUntilChanged(),
-        tap(attibuteUpdater($elements.filter(button => button.getAttribute(attributename) < 0))),
+        tap(attibuteUpdater(pipe(
+          $elements,
+          itFilter(button => button.getAttribute(attributename) < 0),
+        ))),
       );
 
       const forwardButtons = source.pipe(
         map(stage => (stage >= maxStage)),
         startWith(false),
         distinctUntilChanged(),
-        tap(attibuteUpdater($elements.filter(button => button.getAttribute(attributename) > 0))),
+        tap(attibuteUpdater(pipe(
+          $elements,
+          itFilter(button => button.getAttribute(attributename) > 0),
+        ))),
       );
 
       return merge(backButtons, forwardButtons);
