@@ -2,11 +2,13 @@ import fromEvent from '../deps/rxjs/observable/fromEvent.js';
 import { merge } from '../deps/rxjs/observable/merge.js';
 import * as operators from '../deps/rxjs/operators.js';
 import { map as itblMap } from './Iterable.js';
+import { pipe } from './pipe.js';
 
-const fromMultipleEvents = ($element, eventNames) => [
+const fromMultipleEvents = ($element, eventNames) => pipe(
+  eventNames,
   itblMap(eventName => fromEvent($element, eventName)),
   observables => merge(...observables),
-].reduce((value, project) => project(value), eventNames);
+);
 
 export function dragObserver($element) {
   fromMultipleEvents(
