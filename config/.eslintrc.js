@@ -3,6 +3,9 @@ module.exports = {
   env: {
     browser: true,
   },
+  plugins: [
+    'chai-friendly',
+  ],
   rules: {
     'no-restricted-syntax': [
       'error',
@@ -15,6 +18,8 @@ module.exports = {
       allowUnboundThis: true,
     }],
     'import/extensions': 'always',
+    'no-unused-expressions': 0,
+    'chai-friendly/no-unused-expressions': 2,
   },
   settings: {
     'import/resolver': [
