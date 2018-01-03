@@ -20,6 +20,6 @@ module.exports = {
     'import/resolver': [
       'url',
       'node',
-    ]
-  }
+    ],
+  },
 };
