@@ -9,7 +9,7 @@ describe('Chain Class', () => {
 
 describe('Chain functions', () => {
   it('map', () => {
-    expect(new Chain(5).map(x => x * x)).to.have.property(value, 25);
+    expect(new Chain(5).map(x => x * x)).to.have.property('value', 25);
   });
 
   it('do', () => {
