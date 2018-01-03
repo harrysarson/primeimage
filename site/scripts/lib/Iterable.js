@@ -1,4 +1,6 @@
-function* emptyGenerator() {};
+function* emptyGenerator() {
+  // creates empty iterator
+}
 
 
 export class Iterable {
