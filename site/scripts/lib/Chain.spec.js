@@ -1,4 +1,4 @@
-/* global describe it expect */
+/* global describe it expect sinon */
 import { Iterable, filter, map } from './Iterable.js';
 
 describe('Iterable Class', () => {
@@ -10,21 +10,5 @@ describe('Iterable Class', () => {
     const arr = [123, 235, 568, 'hseih', { hi: 235 }, [345, 35, 34]];
 
     expect(new Iterable(function* yieldArray() { yield* arr; })).to.iterate.over(arr);
-  });
-});
-
-describe('Iterable functions', () => {
-  const arr = new Array(100).fill(0).map((value, index) => index);
-
-  it('filter()', () => {
-    const predicate = x => x % 2 === 0;
-
-    expect(filter(predicate)(arr)).to.iterate.over(arr.filter(predicate));
-  });
-
-  it('map', () => {
-    const project = x => x * x;
-
-    expect(map(project)(arr)).to.iterate.over(arr.map(project));
   });
 });
