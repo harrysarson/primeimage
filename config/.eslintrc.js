@@ -18,6 +18,7 @@ module.exports = {
       allowUnboundThis: true,
     }],
     'import/extensions': 'always',
+    'import/prefer-default-export': 'never',
     'no-unused-expressions': 0,
     'chai-friendly/no-unused-expressions': 2,
   },
