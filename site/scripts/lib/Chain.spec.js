@@ -1,4 +1,5 @@
-/* global describe it expect sinon */
+/* global describe it expect */
+import sinon from 'sinon';
 import { Chain } from './Chain.js';
 
 describe('Chain Class', () => {
