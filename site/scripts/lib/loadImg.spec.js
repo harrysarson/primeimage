@@ -11,5 +11,9 @@ describe('loadImg', () => {
     expect(loadedImg).to.have.attribute('src', src);
     expect(loadedImg.complete).to.be.true;
   });
+
+  it('should handle erros');
+
+  it('should verifify using a canvas that images are correct');
 });
 
