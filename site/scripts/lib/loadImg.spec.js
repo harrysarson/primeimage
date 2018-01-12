@@ -26,6 +26,27 @@ describe('loadImg', () => {
       });
   });
 
-  it('should verifify using a canvas that images are correct');
+  it('should verify using a canvas that images are correct', async () => {
+    const sourceCanvas = document.createElement('canvas');
+
+    const sourceContext = sourceCanvas.getContext('2d');
+
+    sourceContext.fillRect(1, 1, 10, 10);
+    const sourceImageData = sourceContext.getImageData(0, 0, 15, 15)
+
+    const src = sourceCanvas.toDataURL();
+
+    const img = await loadImg(src);
+
+    const newCanvas = document.createElement('canvas');
+
+    const newContext = newCanvas.getContext('2d');
+
+    newContext.drawImage(img, 0, 0);
+
+    const newImageData = newContext.getImageData(0, 0, 15, 15);
+
+    expect(newImageData).to.deep.equal(sourceImageData);
+  });
 });
 
