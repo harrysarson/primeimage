@@ -32,7 +32,7 @@ describe('loadImg', () => {
     const sourceContext = sourceCanvas.getContext('2d');
 
     sourceContext.fillRect(1, 1, 10, 10);
-    const sourceImageData = sourceContext.getImageData(0, 0, 15, 15)
+    const sourceImageData = sourceContext.getImageData(0, 0, 15, 15);
 
     const src = sourceCanvas.toDataURL();
 
