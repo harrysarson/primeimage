@@ -21,7 +21,7 @@ describe('loadImg', () => {
     return expect(loadingImg).to.be.rejectedWith(Error)
       .that.eventually.satisfies((error) => {
         expect(error).to.have.property('source').equal(src);
-        expect(error).to.have.property('img').instanceOf(Image);
+        expect(error).to.have.property('img').instanceOf(HTMLImageElement);
         return true;
       });
   });
