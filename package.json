@@ -52,8 +52,5 @@
   },
   "eslintConfig": {
     "extends": "./config/.eslintrc.js"
-  },
-  "babel": {
-    "extends": "./config/.babelrc"
   }
 }
