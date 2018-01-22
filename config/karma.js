@@ -39,7 +39,7 @@ module.exports = function setConfig(config) {
       dir: 'coverage',
       reporters: [
         { type: 'text-summary' },
-        { type: (process.env.TRAVIS) ? 'lcov' : 'html', subdir: '.' },
+        { type: (process.env.TRAVIS) ? 'lcovonly' : 'html', subdir: '.' },
       ],
     },
 
