@@ -13,7 +13,7 @@ module.exports = function setConfig(config) {
     // list of files / patterns to load in the browser
     files: [
       './config/test-setup.js',
-      './site/scripts/**/*.spec.js',
+      './site/scripts/**/*.js',
     ],
 
 
@@ -25,7 +25,7 @@ module.exports = function setConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'site/**/*!(spec).js': ['babel'],
+      'site/**/!(*.spec).js': ['babel'],
       '**/*.js': ['webpack'],
     },
 

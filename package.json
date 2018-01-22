@@ -22,7 +22,9 @@
     "koa-router": "^7.2.1",
     "koa-static": "^4.0.1",
     "pkg-dir": "^2.0.0",
-    "raw-body": "^2.3.2"
+    "raw-body": "^2.3.2",
+    "redux": "^3.7.2",
+    "rxjs": "^5.5.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
