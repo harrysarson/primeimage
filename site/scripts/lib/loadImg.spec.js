@@ -13,7 +13,6 @@ describe('loadImg', () => {
   });
 
   it('should handle errors', () => {
-    /* eslint-disable-line */
     const src = 'not a valid data uri';
 
     const loadingImg = loadImg(src);
