@@ -1,5 +1,4 @@
 module.exports = function setConfig(config) {
-
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -40,7 +39,7 @@ module.exports = function setConfig(config) {
       dir: 'coverage',
       reporters: [
         { type: 'text-summary' },
-        { type: (true || process.env.TRAVIS) ? 'lcov' : 'html', subdir: '.' },
+        { type: (process.env.TRAVIS) ? 'lcov' : 'html', subdir: '.' },
       ],
     },
 
