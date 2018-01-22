@@ -1,1 +1,1 @@
-export * from 'https://unpkg.com/rxjs@5.5.5/_esm2015/Observable';
+export * from 'rxjs/Observable';
