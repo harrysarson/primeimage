@@ -1,4 +1,5 @@
 module.exports = function setConfig(config) {
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -25,6 +26,7 @@ module.exports = function setConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'site/**/*!(spec).js': ['babel'],
       '**/*.js': ['webpack'],
     },
 
@@ -32,8 +34,15 @@ module.exports = function setConfig(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'text-summary' },
+        { type: (true || process.env.TRAVIS) ? 'lcov' : 'html', subdir: '.' },
+      ],
+    },
 
     // web server port
     port: 9876,
@@ -65,6 +74,11 @@ module.exports = function setConfig(config) {
       },
     },
 
+    babelPreprocessor: {
+      options: {
+        plugins: ['istanbul'],
+      },
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
