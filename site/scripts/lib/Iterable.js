@@ -17,13 +17,6 @@ export class Iterable {
     return this.generator();
   }
 
-  filter(predicate) {
-    return Iterable.filter(predicate)(this);
-  }
-
-  pipe(...projects) {
-    return projects.reduce((value, project) => project(value), this);
-  }
 }
 
 export const filter = predicate => iterable =>
