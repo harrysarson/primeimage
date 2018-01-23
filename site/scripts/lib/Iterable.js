@@ -16,7 +16,6 @@ export class Iterable {
   [Symbol.iterator]() {
     return this.generator();
   }
-
 }
 
 export const filter = predicate => iterable =>
