@@ -1,3 +1,6 @@
+const replace = require("rollup-plugin-replace");
+const resolve = require("rollup-plugin-node-resolve");
+
 module.exports = function setConfig(config) {
   config.set({
 
@@ -7,13 +10,18 @@ module.exports = function setConfig(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+    frameworks: [
+      'mocha',
+      'chai',
+      'chai-as-promised',
+      'sinon-chai',
+      'chai-dom',
+    ],
 
 
     // list of files / patterns to load in the browser
     files: [
-      './config/test-setup.js',
-      './site/scripts/**/*.js',
+      { pattern: 'site/**/*.spec.js', watched: false },
     ],
 
 
@@ -25,10 +33,8 @@ module.exports = function setConfig(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'site/**/!(*.spec).js': ['babel'],
-      '**/*.js': ['webpack'],
+      'site/**/*.js': ['babel', 'rollup'],
     },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -77,6 +83,32 @@ module.exports = function setConfig(config) {
       options: {
         plugins: ['istanbul'],
       },
+    },
+
+    // TODO: avoid duplication with rollup.config.js
+    rollupPreprocessor: {
+      output: {
+        format: 'iife',
+        name: 'PrimeImageTest',
+        sourcemap: 'inline',
+      },
+
+      plugins: [
+        replace({
+          exclude: [],
+          values: {
+            // for redux
+            'process.env.NODE_ENV': JSON.stringify('development'),
+          },
+        }),
+        resolve({
+          module: true,
+          jsnext: true,
+          main: false,
+          browser: true,
+          modulesOnly: true,
+        }),
+      ],
     },
 
     // Continuous Integration mode
