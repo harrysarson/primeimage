@@ -1,4 +1,4 @@
-import { combineReducers } from '../deps/redux.js';
+import { combineReducers } from 'redux/es/index.js';
 import { types as actionType } from '../actions/index.js';
 
 

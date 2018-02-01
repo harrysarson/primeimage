@@ -1,4 +1,4 @@
-import { pluck, tap, map, filter } from '../../deps/rxjs/operators.js';
+import { pluck, tap, map, filter } from 'rxjs/_esm2015/operators.js';
 
 import { creators as actionCreators } from '../../actions/index.js';
 import { dragObserver } from '../../lib/dragObserver.js';

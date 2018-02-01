@@ -1,6 +1,6 @@
-import fromEvent from '../deps/rxjs/observable/fromEvent.js';
-import { merge } from '../deps/rxjs/observable/merge.js';
-import * as operators from '../deps/rxjs/operators.js';
+import { fromEvent } from 'rxjs/_esm2015/observable/fromEvent';
+import { merge } from 'rxjs/_esm2015/observable/merge';
+import * as operators from 'rxjs/_esm2015/operators';
 import { map as itblMap } from './Iterable.js';
 import { pipe } from './pipe.js';
 

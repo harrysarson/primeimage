@@ -1,6 +1,6 @@
-import { fromEvent } from '../deps/rxjs/observable/fromEvent.js';
-import { merge } from '../deps/rxjs/observable/merge.js';
-import { tap, map, startWith, distinctUntilChanged, filter } from '../deps/rxjs/operators.js';
+import { fromEvent } from 'rxjs/_esm2015/observable/fromEvent.js';
+import { merge } from 'rxjs/_esm2015/observable/merge.js';
+import { tap, map, startWith, distinctUntilChanged, filter } from 'rxjs/_esm2015/operators.js';
 
 import { creators as actionCreators } from '../actions/index.js';
 import { Iterable, filter as itFilter } from '../lib/Iterable.js';
