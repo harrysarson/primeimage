@@ -3,13 +3,13 @@ import { Iterable, filter, map } from './Iterable.js';
 
 describe('Iterable Class', () => {
   it('new Iterable() should create empty iterable', () => {
-    expect(new Iterable()).to.iterate.for.lengthOf(0);
+    expect([...new Iterable()]).to.be.empty;
   });
 
   it('Iterable should iterate over correct values', () => {
     const arr = [123, 235, 568, 'hseih', { hi: 235 }, [345, 35, 34]];
 
-    expect(new Iterable(function* yieldArray() { yield* arr; })).to.iterate.over(arr);
+    expect([...new Iterable(function* yieldArray() { yield* arr; })]).to.deep.equal(arr);
   });
 });
 
@@ -19,12 +19,12 @@ describe('Iterable functions', () => {
   it('filter()', () => {
     const predicate = x => x % 2 === 0;
 
-    expect(filter(predicate)(arr)).to.iterate.over(arr.filter(predicate));
+    expect([...filter(predicate)(arr)]).to.deep.equal(arr.filter(predicate));
   });
 
   it('map', () => {
     const project = x => x * x;
 
-    expect(map(project)(arr)).to.iterate.over(arr.map(project));
+    expect([...map(project)(arr)]).to.deep.equal(arr.map(project));
   });
 });

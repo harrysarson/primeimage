@@ -1,9 +1,9 @@
-import { pluck } from './scripts/deps/rxjs/operators.js';
+import { pluck } from 'rxjs/_esm2015/operators.js';
 
-import imageLoad from './scripts/gui/stage/imageLoad.js';
-import createStore from './scripts/store/create.js';
-import { Chain } from './scripts/lib/Chain.js';
-import createButtons from './scripts/gui/buttons.js';
+import imageLoad from './gui/stage/imageLoad.js';
+import createStore from './store/create.js';
+import { Chain } from './lib/Chain.js';
+import createButtons from './gui/buttons.js';
 
 const store = createStore();
 
