@@ -1,5 +1,5 @@
-const replace = require("rollup-plugin-replace");
-const resolve = require("rollup-plugin-node-resolve");
+const replace = require('rollup-plugin-replace');
+const resolve = require('rollup-plugin-node-resolve');
 
 module.exports = function setConfig(config) {
   config.set({

@@ -19,6 +19,9 @@ module.exports = {
     }],
     'import/extensions': 'always',
     'import/prefer-default-export': 'never',
+    'import/no-extraneous-dependencies': ['error', {
+      devDependencies: ['config/**/*.js', '**/*.spec.js'],
+    }],
     'no-unused-expressions': 0,
     'chai-friendly/no-unused-expressions': 2,
   },
