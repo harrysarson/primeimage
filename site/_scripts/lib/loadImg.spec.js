@@ -1,6 +1,6 @@
 /* global describe it expect */
 
-import { loadImg } from './loadImg.js';
+import {loadImg} from './loadImg.js';
 
 describe('loadImg', () => {
   it('should load an image', async () => {
@@ -17,13 +17,12 @@ describe('loadImg', () => {
 
     const loadingImg = loadImg(src);
 
-    return expect(loadingImg).to.be.rejectedWith(Error)
-      .that.eventually.satisfies((error) => {
-        console.log('error');
-        expect(error).to.have.property('source').equal(src);
-        expect(error).to.have.property('img').instanceOf(HTMLImageElement);
-        return true;
-      });
+    return expect(loadingImg.catch(error => error)).to.eventually.satisfies((error) => {
+      expect(error).to.be.instanceOf(Error);
+      expect(error).to.have.property('source').equal(src);
+      expect(error).to.have.property('img').instanceOf(HTMLImageElement);
+      return true;
+    });
   });
 
   it('should verify using a canvas that images are correct', async () => {
