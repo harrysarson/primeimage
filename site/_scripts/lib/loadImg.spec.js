@@ -1,6 +1,6 @@
 /* global describe it expect */
 
-import {loadImg} from './loadImg.js';
+import { loadImg } from './loadImg.js';
 
 describe('loadImg', () => {
   it('should load an image', async () => {
