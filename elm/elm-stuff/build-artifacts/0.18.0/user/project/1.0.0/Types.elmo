@@ -1,0 +1,6 @@
+var _user$project$Types$Model = function (a) {
+	return {interactionPanel: a};
+};
+var _user$project$Types$InteractionPanel = function (a) {
+	return {ctor: 'InteractionPanel', _0: a};
+};

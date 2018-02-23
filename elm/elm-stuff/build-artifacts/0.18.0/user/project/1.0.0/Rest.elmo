@@ -1,0 +1,19 @@
+var _user$project$Rest$decodeGifUrl = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'data',
+		_1: {
+			ctor: '::',
+			_0: 'image_url',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _user$project$Rest$getRandomGif = function (topic) {
+	var url = A2(_elm_lang$core$Basics_ops['++'], 'https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=', topic);
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Types$NewGif,
+		A2(_elm_lang$http$Http$get, url, _user$project$Rest$decodeGifUrl));
+};
