@@ -1,2 +1,0 @@
-var _user$project$App$main = _elm_lang$html$Html$program(
-	{init: _user$project$State$initialState, update: _user$project$State$update, subscriptions: _user$project$State$subscriptions, view: _user$project$View$view})();

@@ -1,6 +1,0 @@
-var _user$project$InteractionPanel_Types$Model = function (a) {
-	return {stage: a};
-};
-var _user$project$InteractionPanel_Types$ChangeStage = function (a) {
-	return {ctor: 'ChangeStage', _0: a};
-};
