@@ -2,12 +2,11 @@ module Types exposing (..)
 
 import Http
 
-import InteractionPanel.Types
 
 type alias Model =
-  { interactionPanel : InteractionPanel.Types.Model
+  { stage : Int
   }
 
 
 type Msg
-  = InteractionPanel InteractionPanel.Types.Msg
+  = ChangeStage Int
