@@ -1,4 +1,4 @@
-module App exposing (main)
+module Main exposing (main)
 
 import Html
 
