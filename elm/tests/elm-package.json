@@ -4,7 +4,7 @@
     "repository": "https://github.com/not-hosted-on/github.git",
     "license": "MIT",
     "source-directories": [
-        "..",
+        "../elm-src",
         "."
     ],
     "exposed-modules": [],
