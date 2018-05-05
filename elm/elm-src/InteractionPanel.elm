@@ -15,7 +15,7 @@ type alias Props msg =
 view : Props msg -> Html.Html msg
 view props =
   div [ class "interaction-panel" ]
-    [ section [ class "interaction-instructions stage-selecting" ] (Maybe.withDefault [] (Array.get props.stage instructions))
+    [ section [ class "interaction-instructions stage-selecting" ] (Maybe.withDefault default_instructions (Array.get props.stage instructions))
     , div [ class "interaction-interface stage-selecting show-only-selected" ] []
     , div [ class "interaction-control" ]
       [ button
@@ -42,3 +42,9 @@ instructions = Array.fromList
     , p [] [ text "Use the box below to open an image." ]
     ]
   ]
+
+default_instructions = [ h1 [] [ text "Unkown stage" ]
+                       , p []
+                         [ text "dunno"
+                         ]
+                       ]

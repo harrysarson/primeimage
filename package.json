@@ -38,6 +38,7 @@
     "chai-iterator": "^1.1.4",
     "codecov": "^3.0.0",
     "elm": "^0.18.0",
+    "elm-test": "^0.18.12",
     "eslint": "^4.11.0",
     "eslint-config-airbnb-base": "^12.0.2",
     "eslint-plugin-chai-friendly": "^0.4.1",

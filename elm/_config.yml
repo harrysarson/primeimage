@@ -1,1 +1,3 @@
-name: Harry Sarson, Elliot Fosong
+title: Harry Sarson, Elliot Fosong
+
+# exclude: [./elm-src, ./elm-src-stuff]
