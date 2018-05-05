@@ -36,6 +36,7 @@
     "chai-as-promised": "^7.1.1",
     "chai-dom": "^1.6.0",
     "chai-iterator": "^1.1.4",
+    "chokidar-cli": "^1.2.0",
     "codecov": "^3.0.0",
     "elm": "^0.18.0",
     "elm-test": "^0.18.12",
