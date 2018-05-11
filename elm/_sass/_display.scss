@@ -24,6 +24,8 @@
   height: 100%;
   overflow: visible;
 
+  pointer-events: none;
+
   > .current-stage {
     background-color: #ddd;
   }
@@ -35,12 +37,12 @@
     transition-duration: inherit;
     transition-timing-function: inherit;
 
-    pointer-events: none;
-
     font-size: 2em;
     max-height: var(--height);
     position: relative;
     width: 100%;
+    max-width: var(--height);
+    margin: 0 auto;
 
     background: grey content-box;
     overflow: visible;

@@ -7,16 +7,21 @@ import Html.Events exposing (..)
 
 import Types
 
-type alias Props =
+type alias Props msg =
   { stage : Int
+  , change : Int -> msg
   }
 
 
-view : Props -> Html.Html a
+view : Props msg -> Html.Html msg
 view props =
   div []
     [ div
-      [ class "display-panel stage-selecting" ]
+      [ class "display-panel stage-selecting"
+      , style
+        [ ( "--show-stage", toString props.stage ) ]
+      , onClick (props.change 1)
+      ]
       (List.map (div []) displays)
     ]
 

@@ -8,7 +8,8 @@
     "test": "npm run karma -- --single-run",
     "karma": "karma start config/karma.js",
     "rollup": "rollup -c config/rollup.config.js",
-    "start": "node ./server"
+    "start": "node ./server",
+    "elm-dev": "(cd elm && exec chokidar 'elm-src/**/*.elm' -c 'elm-make elm-src/Main.elm --output compiled-elm/elm.js' --initial)"
   },
   "private": true,
   "gypfile": true,

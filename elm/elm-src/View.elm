@@ -12,7 +12,10 @@ import Types
 
 view : Types.Model -> Html Types.Msg
 view model =
-  node "main" []
-    [ InteractionPanel.view { stage = model.stage, change = (\change -> Types.ChangeStage change) }
-    , DisplayPanel.view { stage = model.stage }
-    ]
+  let
+    props = { stage = model.stage, change = (\change -> Types.ChangeStage change) }
+  in
+    node "main" []
+      [ InteractionPanel.view props
+      , DisplayPanel.view props
+      ]
