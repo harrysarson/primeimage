@@ -9,7 +9,8 @@ import Types
 
 type alias Props msg =
   { stage : Int
-  , change : Int -> msg
+  , goNext : msg
+  , canGoNext : Bool
   }
 
 
@@ -20,9 +21,15 @@ view props =
       [ class "display-panel stage-selecting"
       , style
         [ ( "--show-stage", toString props.stage ) ]
-      , onClick (props.change 1)
       ]
-      (List.map (div []) displays)
+      ( List.map
+        ( div <|
+            -- hack because you should not set disabled for a div, replace with a .disabled class
+            [ onClick props.goNext ]
+            ++ if not props.canGoNext then [ attribute "disabled" "" ] else []
+        )
+        displays
+      )
     ]
 
 displays =
