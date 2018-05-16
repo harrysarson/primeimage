@@ -7,14 +7,14 @@ import Html.Events exposing (..)
 
 import Types
 
-type alias Props msg =
+type alias Props =
   { stage : Int
-  , goNext : msg
+  , goNext : Types.Msg
   , canGoNext : Bool
   }
 
 
-view : Props msg -> Html.Html msg
+view : Props -> Html.Html Types.Msg
 view props =
   div []
     [ div

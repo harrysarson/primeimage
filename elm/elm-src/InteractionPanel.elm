@@ -9,14 +9,14 @@ import Html.Events exposing (..)
 
 import Types
 
-type alias Props msg =
+type alias Props =
   { stage : Int
-  , change : Int -> msg
+  , change : Int -> Types.Msg
   , canGoBack : Bool
   , canGoNext : Bool
   }
 
-view : Props msg -> Html.Html msg
+view : Props -> Html.Html Types.Msg
 view props =
   div [ class "interaction-panel" ]
     [ section
@@ -38,6 +38,7 @@ view props =
       ]
     ]
 
+instructions : Array.Array (List (Html Types.Msg))
 instructions = Array.fromList
   [ [ h1 [] [ text "Welcome to Prime Image" ]
     , p []
@@ -55,6 +56,7 @@ instructions = Array.fromList
 -- todo: xmlns="http://www.w3.org/2000/svg"
 
 
+interactions : Array.Array (List (Html Types.Msg))
 interactions = Array.fromList
   [ []
   , [ Html.form
@@ -79,7 +81,7 @@ interactions = Array.fromList
     ]
   ]
 
-default_instructions : int -> List(Html msg)
+default_instructions : int -> List(Html Types.Msg)
 default_instructions stage =
   [ h1 [] [ text "Unknown stage" ]
   , p [] [ text ("Stage " ++ (toString stage) ++ " could not be found") ]
