@@ -3,15 +3,16 @@ module Main exposing (main)
 import Html
 
 import Types
-import State
-import View
+import State exposing (initialState, update)
+import View exposing (view)
+import Subscriptions exposing (subscriptions)
 
 
 main : Program Never Types.Model Types.Msg
 main =
     Html.program
-        { init = State.initialState
-        , update = State.update
-        , subscriptions = State.subscriptions
-        , view = View.view
+        { init = initialState
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
         }

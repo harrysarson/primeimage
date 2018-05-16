@@ -3,11 +3,13 @@ module InteractionPanel exposing (Props, view)
 import Array
 import Html exposing (..)
 import Svg
+import Json.Decode as Decode
 import Html.Attributes exposing (..)
 import Svg.Attributes
 import Html.Events exposing (..)
 
 import Types
+import Config
 
 type alias Props =
   { stage : Int
@@ -72,7 +74,12 @@ interactions = Array.fromList
               """
           ] []
         ]
-      , input [ type_ "file", name "files[]", id "file" ] []
+      , input
+        [ type_ "file"
+        , name "files[]"
+        , id Config.imageInputId
+        , on "change" <| Decode.succeed Types.ImageSelected
+        ] []
       , label [ for "file" ]
         [ strong [] [ text "Choose a file" ]
         , text " or drag it here."

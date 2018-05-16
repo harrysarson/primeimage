@@ -2,10 +2,13 @@ module State exposing (..)
 
 import Types
 import Config
+import ImageUploadPort exposing (fileSelected)
 
 initialState : (Types.Model, Cmd Types.Msg)
 initialState =
-  ( { stage = 0 }
+  ( { stage = 0
+    , image = Nothing
+    }
   , Cmd.none
   )
 
@@ -19,6 +22,21 @@ update msg model =
       in
         ( { model | stage = newStage }
         , Cmd.none )
+    Types.ImageSelected ->
+      ( model
+      , fileSelected Config.imageInputId
+      )
+    Types.ImageRead data ->
+      let
+        newImage =
+          { contents = data.contents
+          , filename = data.filename
+          }
+      in
+        ( { model | image = Just newImage }
+        , Cmd.none
+        )
+
 
 
 subscriptions : Types.Model -> Sub Types.Msg

@@ -20,6 +20,7 @@ view model =
       { stage = model.stage
       , goNext = Types.ChangeStage 1
       , canGoNext = canGoNext
+      , imagePreview = model.image
       }
     interactionProps =
       { stage = model.stage

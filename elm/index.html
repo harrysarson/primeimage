@@ -15,6 +15,34 @@
 
     <script type="text/javascript">
       const app = Elm.Main.fullscreen();
+
+
+      app.ports.fileSelected.subscribe(function (id) {
+        var element = document.getElementById(id);
+        if (element === null) {
+          return;
+        }
+
+        var file = element.files[0];
+        var reader = new FileReader();
+
+        reader.onload = (function(event) {
+          // The result is base64 encoded contents of the file.
+          var base64encoded = event.target.result;
+
+          var portData = {
+            contents: base64encoded,
+            filename: file.name
+          };
+
+          app.ports.fileContentRead.send(portData);
+        });
+
+        // Connect our FileReader with the file that was selected in our `input` node.
+        reader.readAsDataURL(file);
+      });
+
+
     </script>
 
 </body>
