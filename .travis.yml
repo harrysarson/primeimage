@@ -28,8 +28,8 @@ notifications:
     on_failure: always # default: always
 
 before_deploy:
-  - "npm run build"
-  - "git add site/built -r"
+  - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
+  - git add site/built -r
 
 deploy:
   local-dir: site
