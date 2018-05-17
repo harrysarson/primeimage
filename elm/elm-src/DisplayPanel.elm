@@ -9,7 +9,6 @@ import Types
 
 type alias Props =
   { stage : Int
-  , goNext : Types.Msg
   , canGoNext : Bool
   , imagePreview : Maybe Types.Image
   }
@@ -26,7 +25,7 @@ view props =
       ( List.map
         ( div <|
             -- hack because you should not set disabled for a div, replace with a .disabled class
-            [ onClick props.goNext ]
+            [ onClick (Types.ChangeStage 1) ]
             ++ if not props.canGoNext then [ attribute "disabled" "" ] else []
         )
         ( displays props )

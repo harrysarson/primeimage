@@ -13,7 +13,6 @@ import Config
 
 type alias Props =
   { stage : Int
-  , change : Int -> Types.Msg
   , canGoBack : Bool
   , canGoNext : Bool
   }
@@ -29,12 +28,12 @@ view props =
     , div [ class "interaction-control" ]
       [ button
         [ attribute "data-stage-change" "-1"
-        , onClick (props.change -1)
+        , onClick (Types.ChangeStage -1)
         , disabled <| not props.canGoBack
         ] [ text "Back" ]
       , button
         [ attribute "data-stage-change" "+1"
-        , onClick (props.change 1)
+        , onClick (Types.ChangeStage 1)
         , disabled <| not props.canGoNext
         ] [ text "Next" ]
       ]
