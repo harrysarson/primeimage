@@ -1,4 +1,5 @@
 _site/
 elm-stuff/
-compiled-elm/
 node_modules/
+
+site/built/
