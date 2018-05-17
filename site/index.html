@@ -1,42 +1,50 @@
 ---
-layout: default
-title: Prime Image
 ---
 
-{% assign stages = site.data.stages %}
+<html>
 
-<header>
-  <h1> {{ page.title }} </h1>
-</header>
+<head>
+  <meta charset="utf-8"/>
+  <title>Prime Image</title>
+  <link rel="stylesheet" href="main.css"/>
+</head>
 
-<main>
-  <div class="interaction-panel" id="interaction">
-    <section class="interaction-instructions stage-selecting show-only-selected">
-      {% for stage in stages %}
-      <span>
-        {{ stage.instructions }}
-      </span>
-      {% endfor %}
-    </section>
-    <div class="interaction-interface stage-selecting show-only-selected">
-      {% for stage in stages %}
-      <span>
-        {{ stage.interface }}
-      </span>
-      {% endfor %}
-    </div>
-    <div class="interaction-control">
-      <button data-stage-change="-1">Back</button>
-      <button data-stage-change="1">Next</button>
-    </div>
-  </div>
-  <div>
-    <div class="display-panel stage-selecting">
-      {% for stage in   stages %}
-      <div data-stage-change="1">
-        {{ stage.display }}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</main>
+<body>
+
+    <script type="text/javascript" src="built/elm.js"></script>
+
+    <script type="text/javascript">
+      const app = Elm.Main.fullscreen();
+
+
+      app.ports.fileSelected.subscribe(function (id) {
+        var element = document.getElementById(id);
+        if (element === null) {
+          return;
+        }
+
+        var file = element.files[0];
+        var reader = new FileReader();
+
+        reader.onload = (function(event) {
+          // The result is base64 encoded contents of the file.
+          var base64encoded = event.target.result;
+
+          var portData = {
+            contents: base64encoded,
+            filename: file.name
+          };
+
+          app.ports.fileContentRead.send(portData);
+        });
+
+        // Connect our FileReader with the file that was selected in our `input` node.
+        reader.readAsDataURL(file);
+      });
+
+
+    </script>
+
+</body>
+
+</html>

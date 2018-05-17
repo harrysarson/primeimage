@@ -1,2 +1,5 @@
-name: Harry Sarson, Elliot Fosong
-markdown:    kramdown
+title: Harry Sarson, Elliot Fosong
+
+exclude: [./elm-src, ./elm-src-stuff]
+
+repository: harrysarson/primeimage
