@@ -29,7 +29,7 @@ notifications:
 
 before_deploy:
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
-  - git add site/built -r
+  - git add site/built -f
 
 deploy:
   local-dir: site
