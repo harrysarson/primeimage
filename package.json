@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "elm test",
-    "build": "elm make elm-src/Main.elm --output site/built/elm.js",
+    "build": "elm make --yes elm-src/Main.elm --output site/built/elm.js",
     "serve": "bundle exec jekyll serve --source site"
   },
   "private": true,
