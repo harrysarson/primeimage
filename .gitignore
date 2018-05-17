@@ -1,3 +1,4 @@
-build/
+_site/
+elm-stuff/
+compiled-elm/
 node_modules/
-coverage/
