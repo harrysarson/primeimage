@@ -2,21 +2,14 @@ language: node_js
 node_js:
   - "lts/*"
 
-
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-
-
 cache:
   directories:
     - node_modules
+    - tests/elm-stuff/build-artifacts
 
 
 script:
-  - npm run lint
   - npm run test
-  - npx codecov
 
 notifications:
   email:
