@@ -27,7 +27,7 @@ notifications:
     on_success: never # default: change
     on_failure: always # default: always
 
-before-deploy:
+before_deploy:
   - "git add site/built -r"
 
 deploy:
