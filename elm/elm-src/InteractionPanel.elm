@@ -19,40 +19,58 @@ type alias Props =
 
 view : Props -> Html.Html Types.Msg
 view props =
+  let
+    instruction =
+      Array.get props.stage (instructions props)
+        |> Maybe.withDefault (default_instructions props.stage)
+    interaction =
+      Array.get props.stage interactions
+        |> Maybe.withDefault []
+
+  in
   div [ class "interaction-panel" ]
     [ section
-      [ class "interaction-instructions stage-selecting" ]
-      (Maybe.withDefault (default_instructions props.stage) (Array.get props.stage instructions))
-    , div [ class "interaction-interface stage-selecting" ]
-      (Maybe.withDefault [] (Array.get props.stage interactions))
+        [ class "interaction-instructions stage-selecting" ]
+        instruction
+    , div
+        [ class "interaction-interface stage-selecting" ]
+        interaction
     , div [ class "interaction-control" ]
-      [ button
-        [ attribute "data-stage-change" "-1"
-        , onClick (Types.ChangeStage -1)
-        , disabled <| not props.canGoBack
-        ] [ text "Back" ]
-      , button
-        [ attribute "data-stage-change" "+1"
-        , onClick (Types.ChangeStage 1)
-        , disabled <| not props.canGoNext
-        ] [ text "Next" ]
+      [ stageButton -1 props [ text "Back" ]
+      , stageButton  1 props [ text "Next" ]
       ]
     ]
 
-instructions : Array.Array (List (Html Types.Msg))
-instructions = Array.fromList
-  [ [ h1 [] [ text "Welcome to Prime Image" ]
-    , p []
-      [ text "Click "
-      , button [ attribute "data-stage-change" "+1" ] [ text "Next" ]
-      , text "to begin."
+stageButton : Int -> Props -> List (Html Types.Msg) -> Html.Html Types.Msg
+stageButton change props =
+  let
+    enabled = if change > 0
+      then props.canGoNext
+      else if change < 0
+        then props.canGoBack
+        else False
+  in
+    button
+      [ attribute "data-stage-change" (toString change)
+      , onClick (Types.ChangeStage change)
+      , disabled <| not enabled
+      ]
+
+instructions : Props -> Array.Array (List (Html Types.Msg))
+instructions props =
+  Array.fromList
+    [ [ h1 [] [ text "Welcome to Prime Image" ]
+      , p []
+        [ text "Click "
+        , stageButton 1 props [ text "Next" ]
+        , text "to begin."
+        ]
+      ]
+    , [ h1 [] [ text "Select Image" ]
+      , p [] [ text "First you must select an image to turn into a prime number." ]
+      , p [] [ text "Use the box below to open an image." ]
       ]
     ]
-  , [ h1 [] [ text "Select Image" ]
-    , p [] [ text "First you must select an image to turn into a prime number." ]
-    , p [] [ text "Use the box below to open an image." ]
-    ]
-  ]
 
 -- todo: xmlns="http://www.w3.org/2000/svg"
 
