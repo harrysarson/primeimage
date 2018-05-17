@@ -5,7 +5,7 @@ import Html.Attributes as Attr
 
 import Test exposing (describe, test, fuzz)
 import Test.Html.Query as Query
-import Test.Html.Selector exposing (id, tag, class, attribute)
+import Test.Html.Selector exposing (id, tag, class, attribute, disabled)
 import Test.Html.Event as Event
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer)
@@ -16,13 +16,25 @@ import State
 import InteractionPanel exposing (view, Props)
 import Types
 
-type Msg = Click Int
 
-props : Fuzzer (Props Msg)
+props : Fuzzer Props
 props =
-  Fuzz.custom
-    (Random.map (\i -> { stage = i, change = (\i -> Click i) }) (Random.int -0 10) )
-    (\{ stage, change } -> Shrink.map Props (Shrink.int stage) |> Shrink.andMap (Shrink.noShrink change))
+  let
+    generator = Random.map3
+        Props
+        (Random.int -0 10)
+        Random.bool
+        Random.bool
+    shrinker = \
+      { stage
+      , canGoBack
+      , canGoNext
+      } ->
+      Shrink.map Props (Shrink.int stage)
+       |> Shrink.andMap (Shrink.bool canGoBack)
+       |> Shrink.andMap (Shrink.bool canGoNext)
+  in
+    Fuzz.custom generator shrinker
 
 tests =
   describe "InteractionPanel"
@@ -43,14 +55,14 @@ tests =
         >> Query.fromHtml
         >> Query.find [ tag "h1" ]
         >> \_ -> Expect.pass
-    , test "Stage 0 should have no interaction" <|
-        \() -> view { stage = 0, change = (\i -> Click i) }
+    , fuzz props "Stage 0 should have no interaction" <|
+        \p -> view { p | stage = 0 }
           |> Query.fromHtml
           |> Query.find [ class "interaction-interface" ]
           |> Query.children []
           |> Query.count (Expect.equal 0)
-    , test "Stage 1 should have file loader interaction" <|
-        \() -> view { stage = 1, change = (\i -> Click i) }
+    , fuzz props "Stage 1 should have file loader interaction" <|
+        \p -> view { p | stage = 1 }
           |> Query.fromHtml
           |> Query.find [ class "interaction-interface" ]
           |> Query.find [ tag "form" ]
@@ -59,18 +71,31 @@ tests =
             , Query.find [ tag "input" ]
               >> Query.has [ attribute (Attr.type_ "file"), attribute (Attr.name "files[]"),   id "file" ]
             ]
-    , test "Should have back and forwards button" <|
-        \() -> { stage = 2, change = (\i -> Click i) }
-        |> view
-        |> Query.fromHtml
-        |> Query.findAll [ tag "button" ]
-        |> Expect.all
+    , fuzz props "Should have back and next button" <|
+        view
+        >> Query.fromHtml
+        >> Query.find [ class "interaction-control" ]
+        >> Query.findAll [ tag "button" ]
+        >> Expect.all
           [ Query.count (Expect.equal 2)
           , Query.index 0
             >> Event.simulate Event.click
-            >> Event.expect (Click -1)
+            >> Event.expect (Types.ChangeStage -1)
           , (Query.index 1
             >> Event.simulate Event.click
-            >> Event.expect (Click 1))
+            >> Event.expect (Types.ChangeStage 1))
           ]
+    , fuzz props "Buttons can be disabled" <|
+        \p -> view p
+        |> Query.fromHtml
+        |> Query.find [ class "interaction-control" ]
+        |> Query.children [ tag "button" ]
+        |> Expect.all
+          [ Query.count (Expect.equal 2)
+          , Query.index 0
+            >> Query.has [ disabled (not p.canGoBack) ]
+          , Query.index 1
+            >> Query.has [ disabled (not p.canGoNext) ]
+          ]
+
     ]

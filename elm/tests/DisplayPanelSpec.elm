@@ -14,14 +14,29 @@ import Util exposing (queryInOrder)
 import State
 import DisplayPanel exposing (view, Props)
 import Types
-
-type Msg = Click Int
+import Resources
 
 props : Fuzzer Props
 props =
-  Fuzz.custom
-    (Random.map (\i -> { stage = i}) (Random.int -0 10) )
-    (\{ stage } -> Shrink.map (\i -> { stage = i}) (Shrink.int stage))
+  let
+    generator =
+      Random.map3
+        Props
+        (Random.int 0 10)
+        Random.bool
+        (Random.constant (Just Resources.defaultImage))
+    shrinker = \
+      { stage
+      , canGoNext
+      , imagePreview
+      } ->
+        Shrink.map Props (Shrink.int stage)
+         |> Shrink.andMap (Shrink.bool canGoNext)
+         |> Shrink.andMap (Shrink.noShrink imagePreview)
+  in
+    Fuzz.custom
+      generator
+      shrinker
 
 tests =
   describe "DisplayPanel"
