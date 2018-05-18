@@ -13,6 +13,7 @@
   "dependencies": {},
   "devDependencies": {
     "elm": "^0.18.0",
-    "elm-test": "^0.18.12"
+    "elm-test": "^0.18.12",
+    "node-elm-lint": "^1.0.0-beta.1"
   }
 }
