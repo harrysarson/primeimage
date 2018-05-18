@@ -1,8 +1,6 @@
 module View exposing (view)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html exposing (Html, node)
 
 import InteractionPanel
 import DisplayPanel
