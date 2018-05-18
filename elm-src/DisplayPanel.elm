@@ -1,6 +1,5 @@
 module DisplayPanel exposing (Props, view)
 
-import Array
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
