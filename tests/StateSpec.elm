@@ -1,12 +1,13 @@
-module StateSpec exposing (..)
+module StateSpec exposing (tests)
 
-import Test exposing (describe, test)
+import Test exposing (describe, test, Test)
 import Expect
 import State exposing (..)
 import Types
 
 (model, cmd) = initialState
 
+tests : Test
 tests =
   describe "State"
     [ describe "Initial State"

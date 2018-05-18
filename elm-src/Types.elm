@@ -1,4 +1,7 @@
-module Types exposing (..)
+module Types exposing ( Image
+                      , Model
+                      , Msg(..)
+                      )
 
 type alias Image =
   { contents : String

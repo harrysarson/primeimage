@@ -1,12 +1,12 @@
 module InteractionPanel exposing (Props, view)
 
 import Array
-import Html exposing (..)
+import Html exposing (button, div, section, input, h1, p, text, Html, label, strong)
 import Svg
 import Json.Decode as Decode
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class, attribute, type_, name, id, disabled, for)
 import Svg.Attributes
-import Html.Events exposing (..)
+import Html.Events exposing (onClick, on)
 
 import Types
 import Config
