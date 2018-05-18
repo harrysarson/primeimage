@@ -1,4 +1,7 @@
-module State exposing (..)
+module State exposing ( initialState
+                      , update
+                      , subscriptions
+                      )
 
 import Types
 import Config

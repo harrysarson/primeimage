@@ -1,10 +1,10 @@
-module DisplayPanelSpec exposing (..)
+module DisplayPanelSpec exposing (tests)
 
 import Random.Pcg as Random
 
-import Test exposing (describe, test, fuzz)
+import Test exposing (describe, Test, fuzz)
 import Test.Html.Query as Query
-import Test.Html.Selector exposing (text, tag, class, classes)
+import Test.Html.Selector exposing (tag, class)
 import Test.Html.Event as Event
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer)
@@ -38,6 +38,7 @@ props =
       generator
       shrinker
 
+tests : Test
 tests =
   describe "DisplayPanel"
     [ fuzz props "classes" <|

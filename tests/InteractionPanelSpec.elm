@@ -1,9 +1,9 @@
-module InteractionPanelSpec exposing (..)
+module InteractionPanelSpec exposing (tests)
 
 import Random.Pcg as Random
 import Html.Attributes as Attr
 
-import Test exposing (describe, test, fuzz)
+import Test exposing (describe, Test, fuzz)
 import Test.Html.Query as Query
 import Test.Html.Selector exposing (id, tag, class, attribute, disabled)
 import Test.Html.Event as Event
@@ -36,6 +36,7 @@ props =
   in
     Fuzz.custom generator shrinker
 
+tests : Test
 tests =
   describe "InteractionPanel"
     [ fuzz props "classes" <|
