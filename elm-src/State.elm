@@ -5,7 +5,7 @@ module State exposing ( initialState
 
 import Types
 import Config
-import ImageUploadPort exposing (fileSelected)
+import Ports exposing (fileSelected)
 
 initialState : (Types.Model, Cmd Types.Msg)
 initialState =

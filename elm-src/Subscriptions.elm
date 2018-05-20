@@ -1,6 +1,6 @@
 module Subscriptions exposing (subscriptions)
 
-import ImageUploadPort exposing (fileContentRead)
+import Ports exposing (fileContentRead)
 import Types
 
 subscriptions : Types.Model -> Sub Types.Msg
