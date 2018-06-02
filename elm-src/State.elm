@@ -31,8 +31,7 @@ initialState =
 
 update : Types.Msg -> Types.Model -> (Types.Model, Cmd Types.Msg)
 update msg model =
-    prettyPrintState <|
-    case Debug.log "MSG" msg of
+    case msg of
       Types.ChangeStage change ->
         let
           newStage = max 0 <| min Config.stageCount model.stage + change
