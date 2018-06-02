@@ -33,9 +33,10 @@ before_deploy:
   - git fetch origin gh-pages:gh-pages
   - |
     git diff --exit-code gh-pages:version.txt site/version.txt
-    if [[ $? -eq 1 ]]
+    export GIT_DIFF_EXIT_CODE=$?
+    if [[ $GIT_DIFF_EXIT_CODE -ne 1 ]]
     then
-      echo "Exit code was $?, Need to publish a new version. Exiting.";
+      printf "Exit code was $GIT_DIFF_EXIT_CODE, Probably to publish a new version. Exiting.\n";
       exit 1;
     fi
   # build elm files
