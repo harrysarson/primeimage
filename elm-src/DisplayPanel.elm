@@ -63,6 +63,7 @@ displays props =
       ]
     ]
 
+maybeSingleton : Maybe a -> List a
 maybeSingleton maybe =
     case maybe of
         Just val ->
