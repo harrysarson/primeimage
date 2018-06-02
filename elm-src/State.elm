@@ -31,6 +31,7 @@ initialState =
 
 update : Types.Msg -> Types.Model -> (Types.Model, Cmd Types.Msg)
 update msg model =
+    prettyPrintState <|
     case msg of
       Types.ChangeStage change ->
         let
