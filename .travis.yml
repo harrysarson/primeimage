@@ -31,7 +31,13 @@ before_deploy:
   - node -e "console.log(require('./package.json').version)" > site/version.txt
   # quit if version matches latest in gh-pages
   - git fetch origin gh-pages:gh-pages
-  - git diff --exit-code gh-pages:version.txt site/version.txt; if [[ $? -eq 1 ]]; then echo "Need to publish a new version"; exit 1; fi
+  - |
+    git diff --exit-code gh-pages:version.txt site/version.txt
+    if [[ $? -eq 1 ]]
+    then
+      echo "Exit code was $?, Need to publish a new version. Exiting.";
+      exit 1;
+    fi
   # build elm files
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
   # stage built files
