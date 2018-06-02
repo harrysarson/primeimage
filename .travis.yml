@@ -28,10 +28,11 @@ notifications:
     on_failure: always # default: always
 
 before_deploy:
+  # save version to site before deploying
+  - node -e "console.log(require('./package.json').version)" > site/version.txt
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
-  - node -e "console.log(require('./package.json').version)" > site/VERSION
   - git add site/built -f
-  - git add site/VERSION
+  - git add site/version.txt
 
 deploy:
   local-dir: site
