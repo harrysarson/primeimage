@@ -14,6 +14,27 @@
     <script type="text/javascript" src="built/elm.js"></script>
 
     <script type="text/javascript">
+
+      const runWhen = (test, maxTries) =>
+        new Promise((res, rej) => {
+          let delayCount = 0;
+          requestAnimationFrame(function attempt() {
+            const testResult = test();
+
+            if (!testResult) {
+              delayCount = delayCount + 1;
+
+              if (delayCount > maxTries) {
+                rej(new Error(`Could not set initial number config values after ${maxTries} attempt(s)`));
+              } else {
+                requestAnimationFrame(attempt);
+              }
+            } else {
+              res();
+            }
+          });
+        });
+
       const app = Elm.Main.fullscreen();
 
 
@@ -64,46 +85,33 @@
         });
       });
 
-      app.ports.setInitialValues.subscribe(({ width, height, levels }) => {
-        let delayCount = 0;
-        requestAnimationFrame(function updateDom() {
-          const getInput = name =>
-            document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
+      app.ports.setInitialValues.subscribe(async ({ width, height, levels }) => {
+        const getInput = name => document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
 
-          const $width = getInput('width');
-
-          if ($width == null) {
-            delayCount = delayCount + 1;
-
-            if (delayCount > 5) {
-              console.error(`Could not set initial number config values. Given up.`);
-            } else {
-              console.log(`delaying setting of initial number config values ${delayCount} times`);
-              requestAnimationFrame(updateDom);
-            }
-          } else {
-
-            const $height = getInput('height');
-
-            const $levels = [...(function* () {
-              let $level;
-              let i = 1;
-              while(($level = getInput(`level ${i}`)) != null) {
-                yield $level;
-                ++i;
-              }
-            })()];
-
-            $width.value = width.attemptedValue;
-            $height.value = height.attemptedValue;
-
-            const numLevels = Math.min($levels.length, levels.length);
-
-            for (let i = 0; i < numLevels; ++i) {
-              $levels[i].value = levels[i].attemptedValue
-            }
+        try {
+          await runWhen(() => getInput('width') != null, 5);
+        } catch(e) {
+          console.error(`Given up setting initial values due to error:\n${e}`);
+          return;
+        }
+        const $width = getInput('width');
+        const $height = getInput('height');
+        const $levels = [...(function* () {
+          let $level;
+          let i = 1;
+          while (($level = getInput(`level ${i}`)) != null) {
+            yield $level;
+            ++i;
           }
-        });
+        })()];
+
+        $width.value = width.attemptedValue;
+        $height.value = height.attemptedValue;
+
+        const numLevels = Math.min($levels.length, levels.length);
+        for (let i = 0; i < numLevels; ++i) {
+          $levels[i].value = levels[i].attemptedValue
+        }
       });
 
       app.ports.ppState.subscribe(state => {
