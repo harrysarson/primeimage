@@ -1,8 +1,11 @@
 module Subscriptions exposing (subscriptions)
 
-import Ports exposing (fileContentRead)
+import Ports exposing (fileContentRead, nonPrimeGenerated)
 import Types
 
 subscriptions : Types.Model -> Sub Types.Msg
 subscriptions model =
-  fileContentRead Types.ImageRead
+  Sub.batch
+    [ fileContentRead Types.ImageRead
+    , nonPrimeGenerated Types.NonPrimeGenerated
+    ]

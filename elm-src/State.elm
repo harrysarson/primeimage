@@ -1,48 +1,75 @@
 module State exposing ( initialState
                       , update
-                      , subscriptions
                       )
+
+import Task
 
 import Types
 import Config
-import Ports exposing (fileSelected)
+import Ports exposing (fileSelected, requestNonPrime, prettyPrintState, setInitialValues)
+
+import ToNumberConfig.Types
+import ToNumberConfig.State
 
 initialState : (Types.Model, Cmd Types.Msg)
 initialState =
-  ( { stage = 0
-    , image = Nothing
-    }
-  , Cmd.none
-  )
+    ( { stage = 0
+      , image = Nothing
+      , toNumberConfig = ToNumberConfig.State.initialState
+      , nonPrime = Nothing
+      }
+    , Cmd.batch
+        [ setInitialValues ToNumberConfig.State.initialState
+        , Task.perform Types.ImageRead <|
+            Task.succeed
+                { contents = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                , filename = "sample"
+                }
+        ]
+    )
 
 
 update : Types.Msg -> Types.Model -> (Types.Model, Cmd Types.Msg)
 update msg model =
-  case msg of
-    Types.ChangeStage change ->
-      let
-        newStage = max 0 <| min Config.stageCount model.stage + change
-      in
-        ( { model | stage = newStage }
-        , Cmd.none )
-    Types.ImageSelected ->
-      ( model
-      , fileSelected Config.imageInputId
-      )
-    Types.ImageRead data ->
-      let
-        newImage =
-          { contents = data.contents
-          , filename = data.filename
-          }
-      in
-        ( { model | image = Just newImage }
-        , Cmd.none
-        )
+    prettyPrintState <|
+    case Debug.log "MSG" msg of
+      Types.ChangeStage change ->
+        let
+          newStage = max 0 <| min Config.stageCount model.stage + change
+          cmd =
+              if change /= 0 && newStage == 2 then
+                  setInitialValues model.toNumberConfig
+              else
+                  Cmd.none
+        in
+          ( { model | stage = newStage }
+          , cmd
+          )
+      Types.ImageSelected ->
+          ( model
+          , fileSelected Config.imageInputId
+          )
+      Types.ImageRead data ->
+          ( { model | image = Just data }
+          , getImgCmd data model.toNumberConfig
+          )
+      Types.UpdateNumberConfig updateNumberConfigMsg ->
+        let
+          toNumberConfig =
+              ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
+          imgCmd =
+              model.image
+                |> Maybe.map (\i -> getImgCmd i toNumberConfig)
+                |> Maybe.withDefault Cmd.none
+        in
+          ( { model | toNumberConfig = toNumberConfig }
+          , imgCmd
+          )
+      Types.NonPrimeGenerated nonPrime ->
+          ( { model | nonPrime = Just nonPrime }
+          , Cmd.none
+          )
 
-
-
-subscriptions : Types.Model -> Sub Types.Msg
-subscriptions model =
-  Sub.none
-
+getImgCmd : Types.Image -> ToNumberConfig.Types.Model -> Cmd msg
+getImgCmd image toNumberConfig =
+    requestNonPrime { toNumberConfig = toNumberConfig, image = image }

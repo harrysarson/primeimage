@@ -18,11 +18,13 @@ view model =
       { stage = model.stage
       , canGoNext = canGoNext
       , imagePreview = model.image
+      , nonPrimeImage = model.nonPrime
       }
     interactionProps =
       { stage = model.stage
       , canGoNext = canGoNext
       , canGoBack = model.stage > 0
+      , numberConfig = model.toNumberConfig
       }
   in
     node "main" []

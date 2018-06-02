@@ -43,6 +43,73 @@
       });
 
 
+      app.ports.requestNonPrime.subscribe(({ toNumberConfig, image }) => {
+        const {
+          width: { value: width },
+          height: { value: height },
+          levels: errorableLevels,
+        } = toNumberConfig;
+
+        const levels = errorableLevels.map(x => x.value);
+
+        const val = new Uint8Array(width * height);
+
+        for (let i = 0; i < val.length; ++i) {
+          val[i] = Math.floor(Math.random() * 3);
+        }
+
+        app.ports.nonPrimeGenerated.send({
+          number: val.join(''),
+          width,
+        });
+      });
+
+      app.ports.setInitialValues.subscribe(({ width, height, levels }) => {
+        let delayCount = 0;
+        requestAnimationFrame(function updateDom() {
+          const getInput = name =>
+            document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
+
+          const $width = getInput('width');
+
+          if ($width == null) {
+            delayCount = delayCount + 1;
+
+            if (delayCount > 5) {
+              console.error(`Could not set initial number config values. Given up.`);
+            } else {
+              console.log(`delaying setting of initial number config values ${delayCount} times`);
+              requestAnimationFrame(updateDom);
+            }
+          } else {
+
+            const $height = getInput('height');
+
+            const $levels = [...(function* () {
+              let $level;
+              let i = 1;
+              while(($level = getInput(`level ${i}`)) != null) {
+                yield $level;
+                ++i;
+              }
+            })()];
+
+            $width.value = width.attemptedValue;
+            $height.value = height.attemptedValue;
+
+            const numLevels = Math.min($levels.length, levels.length);
+
+            for (let i = 0; i < numLevels; ++i) {
+              $levels[i].value = levels[i].attemptedValue
+            }
+          }
+        });
+      });
+
+      app.ports.ppState.subscribe(state => {
+        console.log(state);
+      });
+
     </script>
 
 </body>
