@@ -21,8 +21,6 @@ view props =
   div []
     [ div
       [ class "display-panel stage-selecting"
-      , style
-        [ ( "--show-stage", toString props.stage ) ]
       ]
       ( List.map
         ( div <|

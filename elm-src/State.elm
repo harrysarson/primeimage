@@ -6,7 +6,13 @@ import Task
 
 import Types
 import Config
-import Ports exposing (fileSelected, requestNonPrime, prettyPrintState, setInitialValues, resizeImageNumber)
+import Ports exposing ( fileSelected
+                      , requestNonPrime
+                      , prettyPrintState
+                      , setInitialValues
+                      , resizeImageNumber
+                      , setCssProp
+                      )
 
 import ToNumberConfig.Types
 import ToNumberConfig.State
@@ -25,6 +31,8 @@ initialState =
                 { contents = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                 , filename = "sample"
                 }
+        , Task.perform Types.ChangeStage <|
+            Task.succeed 0
         ]
     )
 
@@ -36,14 +44,17 @@ update msg model =
       Types.ChangeStage change ->
         let
           newStage = max 0 <| min Config.stageCount model.stage + change
-          cmd =
+          setIntialVal =
               if change /= 0 && newStage == 2 then
                   setInitialValues model.toNumberConfig
               else
                   Cmd.none
         in
           ( { model | stage = newStage }
-          , cmd
+          , Cmd.batch
+              [ setIntialVal
+              , setCssProp ( ".display-panel", "--show-stage", toString newStage )
+              ]
           )
       Types.ImageSelected ->
           ( model
