@@ -28,10 +28,7 @@ notifications:
     on_failure: always # default: always
 
 before_deploy:
-  # save version to site before deploying
   - node -e "console.log(require('./package.json').version)" > site/version.txt
-  # make sure version has change since last time
-  - "! git diff --exit-code origin/gh-pages:version.txt site/version.txt"
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
   - git add site/built -f
   - git add site/version.txt
@@ -39,6 +36,7 @@ before_deploy:
 deploy:
   local-dir: site
   provider: pages
+  condition: "! git diff --exit-code origin/gh-pages:version.txt site/version.txt"
   skip-cleanup: true
   github-token:
     secure: "geLH07dRroZ+Av+j+NC3ALWWg0hE+JJcniSUlRjT0PMlESMGdLF5bLNPd6tXzWELCPzphn+JhQSn3StJknE4hv1jw9CVmFhSTHlYeLpHHepOjAZvRKFy89FYW4uBkJGrYm61ZqgMdhuzVTVqXPmliJBl2XkrUw4yIkA4Vg8+/srwhCRU8rvKDkcx82p2GDPAccQaXpMQfY24GunoHOmeswJc8iGzkLWGpYzGSYOejtnBAVAt7O/6cNLXGbO0E0hiJWlOY7aM3ENZq1HnirSZPbnH+UcRWvdXZNHCenO1/zSqnUnyDzguhXrxy2Pu9HZziOxMrG7QmBti7ThFcHbHiioEdFekGUEi2LYAmgIaX98ag52q5M2Tg5Q2HnkABi2E1LL90ORJ7CQBMlLbquiSGxLMizuce95HJA+KsZ4SSkxi71oyLVdXUdHwsijFMFmY1y3uMaE/4+gBWflEPgui1g88OMHnxfWoj6OsNbbAKCrbRWUEvqESirytA7ORsMcUOqcLXm9gYqkI5gCihIzBGzUG64VNlYFxH/CZqCgkTz40gMa4jlDWMn7jgTOQLZLKIEoEL1BG9NrR++3TijLHTynvSJf4Gp+54HYHo2mo48fozPHKCugkdfVBsTTvC/qK5S1jGyMmFb+2+jfcMrGz2+AKoL79x1n4BVEzK8Y6kR0="
