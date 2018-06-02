@@ -19,20 +19,31 @@ import Resources
 props : Fuzzer Props
 props =
   let
+    nonPrimeImage =
+      { number = "112412412412412412512368346936"
+      , width = 3
+      }
+    displayImage =
+        { filename = "Test image"
+        , contents = "A data url"
+        }
     generator =
-      Random.map3
+      Random.map4
         Props
         (Random.int 0 10)
         Random.bool
-        (Random.constant (Just Resources.defaultImage))
+        (Random.constant (Just displayImage))
+        (Random.constant (Just nonPrimeImage))
     shrinker = \
       { stage
       , canGoNext
       , imagePreview
+      , nonPrimeImage
       } ->
         Shrink.map Props (Shrink.int stage)
          |> Shrink.andMap (Shrink.bool canGoNext)
          |> Shrink.andMap (Shrink.noShrink imagePreview)
+         |> Shrink.andMap (Shrink.noShrink nonPrimeImage)
   in
     Fuzz.custom
       generator
@@ -62,6 +73,9 @@ tests =
             >> Query.find [ tag "text" ]
             >> \_ -> Expect.pass
           , Query.find [ tag "canvas" ]
+            >> \_ -> Expect.pass
+          , Query.find [ class "image-number" ]
+            >> Query.find [ tag "text" ]
             >> \_ -> Expect.pass
           ]
     ]
