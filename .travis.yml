@@ -31,7 +31,8 @@ before_deploy:
   - node -e "console.log(require('./package.json').version)" > site/version.txt
   # quit if version matches latest in gh-pages
   - git fetch origin gh-pages
-  - git diff --exit-code origin/gh-pages:version.txt site/version.txt;
+  - git branch gh-pages origin/gh-pages
+  - git diff --exit-code gh-pages:version.txt site/version.txt
   - if [[ $? -eq 1 ]]; then exit; fi
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
   - git add site/built -f
