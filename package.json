@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "preversion": "npm test",
-    "postversion": "git push && git push --tags",
+    "postversion": "git push --tags && git push",
     "lint": "eslint .",
     "test": "elm test",
     "build": "elm make --warn --yes elm-src/Main.elm --output site/built/elm.js",
