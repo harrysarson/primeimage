@@ -2,7 +2,7 @@ module Config exposing ( stageCount
                        , imageInputId
                        )
 stageCount : Int
-stageCount = 2
+stageCount = 3
 
 imageInputId : String
 imageInputId = "file"

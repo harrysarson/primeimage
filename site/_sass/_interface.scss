@@ -69,6 +69,28 @@
   }
 }
 
+.to-number-config {
+  & > .error-in-field {
+    background: #ffb7b7;
+    color: #850002;
+  }
+  > * {
+    display: block;
+    > input {
+      float: right;
+      width: 4em;
+      background-color: inherit;
+      color: inherit;
+      border-style: none;
+    }
+    &:after {
+      display: block;
+      clear: both;
+      content: "";
+    }
+  }
+}
+
 @keyframes appear-from-inside {
   from {
     transform: translateY(-50%) scale(0);
