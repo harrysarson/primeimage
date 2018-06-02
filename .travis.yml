@@ -31,7 +31,7 @@ before_deploy:
   # save version to site before deploying
   - node -e "console.log(require('./package.json').version)" > site/version.txt
   # make sure version has change since last time
-  - ! git diff --exit-code -- site/version.txt
+  - "! git diff --exit-code origin/gh-pages:version.txt site/version.txt"
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
   - git add site/built -f
   - git add site/version.txt
