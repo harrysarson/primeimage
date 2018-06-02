@@ -3,9 +3,9 @@ module ToNumberConfig.View exposing (view)
 import List
 import Array
 import Json.Decode as Decode
-import Html exposing (button, div, section, input, h1, form, text, Html, label, strong)
-import Html.Attributes exposing (class, classList, attribute, value, type_, name, id, disabled, for)
-import Html.Events exposing (onClick, on, onWithOptions)
+import Html exposing (div, input, form, text, Html, label)
+import Html.Attributes exposing (class, classList, attribute, type_, name)
+import Html.Events exposing (on)
 
 import ToNumberConfig.Types as Types
 {-
