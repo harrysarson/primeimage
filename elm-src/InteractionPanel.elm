@@ -4,9 +4,9 @@ import Array
 import Html exposing (button, div, section, input, h1, p, text, Html, label, strong)
 import Svg
 import Json.Decode as Decode
-import Html.Attributes exposing (class, classList, attribute, type_, name, id, disabled, for)
+import Html.Attributes exposing (class, attribute, type_, name, id, disabled, for)
 import Svg.Attributes
-import Html.Events exposing (onClick, on, onWithOptions)
+import Html.Events exposing (onClick, on)
 
 import ToNumberConfig.View
 import ToNumberConfig.Types
