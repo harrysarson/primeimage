@@ -118,6 +118,81 @@
         console.log(state);
       });
 
+      /* Automatic text resizing */
+
+      function resizeText($node) {
+        // TODO: check not null
+        const $parent = $node.parentNode;
+
+        let intFontSize = parseInt(getComputedStyle($node).getPropertyValue('font-size'));
+
+        if (isNaN(intFontSize))
+          throw new Error("Invalid font size read");
+
+        /* increase font size util it does not fit */
+
+        for(; intFontSize < 100; ++intFontSize)  {
+
+          const parentDim = {
+            width: $parent.offsetWidth,
+            height: $parent.offsetHeight,
+          };
+          const textDim = {
+            width: $node.offsetWidth,
+            height: $node.offsetHeight,
+          };
+
+          if (textDim.width > parentDim.width || textDim.height > parentDim.height) break;
+
+
+          $node.style.setProperty('font-size', intFontSize + 'px');
+        }
+
+        /* decrease font size to fit */
+
+        for(; intFontSize > 0; --intFontSize)  {
+
+          const parentDim = {
+            width: $parent.offsetWidth,
+            height: $parent.offsetHeight,
+          };
+          const textDim = {
+            width: $node.offsetWidth,
+            height: $node.offsetHeight,
+          };
+
+          if (textDim.width < parentDim.width && textDim.height < parentDim.height) break;
+
+
+          $node.style.setProperty('font-size', intFontSize + 'px');
+        }
+      }
+
+      (async () => {
+        try {
+          await runWhen(() => document.querySelector(".display-panel") != null, 5);
+        } catch (e) {
+          console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
+          return;
+        }
+
+        for (let node of document.querySelectorAll(".display-panel .image-number")) {
+          resizeText(node);
+        }
+
+      })();
+
+      app.ports.resizeImageNumber.subscribe(async id => {
+        try {
+          await runWhen(() => document.getElementById(id) != null, 5);
+        } catch (e) {
+          console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
+          return;
+        }
+
+        resizeText(document.getElementById(id));
+      });
+
     </script>
 
 </body>

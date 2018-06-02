@@ -4,6 +4,7 @@ port module Ports exposing  ( fileSelected
                             , nonPrimeGenerated
                             , prettyPrintState
                             , setInitialValues
+                            , resizeImageNumber
                             )
 import Types
 import ToNumberConfig.Types
@@ -26,3 +27,5 @@ prettyPrintState ( model, msg ) =
 port ppState : Types.Model -> Cmd msg
 
 port setInitialValues : ToNumberConfig.Types.Model -> Cmd msg
+
+port resizeImageNumber : String -> Cmd msg
