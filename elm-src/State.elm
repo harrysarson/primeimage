@@ -6,7 +6,7 @@ import Task
 
 import Types
 import Config
-import Ports exposing (fileSelected, requestNonPrime, prettyPrintState, setInitialValues)
+import Ports exposing (fileSelected, requestNonPrime, prettyPrintState, setInitialValues, resizeImageNumber)
 
 import ToNumberConfig.Types
 import ToNumberConfig.State
@@ -67,7 +67,7 @@ update msg model =
           )
       Types.NonPrimeGenerated nonPrime ->
           ( { model | nonPrime = Just nonPrime }
-          , Cmd.none
+          , resizeImageNumber Config.nonPrimeImageNumberId
           )
 
 getImgCmd : Types.Image -> ToNumberConfig.Types.Model -> Cmd msg

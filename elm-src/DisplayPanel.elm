@@ -6,6 +6,7 @@ import Html.Events exposing (..)
 
 import Types
 import Resources
+import Config
 
 type alias Props =
   { stage : Int
@@ -58,7 +59,8 @@ displays props =
         []
       ]
     , [ span
-        [ class "image-number" ]
+        [ class "image-number"
+        , id Config.nonPrimeImageNumberId ]
         nonPrimeImageList
       ]
     ]
