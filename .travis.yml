@@ -29,7 +29,9 @@ notifications:
 
 before_deploy:
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
+  - node -e "console.log(require('./package.json').version)" > site/VERSION
   - git add site/built -f
+  - git add site/VERSION
 
 deploy:
   local-dir: site
