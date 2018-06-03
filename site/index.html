@@ -10,10 +10,8 @@
 </head>
 
 <body>
-
-    <script type="text/javascript" src="built/elm.js"></script>
-
-    <script type="text/javascript">
+    <script type=module>
+      import { Elm } from "./built/elm.js";
 
       const runWhen = (test, maxTries) =>
         new Promise((res, rej) => {

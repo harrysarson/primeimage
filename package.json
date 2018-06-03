@@ -8,7 +8,7 @@
     "postversion": "git push --tags && git push",
     "lint": "eslint .",
     "test": "elm test",
-    "build": "elm make --warn --yes elm-src/Main.elm --output site/built/elm.js",
+    "build": "elm make --warn --yes elm-src/Main.elm --output site/built/elm.js && node util/elm2esm site/built/elm.js",
     "serve": "bundle exec jekyll serve --source site"
   },
   "private": true,
