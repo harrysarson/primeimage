@@ -5,7 +5,7 @@ node_js:
 cache:
   directories:
     - node_modules
-    - tests/elm-stuff/build-artifacts
+    - elm-tests/elm-stuff/build-artifacts
     - sysconfcpus
 
 install:

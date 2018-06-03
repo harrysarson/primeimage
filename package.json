@@ -7,7 +7,7 @@
     "preversion": "npm test",
     "postversion": "git push --tags && git push",
     "lint": "eslint .",
-    "test": "elm test",
+    "test": "elm test 'elm-tests/**/*.elm'",
     "build": "elm make --warn --yes elm-src/Main.elm --output site/built/elm.js && node util/elm2esm site/built/elm.js",
     "serve": "bundle exec jekyll serve --source site"
   },
