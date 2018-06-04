@@ -33,16 +33,16 @@ update msg model =
             }
         Types.SetLevel index levelStr ->
             Array.get index model.levels
-              |> Maybe.map (\oldLevel -> updateErrorable validateLevel levelStr oldLevel)  
+              |> Maybe.map (\oldLevel -> updateErrorable validateLevel levelStr oldLevel)
               |> Maybe.map (\newLevel -> { model | levels = Array.set index newLevel model.levels })
               |> Maybe.withDefault model
 
 
 validateSize : String -> Int -> Result String Int
 validateSize dimName width =
-    if width >= 0 && width <= Config.maxImageWidth
+    if width >= 0 && width <= Config.maxImageSize
         then Ok width
-        else Err (dimName ++ " must be positive integer less than " ++ toString Config.maxImageWidth)
+        else Err (dimName ++ " must be positive integer less than " ++ toString Config.maxImageSize)
 
 
 validateLevel : Int -> Result String Int
