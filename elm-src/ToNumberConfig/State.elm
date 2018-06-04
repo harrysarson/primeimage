@@ -40,7 +40,7 @@ update msg model =
 
 validateSize : String -> Int -> Result String Int
 validateSize dimName width =
-    if width >= 0 && width <= Config.maxImageSize
+    if width > 0 && width <= Config.maxImageSize
         then Ok width
         else Err (dimName ++ " must be positive integer less than " ++ toString Config.maxImageSize)
 
