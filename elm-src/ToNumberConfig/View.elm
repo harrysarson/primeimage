@@ -8,15 +8,7 @@ import Html.Attributes exposing (class, classList, attribute, type_, name)
 import Html.Events exposing (on)
 
 import ToNumberConfig.Types as Types
-{-
-makeConfig : String -> String -> String -> String -> String -> Types.Msg
-makeConfig width height level0 level1 level2 =
-    Types.UpdateConfig
-        { width = width
-        , height = height
-        , levels = [ level0, level1, level2 ]
-        }
--}
+
 
 view : Types.Model -> Html Types.Msg
 view model =
