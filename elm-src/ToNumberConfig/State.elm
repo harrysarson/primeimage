@@ -57,6 +57,7 @@ updateErrorable validate attemptedValue errorable =
     let
       parsedSize = attemptedValue
           |> Decode.decodeString Decode.int
+          |> Result.mapError (\_ -> "please enter an integer")
           |> Result.andThen validate
     in
       case parsedSize of
