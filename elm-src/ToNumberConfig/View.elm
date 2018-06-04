@@ -23,7 +23,7 @@ view model =
   let
     levelInputs =
         List.indexedMap
-          (\level -> inputBox { msg = Types.SetLevel 0, name = "level " ++ toString (level + 1) })
+          (\level -> inputBox { msg = Types.SetLevel level, name = "level " ++ toString (level + 1) })
           (Array.toList model.levels)
     children =
         inputBox { msg = Types.SetWidth, name = "width" } model.width
