@@ -63,16 +63,16 @@ updateErrorable validate attemptedValue errorable =
       case parsedSize of
           Ok size ->
               { value = size
-              , attemptedValue = Just attemptedValue
+              , attemptedValue = attemptedValue
               , error = Nothing
               }
           Err err ->
               { value = errorable.value
-              , attemptedValue = Just attemptedValue
+              , attemptedValue = attemptedValue
               , error = Just err
               }
 
 
 setAttempted : String -> Errorable a -> Errorable a
 setAttempted attemptedValue errorable =
-  { errorable | attemptedValue = Just attemptedValue }
+  { errorable | attemptedValue = attemptedValue }

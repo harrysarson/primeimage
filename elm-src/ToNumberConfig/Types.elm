@@ -15,14 +15,14 @@ type alias Model =
 
 type alias Errorable a =
     { value : a
-    , attemptedValue : Maybe String
+    , attemptedValue : String
     , error : Maybe String
     }
 
 makeErrorable : a -> Errorable a
 makeErrorable value =
     { value = value
-    , attemptedValue = Just (toString value)
+    , attemptedValue = toString value
     , error = Nothing
     }
 
