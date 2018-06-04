@@ -1,9 +1,10 @@
-module ToNumberConfig.Config exposing ( maxImageWidth
+module ToNumberConfig.Config exposing ( maxImageSize
                                       , maxLevel
                                       , numberOfLevels
                                       )
-maxImageWidth : Int
-maxImageWidth = 1000
+
+maxImageSize : Int
+maxImageSize = 1000
 
 maxLevel : Int
 maxLevel = 256
