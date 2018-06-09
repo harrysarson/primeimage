@@ -43,7 +43,7 @@ update msg model =
     case msg of
       Types.ChangeStage change ->
         let
-          newStage = max 0 <| min Config.maxStage model.stage + change
+          newStage = max 0 <| min Config.maxStage (model.stage + change)
           setIntialVal =
               if change /= 0 && newStage == 2 then
                   setInitialValues model.toNumberConfig
