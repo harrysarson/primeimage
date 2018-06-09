@@ -27,13 +27,13 @@ stringOfLengthGen stringLength =
         (Random.list stringLength
           (Random.map
               Char.fromCode
-              (Random.int 0 65535)
+              (Random.int (Char.toCode 'a') (Char.toCode 'z'))
           )
         )
 
 
 {-| Generates a random string of random length given the minimum length
-and maximum length and a given character generator.
+    and maximum length and a given character generator.
 -}
 stringGen : Int -> Int -> Generator String
 stringGen minLength maxLength =
