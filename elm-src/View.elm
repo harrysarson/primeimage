@@ -13,7 +13,7 @@ view : Types.Model -> Html Types.Msg
 view model =
   let
     -- todo: find a more elegant way to set these props
-    canGoNext = model.stage + 1 < Config.maxStage
+    canGoNext = model.stage < Config.maxStage
     displayProps =
       { stage = model.stage
       , canGoNext = canGoNext
