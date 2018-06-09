@@ -1,9 +1,9 @@
-module Config exposing ( stageCount
+module Config exposing ( maxStage
                        , imageInputId
                        , nonPrimeImageNumberId
                        )
-stageCount : Int
-stageCount = 3
+maxStage : Int
+maxStage = 2
 
 imageInputId : String
 imageInputId = "file"
