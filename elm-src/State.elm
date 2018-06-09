@@ -2,8 +2,6 @@ module State exposing ( initialState
                       , update
                       )
 
-import Task
-
 import Types
 import Config
 import Ports exposing ( fileSelected
@@ -14,7 +12,6 @@ import Ports exposing ( fileSelected
                       , setCssProp
                       )
 
-import ToNumberConfig.Types
 import ToNumberConfig.State
 
 initialState : (Types.Model, Cmd Types.Msg)
@@ -26,6 +23,7 @@ initialState =
       }
     , Cmd.batch
         [ setInitialValues ToNumberConfig.State.initialState
+        {- }
         , Task.perform Types.ImageRead <|
             Task.succeed
                 { contents = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
@@ -33,6 +31,7 @@ initialState =
                 }
         , Task.perform Types.ChangeStage <|
             Task.succeed 0
+        --}
         ]
     )
 
@@ -60,27 +59,21 @@ update msg model =
           ( model
           , fileSelected Config.imageInputId
           )
-      Types.ImageRead data ->
-          ( { model | image = Just data }
-          , getImgCmd data model.toNumberConfig
+      Types.ImageRead image ->
+          ( { model | image = Just image }
+          , requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
           )
       Types.UpdateNumberConfig updateNumberConfigMsg ->
         let
           toNumberConfig =
               ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
-          imgCmd =
-              model.image
-                |> Maybe.map (\i -> getImgCmd i toNumberConfig)
-                |> Maybe.withDefault Cmd.none
         in
           ( { model | toNumberConfig = toNumberConfig }
-          , imgCmd
+          , model.image
+              |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
+              |> Maybe.withDefault Cmd.none
           )
       Types.NonPrimeGenerated nonPrime ->
           ( { model | nonPrime = Just nonPrime }
           , resizeImageNumber Config.nonPrimeImageNumberId
           )
-
-getImgCmd : Types.Image -> ToNumberConfig.Types.Model -> Cmd msg
-getImgCmd image toNumberConfig =
-    requestNonPrime { toNumberConfig = toNumberConfig, image = image }
