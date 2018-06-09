@@ -15,6 +15,7 @@ import Shrink
 import Util exposing (queryInOrder)
 import State
 import InteractionPanel exposing (view, Props)
+import Config
 import Types
 
 import ToNumberConfig.Types exposing (makeErrorable)
@@ -32,7 +33,7 @@ props =
       }
     generator = Random.map4
         Props
-        (Random.int -0 10)
+        (Random.int 0 Config.maxStage)
         Random.bool
         Random.bool
         (Random.constant toNumberConfig)
