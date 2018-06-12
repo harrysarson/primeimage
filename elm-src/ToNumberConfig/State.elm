@@ -10,8 +10,8 @@ import ToNumberConfig.Config as Config
 
 initialState : Types.Model
 initialState =
-    { width = makeErrorable 100
-    , height = makeErrorable  100
+    { width = makeErrorable 50
+    , height = makeErrorable  50
     , levels = List.range 1 Config.numberOfLevels
        |> List.map (\x -> toFloat (x * Config.maxLevel) / toFloat(Config.numberOfLevels + 1))
        |> List.map round
@@ -57,7 +57,7 @@ updateErrorable validate attemptedValue errorable =
     let
       parsedSize = attemptedValue
           |> Decode.decodeString Decode.int
-          |> Result.mapError (\_ -> "please enter an integer")
+          |> Result.mapError (\_ -> "Please enter an integer")
           |> Result.andThen validate
     in
       case parsedSize of

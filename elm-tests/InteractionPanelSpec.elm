@@ -41,7 +41,7 @@ props =
       { stage
       , canGoBack
       , canGoNext
-      , numberConfig
+      , toNumberConfig
       } ->
       Shrink.map Props (Shrink.int stage)
        |> Shrink.andMap (Shrink.bool canGoBack)

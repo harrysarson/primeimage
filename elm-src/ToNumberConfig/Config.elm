@@ -10,4 +10,4 @@ maxLevel : Int
 maxLevel = 256
 
 numberOfLevels : Int
-numberOfLevels = 4
+numberOfLevels = 3

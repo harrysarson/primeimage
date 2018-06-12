@@ -102,13 +102,12 @@ tests =
                 [ fuzz2
                       model
                       updateNumberConfigMsgFuzz
-                      "ImageSelected message does not change state"
+                      "UpdateNumberConfig message changes state.toNumberConfig"
                       <| \model updateNumberConfigMsg -> update (Types.UpdateNumberConfig updateNumberConfigMsg) model
                         |> Tuple.first
+                        |> .toNumberConfig
                         |> Expect.equal
-                            { model
-                            | toNumberConfig = ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
-                            }
+                            (ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig)
                 ]
             ,  describe "NonPrimeGenerated message"
                 [ fuzz

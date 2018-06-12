@@ -1,7 +1,7 @@
 module InteractionPanel exposing (Props, view)
 
 import Array
-import Html exposing (button, div, section, input, h1, p, text, Html, label, strong)
+import Html exposing (button, div, section, input, h1, p, text, Html, label, strong, br)
 import Svg
 import Json.Decode as Decode
 import Html.Attributes exposing (class, attribute, type_, name, id, disabled, for)
@@ -18,7 +18,7 @@ type alias Props =
   { stage : Int
   , canGoBack : Bool
   , canGoNext : Bool
-  , numberConfig : ToNumberConfig.Types.Model
+  , toNumberConfig : ToNumberConfig.Types.Model
   }
 
 view : Props -> Html.Html Types.Msg
@@ -62,6 +62,16 @@ stageButton change props =
 
 instructions : Props -> Array.Array (List (Html Types.Msg))
 instructions props =
+  let
+    makeErrorP : ( String, String ) -> Html msg
+    makeErrorP ( name, errorDescription ) =
+          p
+              [ class "error-in-field" ]
+              [ text <| "Error setting " ++ name ++ ":"
+              , br [] []
+              , text <| "  " ++ errorDescription
+              ]
+  in
     Array.fromList
         [ [ h1 [] [ text "Welcome to Prime Image" ]
           , p []
@@ -74,9 +84,12 @@ instructions props =
           , p [] [ text "First you must select an image to turn into a prime number." ]
           , p [] [ text "Use the box below to open an image." ]
           ]
-        , [ h1 [] [ text "Convert Image To Number" ]
-          , p [] [ text "Use the controls below to convert the image to a number" ]
-          ]
+        , ( h1 [] [ text "Convert Image To Number" ]
+         :: p [] [ text "Use the controls below to convert the image to a number" ]
+         :: (ToNumberConfig.Types.errorsInModel props.toNumberConfig
+                |> List.map makeErrorP
+            )
+          )
         ]
 
 -- todo: xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +129,9 @@ interactions props =
               ]
             ]
           ]
-        , [ Html.map Types.UpdateNumberConfig (ToNumberConfig.View.view props.numberConfig)
+        , [ Html.map
+              Types.UpdateNumberConfig
+              (ToNumberConfig.View.view props.toNumberConfig)
           ]
         ]
 

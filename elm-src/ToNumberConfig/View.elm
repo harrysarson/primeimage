@@ -17,11 +17,12 @@ view model =
         List.indexedMap
           (\level -> inputBox { msg = Types.SetLevel level, name = "level " ++ toString (level + 1) })
           (Array.toList model.levels)
+
+
     children =
         inputBox { msg = Types.SetWidth, name = "width" } model.width
-    ++  inputBox { msg = Types.SetHeight, name = "height" } model.height
-    ++  (List.concat levelInputs)
-
+        :: inputBox { msg = Types.SetHeight, name = "height" } model.height
+        :: levelInputs
   in
     form
         [ class "to-number-config" ]
@@ -29,34 +30,27 @@ view model =
 
 
 
-inputBox : { msg : (String -> msg), name : String } -> (Types.Errorable Int) -> List (Html msg)
+inputBox : { msg : (String -> msg), name : String } -> (Types.Errorable Int) -> Html msg
 inputBox { msg, name } errorable =
   let
     isError =
         case errorable.error of
             Just _ -> True
             Nothing -> False
-
-    errorMessage =
-        errorable.error
-            |> Maybe.map (\desc -> div [] [ text desc ])
-            |> Maybe.map List.singleton
   in
-    (Maybe.withDefault [] errorMessage) ++
-    [ label
-          [ classList
-            [ ( "error-in-field", isError )
+    label
+        [ classList
+          [ ( "error-in-field", isError )
+          ]
+        ]
+        [ text name
+        , input
+            [ type_ "text"
+            , class "to-number-config-input"
+            , attribute "data-input-name" name
+            , on
+                "input"
+                (Decode.map msg (Decode.at ["target", "value"] Decode.string))
             ]
-          ]
-          [ text name
-          , input
-              [ type_ "text"
-              , class "to-number-config-input"
-              , attribute "data-input-name" name
-              , on
-                  "input"
-                  (Decode.map msg (Decode.at ["target", "value"] Decode.string))
-              ]
-              []
-          ]
-    ]
+            []
+        ]

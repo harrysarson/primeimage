@@ -24,7 +24,7 @@ view model =
       { stage = model.stage
       , canGoNext = canGoNext
       , canGoBack = model.stage > 0
-      , numberConfig = model.toNumberConfig
+      , toNumberConfig = model.toNumberConfig
       }
   in
     node "main" []

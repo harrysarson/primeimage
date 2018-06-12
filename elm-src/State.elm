@@ -67,12 +67,22 @@ update msg model =
         let
           toNumberConfig =
               ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
+          isError =
+              ToNumberConfig.Types.errorsInModel toNumberConfig
+                |> List.isEmpty
+                |> not
+          updatedModel = { model | toNumberConfig = toNumberConfig}
         in
-          ( { model | toNumberConfig = toNumberConfig }
-          , model.image
-              |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
-              |> Maybe.withDefault Cmd.none
-          )
+          if isError then
+              ( { updatedModel | nonPrime = Nothing }
+              , Cmd.none
+              )
+          else
+              ( updatedModel
+              , model.image
+                  |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
+                  |> Maybe.withDefault Cmd.none
+              )
       Types.NonPrimeGenerated nonPrime ->
           ( { model | nonPrime = Just nonPrime }
           , resizeImageNumber Config.nonPrimeImageNumberId
