@@ -14,8 +14,17 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "chai": "^4.1.2",
     "elm": "^0.18.0",
     "elm-test": "^0.18.12",
-    "node-elm-lint": "^1.0.0-beta.1"
+    "karma": "^2.0.2",
+    "karma-chai": "^0.1.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-webpack": "^3.0.0",
+    "mocha": "^5.2.0",
+    "node-elm-lint": "^1.0.0-beta.1",
+    "webpack": "^4.12.0"
   }
 }
