@@ -4,11 +4,11 @@ node_js:
 
 cache:
   directories:
-    - node_modules
-    - elm-tests/elm-stuff/build-artifacts
+    - "$HOME/.npm"
     - sysconfcpus
 
 install:
+  - npm ci
   - |
     if [ ! -d sysconfcpus/bin ];
     then
