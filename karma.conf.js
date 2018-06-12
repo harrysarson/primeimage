@@ -1,56 +1,45 @@
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     basePath: '',
 
-
     frameworks: [
       'chai',
-      'mocha',
+      'mocha'
     ],
-
 
     files: [
       'js-tests/**/*.spec.js'
     ],
 
-
     exclude: [
     ],
 
-
     preprocessors: {
-      'js-tests/**/*.spec.js': [ 'webpack' ],
+      'js-tests/**/*.spec.js': ['webpack']
     },
 
-
     webpack: {
-      mode: 'development',
+      mode: 'development'
     },
 
     reporters: [
       'progress',
-      'mocha',
+      'mocha'
     ],
-
 
     port: 9876,
 
-
     colors: true,
-
 
     logLevel: config.LOG_INFO,
 
-
     autoWatch: true,
-
 
     browsers: ['Firefox'],
 
-
     singleRun: false,
 
-    concurrency: Infinity,
+    concurrency: Infinity
   });
 };

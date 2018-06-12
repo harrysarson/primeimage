@@ -1,4 +1,5 @@
-import {GreyImageData} from "../site/js/GreyImageData";
+import {expect} from 'chai';
+import {GreyImageData} from '../site/js/grey-image-data';
 
 describe('GreyImageData', () => {
   it('should construct GreyImageData', () => {
@@ -22,10 +23,10 @@ describe('GreyImageData', () => {
 
       for (let i = 0, length = width * height; i < length; ++i) {
         const val = Math.random() * 256;
-        input.data[0 + 4 * i] = val;
-        input.data[1 + 4 * i] = val;
-        input.data[2 + 4 * i] = val;
-        input.data[3 + 4 * i] = 255;
+        input.data[0 + (4 * i)] = val;
+        input.data[1 + (4 * i)] = val;
+        input.data[2 + (4 * i)] = val;
+        input.data[3 + (4 * i)] = 255;
 
         expected.data[i] = val;
       }
@@ -42,19 +43,17 @@ describe('GreyImageData', () => {
       const expected = new GreyImageData(width, height);
 
       for (let i = 0, length = width * height; i < length; ++i) {
-        input.data[0 + 4 * i] = 1;
-        input.data[1 + 4 * i] = 5;
-        input.data[2 + 4 * i] = 3;
-        input.data[3 + 4 * i] = 255;
+        input.data[0 + (4 * i)] = 1;
+        input.data[1 + (4 * i)] = 5;
+        input.data[2 + (4 * i)] = 3;
+        input.data[3 + (4 * i)] = 255;
 
         expected.data[i] = 3;
       }
 
-      const output = GreyImageData.fromColorImage(input, [ 1, 1, 1 ]);
+      const output = GreyImageData.fromColorImage(input, [1, 1, 1]);
 
       expect(output).deep.equals(expected);
     });
-
-
   });
 });
