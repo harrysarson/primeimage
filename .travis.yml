@@ -2,12 +2,9 @@ language: node_js
 node_js:
   - "lts/*"
 
-cache:
-  directories:
-    - "$HOME/.npm"
-    - sysconfcpus
 
 install:
+  - npm i -g npm@5.8
   - npm ci
   - |
     if [ ! -d sysconfcpus/bin ];
@@ -19,6 +16,7 @@ install:
       cd ..;
     fi
 
+
 script:
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run test:elm
   - npm run test:js
@@ -27,6 +25,7 @@ notifications:
   email:
     on_success: never # default: change
     on_failure: always # default: always
+
 
 before_deploy:
   - node -e "console.log(require('./package.json').version)" > site/version.txt
@@ -46,6 +45,7 @@ before_deploy:
   - git add site/built -f
   - git add site/version.txt
 
+
 deploy:
   local-dir: site
   provider: pages
@@ -55,3 +55,9 @@ deploy:
   keep-history: true
   on:
     branch: master
+
+
+cache:
+  directories:
+    - "$HOME/.npm"
+    - sysconfcpus
