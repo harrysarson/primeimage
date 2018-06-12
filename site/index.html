@@ -15,6 +15,7 @@
   import { getImageData, quantise } from './js/createNonPrime.js';
   import { GreyImageData } from './js/GreyImageData.js';
   import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
+  import { childFits } from './js/resizeText.js';
 
   const runWhen = (test, maxTries) =>
     new Promise((res, rej) => {
@@ -155,39 +156,13 @@
 
     /* increase font size util it does not fit */
 
-    for (; intFontSize < 100; ++intFontSize) {
-
-      const parentDim = {
-        width: $parent.offsetWidth,
-        height: $parent.offsetHeight,
-      };
-      const textDim = {
-        width: $node.offsetWidth,
-        height: $node.offsetHeight,
-      };
-
-      if (textDim.width > parentDim.width || textDim.height > parentDim.height) break;
-
-
+    for (; intFontSize < 100 && childFits($node, $parent); ++intFontSize) {
       $node.style.setProperty('font-size', intFontSize + 'px');
     }
 
     /* decrease font size to fit */
 
-    for (; intFontSize > 0; --intFontSize) {
-
-      const parentDim = {
-        width: $parent.offsetWidth,
-        height: $parent.offsetHeight,
-      };
-      const textDim = {
-        width: $node.offsetWidth,
-        height: $node.offsetHeight,
-      };
-
-      if (textDim.width < parentDim.width && textDim.height < parentDim.height) break;
-
-
+    for (; intFontSize > 0 && !childFits($node, $parent); --intFontSize) {
       $node.style.setProperty('font-size', intFontSize + 'px');
     }
   }
