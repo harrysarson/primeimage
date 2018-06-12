@@ -85,7 +85,22 @@ instructions props =
           , p [] [ text "Use the box below to open an image." ]
           ]
         , ( h1 [] [ text "Convert Image To Number" ]
-         :: p [] [ text "Use the controls below to convert the image to a number" ]
+         :: p [] [ text "Use the controls below to convert the image to a number." ]
+         :: p
+            []
+            [ text """
+                Set the demensions of the number image using width and height,
+                although remember that larger numbers may take a very long time
+                to convert to a prime.
+                """
+            ]
+         :: p
+            []
+            [ text ("The " ++ toString (Array.length props.toNumberConfig.levels) ++ """
+                level(s) determine the which pixel values map to each number.
+                Play around with these to get the clearest number image.
+                """)
+            ]
          :: (ToNumberConfig.Types.errorsInModel props.toNumberConfig
                 |> List.map makeErrorP
             )
@@ -124,8 +139,7 @@ interactions props =
               , on "change" <| Decode.succeed Types.ImageSelected
               ] []
             , label [ for "file" ]
-              [ strong [] [ text "Choose a file" ]
-              , text " or drag it here."
+              [ strong [] [ text "Click here to choose a file" ]
               ]
             ]
           ]

@@ -1,4 +1,5 @@
-import { quantise, getImageData } from '../site/js/createNonPrime';
+import {expect} from 'chai';
+import {quantise, getImageData} from '../site/js/create-non-prime';
 
 describe('getImageData', () => {
   it('should work with image data urls', async () => {
@@ -6,8 +7,7 @@ describe('getImageData', () => {
 
     const imageData = await getImageData(url, 1, 1);
 
-    expect(imageData).deep.equals(new ImageData(1, 1));
-
+    expect(imageData).deep.equals(new window.ImageData(1, 1));
   });
 });
 
@@ -20,6 +20,5 @@ describe('quantise', () => {
     const expected = [1, 1, 3, 0, 3, 2, 0, 1, 0, 3];
 
     expect(quantise(input, input.slice().fill(0), levels)).deep.equals(expected);
-
   });
 });

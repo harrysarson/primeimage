@@ -12,10 +12,10 @@
 <body>
 <script type=module>
   import { Elm } from './built/elm.js';
-  import { getImageData, quantise } from './js/createNonPrime.js';
-  import { GreyImageData } from './js/GreyImageData.js';
+  import { getImageData, quantise } from './js/create-non-prime.spec.js';
+  import { GreyImageData } from './js/grey-image-data.js';
   import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
-  import { childFits } from './js/resizeText.js';
+  import { childFits } from './js/resize-text.js';
 
   const runWhen = (test, maxTries) =>
     new Promise((res, rej) => {

@@ -27,6 +27,15 @@
     "karma-webpack": "^3.0.0",
     "mocha": "^5.2.0",
     "node-elm-lint": "^1.0.0-beta.1",
-    "webpack": "^4.12.0"
+    "webpack": "^4.12.0",
+    "xo": "^0.21.1"
+  },
+  "xo": {
+    "space": true,
+    "env": [
+      "mocha",
+      "browser"
+    ],
+    "import/extensions": "ignorePackages"
   }
 }

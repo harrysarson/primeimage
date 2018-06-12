@@ -1,16 +1,15 @@
 export async function getImageData(url, width, height) {
-
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
-  const { target: img } = await new Promise((res, rej) => {
+  const {target: img} = await new Promise((resolve, reject) => {
     const img = document.createElement('img');
-    img.onload = res;
-    img.onerror = event => {
+    img.addEventListener('load', resolve);
+    img.addEventListener('error', event => {
       const error = new Error('could not convert url to an img');
       error.event = event;
-      rej(error);
-    };
+      reject(error);
+    });
     img.src = url;
   });
 
@@ -25,10 +24,10 @@ export function quantise(input, output, levels) {
     throw new Error('Input array is a different size to the output');
   }
 
-  const { length } = input;
+  const {length} = input;
 
   levels = levels.slice().sort((lhs, rhs) => lhs - rhs);
-  const { length: numberOfLevels } = levels;
+  const {length: numberOfLevels} = levels;
 
   for (let i = 0; i < length; i++) {
     let j = 0;

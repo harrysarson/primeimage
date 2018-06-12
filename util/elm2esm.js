@@ -1,26 +1,24 @@
 const fs = require('fs');
-const { promisify } = require('util');
+const {promisify} = require('util');
 
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
-(async function main() {
+(async () => {
+  const elmPath = process.argv[2];
 
-  const elm_path = process.argv[2];
+  console.log(`Making ${elmPath} into a es module...`);
 
-  console.log(`Making ${elm_path} into a es module...`);
+  const elmEs3 = await readFile(elmPath, 'utf8');
 
-  const elm_es3 = await readFile(elm_path, 'utf8');
-
-  const elm_esm =
+  const elmEsm =
     '\n' +
     'const scope = {};\n' +
-    elm_es3.replace('}).call(this);', '}).call(scope);') +
+    elmEs3.replace('}).call(this);', '}).call(scope);') +
     'export const { Elm } = scope;\n' +
     '\n';
 
-  await writeFile(elm_path, elm_esm);
+  await writeFile(elmPath, elmEsm);
 
   console.log(`Finished.`);
-
 })();
