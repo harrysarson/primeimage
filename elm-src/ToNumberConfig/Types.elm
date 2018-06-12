@@ -41,7 +41,7 @@ makeErrorable value =
 errorsInModel : Model -> List ( String, String )
 errorsInModel model =
   let
-    errorTuple : String -> Errorable -> Maybe ( String, String )
+    errorTuple : String -> Errorable a -> Maybe ( String, String )
     errorTuple name =
         .error
           >> Maybe.map (\error -> ( name,  error ))
