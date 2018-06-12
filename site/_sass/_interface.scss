@@ -3,6 +3,12 @@
 
   flex: 0 0 var(--side-length);
   width: calc(var(--panel-width) - 2 * var(--padding));
+  height: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
   margin-left: auto;
   margin-right: auto;
 
@@ -19,6 +25,7 @@
   outline-offset: calc(0px - var(--outline-inset));
   transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
   padding: calc(var(--outline-inset) + 0.5em);
+  margin: 0;
 
   text-align: center;
 
@@ -69,25 +76,25 @@
   }
 }
 
-.to-number-config {
-  & > .error-in-field {
-    background: #ffb7b7;
-    color: #850002;
+.to-number-config label {
+  display: block;
+  padding: var(--box-padding);
+  border: var(--border-width) none grey;
+  border-bottom-style: solid;
+  > input {
+    float: right;
+    width: 4em;
+    background-color: inherit;
+    color: inherit;
+    border-style: none;
   }
-  > * {
+  &:after {
     display: block;
-    > input {
-      float: right;
-      width: 4em;
-      background-color: inherit;
-      color: inherit;
-      border-style: none;
-    }
-    &:after {
-      display: block;
-      clear: both;
-      content: "";
-    }
+    clear: both;
+    content: "";
+  }
+  &:first-child {
+    border-top-style: solid;
   }
 }
 

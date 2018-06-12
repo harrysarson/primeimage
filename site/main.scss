@@ -32,6 +32,7 @@ header > h1 {
 main {
   --horizontal-spacing: 1em;
   --padding: 10px;
+  --border-width: 3px;
   background: white;
   flex: 1 0;
   display: flex;
@@ -48,11 +49,12 @@ main {
 
 button {
   @import 'mixin/nice-button';
-  @include nice-button;
+  @include nice-button($border-width: var(--border-width));
 }
 
 .interaction-panel {
   --panel-width: 20em;
+  --box-padding: 0.6em 0.3em;
 
   flex: 0 0 var(--panel-width);
   display: flex;
@@ -93,4 +95,9 @@ button {
 
 .show-only-selected > *:not(.current-stage) {
   display: none;
+}
+
+.error-in-field {
+  background: #ffb7b7 !important;
+  color: #850002 !important;
 }
