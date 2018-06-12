@@ -10,220 +10,220 @@
 </head>
 
 <body>
-    <script type=module>
-      import { Elm } from './built/elm.js';
-      import { getImageData, quantise } from './js/createNonPrime.js';
-      import { GreyImageData } from './js/GreyImageData.js';
-      import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
+<script type=module>
+  import { Elm } from './built/elm.js';
+  import { getImageData, quantise } from './js/createNonPrime.js';
+  import { GreyImageData } from './js/GreyImageData.js';
+  import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
 
-      const runWhen = (test, maxTries) =>
-        new Promise((res, rej) => {
-          let delayCount = 0;
-          requestAnimationFrame(function attempt() {
-            const testResult = test();
+  const runWhen = (test, maxTries) =>
+    new Promise((res, rej) => {
+      let delayCount = 0;
+      requestAnimationFrame(function attempt() {
+        const testResult = test();
 
-            if (!testResult) {
-              delayCount = delayCount + 1;
+        if (!testResult) {
+          delayCount = delayCount + 1;
 
-              if (delayCount > maxTries) {
-                rej(new Error(`Could not set initial number config values after ${maxTries} attempt(s)`));
-              } else {
-                requestAnimationFrame(attempt);
-              }
-            } else {
-              res();
-            }
-          });
-        });
-
-      const app = Elm.Main.fullscreen();
-
-
-      app.ports.logError.subscribe(function (description) {
-        console.error(description);
-      });
-
-      app.ports.fileSelected.subscribe(function (id) {
-        var element = document.getElementById(id);
-        if (element === null) {
-          return;
-        }
-
-        var file = element.files[0];
-        var reader = new FileReader();
-
-        reader.onload = (function(event) {
-          // The result is base64 encoded contents of the file.
-          var base64encoded = event.target.result;
-
-          var portData = {
-            contents: base64encoded,
-            filename: file.name
-          };
-
-          app.ports.fileContentRead.send(portData);
-        });
-
-        // Connect our FileReader with the file that was selected in our `input` node.
-        reader.readAsDataURL(file);
-      });
-
-
-      app.ports.requestNonPrime.subscribe(async ({ toNumberConfig, image }) => {
-        const {
-          width: { value: width },
-          height: { value: height },
-          levels: errorableLevels,
-        } = toNumberConfig;
-
-        const numberLookup = [ 8, 4, 1, 7 ];
-
-        const levels = errorableLevels.map(x => x.value);
-
-        if (levels.length + 1 !== numberLookup.length) {
-          app.ports.nonPrimeError.send(
-            `Incorrect number of levels (${levels.length}), expected ${numberLookup.length}`,
-          );
-          return;
-        }
-        let number;
-        try {
-          const color = await getImageData(image.contents, width, height);
-          const grey = GreyImageData.fromColorImage(color);
-          const quantised = quantise(grey.data, new Uint8Array(width * height), levels);
-          number = quantised.map(x => numberLookup[ x ]);
-        } catch (e) {
-          app.ports.nonPrimeError.send(`${e}`);
-          return;
-        }
-
-        app.ports.nonPrimeGenerated.send({
-          number: number.join(''),
-          width,
-        });
-      });
-
-      app.ports.setInitialValues.subscribe(async ({ width, height, levels }) => {
-        const getInput = name => document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
-
-        try {
-          await runWhen(() => getInput('width') != null, 5);
-        } catch(e) {
-          console.error(`Given up setting initial values due to error:\n${e}`);
-          return;
-        }
-        const $width = getInput('width');
-        const $height = getInput('height');
-        const $levels = [...(function* () {
-          let $level;
-          let i = 1;
-          while (($level = getInput(`level ${i}`)) != null) {
-            yield $level;
-            ++i;
+          if (delayCount > maxTries) {
+            rej(new Error(`Could not set initial number config values after ${maxTries} attempt(s)`));
+          } else {
+            requestAnimationFrame(attempt);
           }
-        })()];
-
-        $width.value = width.attemptedValue;
-        $height.value = height.attemptedValue;
-
-        const numLevels = Math.min($levels.length, levels.length);
-        for (let i = 0; i < numLevels; ++i) {
-          $levels[i].value = levels[i].attemptedValue
+        } else {
+          res();
         }
       });
+    });
 
-      app.ports.ppState.subscribe(state => {
-        console.log(state);
-      });
-
-      app.ports.setCssProp.subscribe(([selector, prop, value]) => {
-        for(const $el of document.querySelectorAll(selector)) {
-          $el.style.setProperty(prop, value);
-        }
-      });
-
-      /* Automatic text resizing */
-
-      function resizeText($node) {
-        // TODO: check not null
-        const $parent = $node.parentNode;
-
-        let intFontSize = parseInt(getComputedStyle($node).getPropertyValue('font-size'));
-
-        if (isNaN(intFontSize))
-          throw new Error('Invalid font size read');
-
-        /* increase font size util it does not fit */
-
-        for(; intFontSize < 100; ++intFontSize)  {
-
-          const parentDim = {
-            width: $parent.offsetWidth,
-            height: $parent.offsetHeight,
-          };
-          const textDim = {
-            width: $node.offsetWidth,
-            height: $node.offsetHeight,
-          };
-
-          if (textDim.width > parentDim.width || textDim.height > parentDim.height) break;
+  const app = Elm.Main.fullscreen();
 
 
-          $node.style.setProperty('font-size', intFontSize + 'px');
-        }
+  app.ports.logError.subscribe(function (description) {
+    console.error(description);
+  });
 
-        /* decrease font size to fit */
+  app.ports.fileSelected.subscribe(function (id) {
+    var element = document.getElementById(id);
+    if (element === null) {
+      return;
+    }
 
-        for(; intFontSize > 0; --intFontSize)  {
+    var file = element.files[0];
+    var reader = new FileReader();
 
-          const parentDim = {
-            width: $parent.offsetWidth,
-            height: $parent.offsetHeight,
-          };
-          const textDim = {
-            width: $node.offsetWidth,
-            height: $node.offsetHeight,
-          };
+    reader.onload = (function (event) {
+      // The result is base64 encoded contents of the file.
+      var base64encoded = event.target.result;
 
-          if (textDim.width < parentDim.width && textDim.height < parentDim.height) break;
+      var portData = {
+        contents: base64encoded,
+        filename: file.name,
+      };
+
+      app.ports.fileContentRead.send(portData);
+    });
+
+    // Connect our FileReader with the file that was selected in our `input` node.
+    reader.readAsDataURL(file);
+  });
 
 
-          $node.style.setProperty('font-size', intFontSize + 'px');
-        }
+  app.ports.requestNonPrime.subscribe(async ({ toNumberConfig, image }) => {
+    const {
+      width: { value: width },
+      height: { value: height },
+      levels: errorableLevels,
+    } = toNumberConfig;
+
+    const numberLookup = [8, 4, 1, 7];
+
+    const levels = errorableLevels.map(x => x.value);
+
+    if (levels.length + 1 !== numberLookup.length) {
+      app.ports.nonPrimeError.send(
+        `Incorrect number of levels (${levels.length}), expected ${numberLookup.length}`,
+      );
+      return;
+    }
+    let number;
+    try {
+      const color = await getImageData(image.contents, width, height);
+      const grey = GreyImageData.fromColorImage(color);
+      const quantised = quantise(grey.data, new Uint8Array(width * height), levels);
+      number = quantised.map(x => numberLookup[x]);
+    } catch (e) {
+      app.ports.nonPrimeError.send(`${e}`);
+      return;
+    }
+
+    app.ports.nonPrimeGenerated.send({
+      number: number.join(''),
+      width,
+    });
+  });
+
+  app.ports.setInitialValues.subscribe(async ({ width, height, levels }) => {
+    const getInput = name => document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
+
+    try {
+      await runWhen(() => getInput('width') != null, 5);
+    } catch (e) {
+      console.error(`Given up setting initial values due to error:\n${e}`);
+      return;
+    }
+    const $width = getInput('width');
+    const $height = getInput('height');
+    const $levels = [...(function* () {
+      let $level;
+      let i = 1;
+      while (($level = getInput(`level ${i}`)) != null) {
+        yield $level;
+        ++i;
       }
+    })()];
 
-      function resizeAllTexts() {
-        for (let node of document.querySelectorAll('.display-panel .image-number')) {
-          resizeText(node);
-        }
-      }
+    $width.value = width.attemptedValue;
+    $height.value = height.attemptedValue;
 
-      (async () => {
-        try {
-          await runWhen(() => document.querySelector('.display-panel') != null, 5);
-        } catch (e) {
-          console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
-          return;
-        }
+    const numLevels = Math.min($levels.length, levels.length);
+    for (let i = 0; i < numLevels; ++i) {
+      $levels[i].value = levels[i].attemptedValue;
+    }
+  });
 
-        resizeAllTexts();
+  app.ports.ppState.subscribe(state => {
+    console.log(state);
+  });
 
-      })();
+  app.ports.setCssProp.subscribe(([selector, prop, value]) => {
+    for (const $el of document.querySelectorAll(selector)) {
+      $el.style.setProperty(prop, value);
+    }
+  });
 
-      window.addEventListener('resize', debounce(resizeAllTexts, 200));
+  /* Automatic text resizing */
 
-      app.ports.resizeImageNumber.subscribe(async id => {
-        try {
-          await runWhen(() => document.getElementById(id) != null, 5);
-        } catch (e) {
-          console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
-          return;
-        }
+  function resizeText($node) {
+    // TODO: check not null
+    const $parent = $node.parentNode;
 
-        resizeText(document.getElementById(id));
-      });
+    let intFontSize = parseInt(getComputedStyle($node).getPropertyValue('font-size'));
 
-    </script>
+    if (isNaN(intFontSize))
+      throw new Error('Invalid font size read');
+
+    /* increase font size util it does not fit */
+
+    for (; intFontSize < 100; ++intFontSize) {
+
+      const parentDim = {
+        width: $parent.offsetWidth,
+        height: $parent.offsetHeight,
+      };
+      const textDim = {
+        width: $node.offsetWidth,
+        height: $node.offsetHeight,
+      };
+
+      if (textDim.width > parentDim.width || textDim.height > parentDim.height) break;
+
+
+      $node.style.setProperty('font-size', intFontSize + 'px');
+    }
+
+    /* decrease font size to fit */
+
+    for (; intFontSize > 0; --intFontSize) {
+
+      const parentDim = {
+        width: $parent.offsetWidth,
+        height: $parent.offsetHeight,
+      };
+      const textDim = {
+        width: $node.offsetWidth,
+        height: $node.offsetHeight,
+      };
+
+      if (textDim.width < parentDim.width && textDim.height < parentDim.height) break;
+
+
+      $node.style.setProperty('font-size', intFontSize + 'px');
+    }
+  }
+
+  function resizeAllTexts() {
+    for (let node of document.querySelectorAll('.display-panel .image-number')) {
+      resizeText(node);
+    }
+  }
+
+  (async () => {
+    try {
+      await runWhen(() => document.querySelector('.display-panel') != null, 5);
+    } catch (e) {
+      console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
+      return;
+    }
+
+    resizeAllTexts();
+
+  })();
+
+  window.addEventListener('resize', debounce(resizeAllTexts, 200));
+
+  app.ports.resizeImageNumber.subscribe(async id => {
+    try {
+      await runWhen(() => document.getElementById(id) != null, 5);
+    } catch (e) {
+      console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
+      return;
+    }
+
+    resizeText(document.getElementById(id));
+  });
+
+</script>
 
 </body>
 

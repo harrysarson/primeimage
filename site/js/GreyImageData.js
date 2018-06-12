@@ -1,4 +1,3 @@
-
 export class GreyImageData {
 
   constructor(width, height) {
@@ -9,8 +8,8 @@ export class GreyImageData {
 
   static fromColorImage(
     input,
-    [ redWeight, greenWeight, blueWeight ] = [ 0.2126, 0.7152, 0.0722 ],
-    ) {
+    [redWeight, greenWeight, blueWeight] = [0.2126, 0.7152, 0.0722],
+  ) {
 
     const weightSum = redWeight + greenWeight + blueWeight;
 
