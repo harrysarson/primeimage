@@ -30,3 +30,4 @@ type Msg
   | ImageRead Image
   | UpdateNumberConfig ToNumberConfig.Types.Msg
   | NonPrimeGenerated ImageNumber
+  | NonPrimeError String

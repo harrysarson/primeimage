@@ -6,6 +6,8 @@ port module Ports exposing  ( fileSelected
                             , setInitialValues
                             , resizeImageNumber
                             , setCssProp
+                            , nonPrimeError
+                            , logError
                             )
 import Types
 import ToNumberConfig.Types
@@ -20,12 +22,14 @@ port fileContentRead : (Types.Image -> msg) -> Sub msg
 
 port requestNonPrime : { toNumberConfig : ToNumberConfig.Types.Model, image : Types.Image } -> Cmd msg
 port nonPrimeGenerated : (Types.ImageNumber -> msg) -> Sub msg
+port nonPrimeError : (String -> msg) -> Sub msg
 
 prettyPrintState : (Types.Model, Cmd msg) -> (Types.Model, Cmd msg)
 prettyPrintState ( model, msg ) =
     ( model, Cmd.batch [msg, ppState model] )
 
 port ppState : Types.Model -> Cmd msg
+port logError : String -> Cmd msg
 
 port setInitialValues : ToNumberConfig.Types.Model -> Cmd msg
 

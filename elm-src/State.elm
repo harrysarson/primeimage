@@ -10,9 +10,11 @@ import Ports exposing ( fileSelected
                       , setInitialValues
                       , resizeImageNumber
                       , setCssProp
+                      , logError
                       )
 
 import ToNumberConfig.State
+import ToNumberConfig.Types
 
 initialState : (Types.Model, Cmd Types.Msg)
 initialState =
@@ -86,4 +88,8 @@ update msg model =
       Types.NonPrimeGenerated nonPrime ->
           ( { model | nonPrime = Just nonPrime }
           , resizeImageNumber Config.nonPrimeImageNumberId
+          )
+      Types.NonPrimeError error ->
+          ( { model | nonPrime = Nothing }
+          , logError error
           )

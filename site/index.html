@@ -11,7 +11,10 @@
 
 <body>
     <script type=module>
-      import { Elm } from "./built/elm.js";
+      import { Elm } from './built/elm.js';
+      import { getImageData, quantise } from './js/createNonPrime.js';
+      import { GreyImageData } from './js/GreyImageData.js';
+      import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
 
       const runWhen = (test, maxTries) =>
         new Promise((res, rej) => {
@@ -35,6 +38,10 @@
 
       const app = Elm.Main.fullscreen();
 
+
+      app.ports.logError.subscribe(function (description) {
+        console.error(description);
+      });
 
       app.ports.fileSelected.subscribe(function (id) {
         var element = document.getElementById(id);
@@ -69,16 +76,29 @@
           levels: errorableLevels,
         } = toNumberConfig;
 
+        const numberLookup = [ 8, 4, 1, 7 ];
+
         const levels = errorableLevels.map(x => x.value);
 
-        const val = new Uint8Array(width * height);
-
-        for (let i = 0; i < val.length; ++i) {
-          val[i] = Math.floor(Math.random() * 3);
+        if (levels.length + 1 !== numberLookup.length) {
+          app.ports.nonPrimeError.send(
+            `Incorrect number of levels (${levels.length}), expected ${numberLookup.length}`,
+          );
+          return;
+        }
+        let number;
+        try {
+          const color = await getImageData(image.contents, width, height);
+          const grey = GreyImageData.fromColorImage(color);
+          const quantised = quantise(grey.data, new Uint8Array(width * height), levels);
+          number = quantised.map(x => numberLookup[ x ]);
+        } catch (e) {
+          app.ports.nonPrimeError.send(`${e}`);
+          return;
         }
 
         app.ports.nonPrimeGenerated.send({
-          number: val.join(''),
+          number: number.join(''),
           width,
         });
       });
@@ -131,7 +151,7 @@
         let intFontSize = parseInt(getComputedStyle($node).getPropertyValue('font-size'));
 
         if (isNaN(intFontSize))
-          throw new Error("Invalid font size read");
+          throw new Error('Invalid font size read');
 
         /* increase font size util it does not fit */
 
@@ -172,19 +192,25 @@
         }
       }
 
+      function resizeAllTexts() {
+        for (let node of document.querySelectorAll('.display-panel .image-number')) {
+          resizeText(node);
+        }
+      }
+
       (async () => {
         try {
-          await runWhen(() => document.querySelector(".display-panel") != null, 5);
+          await runWhen(() => document.querySelector('.display-panel') != null, 5);
         } catch (e) {
           console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
           return;
         }
 
-        for (let node of document.querySelectorAll(".display-panel .image-number")) {
-          resizeText(node);
-        }
+        resizeAllTexts();
 
       })();
+
+      window.addEventListener('resize', debounce(resizeAllTexts, 200));
 
       app.ports.resizeImageNumber.subscribe(async id => {
         try {
