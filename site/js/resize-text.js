@@ -1,3 +1,6 @@
+/*
+ * Note: this (probably) fails when $parent has padding.
+ */
 export function childFits($node, $parent) {
   const parentDim = {
     width: $parent.clientWidth,

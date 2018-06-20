@@ -54,6 +54,7 @@
 
     > * {
       margin: 0em auto;
+      border: 1em solid transparent;
       &:not(.auto-resize) {
         max-width: 100%;
         max-height: 100%;
