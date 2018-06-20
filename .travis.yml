@@ -17,10 +17,10 @@ install:
     fi
 
 env:
-  - COMMAND=$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run test:elm
-  - COMMAND=npm run test:js
-  - COMMAND=npm run lint:elm
-  - COMMAND=npm run lint:js
+  - COMMAND="$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run test:elm"
+  - COMMAND="npm run test:js"
+  - COMMAND="npm run lint:elm"
+  - COMMAND="npm run lint:js"
 
 script:
   - $COMMAND
