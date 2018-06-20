@@ -12,30 +12,12 @@
 <body>
 <script type=module>
   import { Elm } from './built/elm.js';
-  import { getImageData, quantise } from './js/create-non-prime.spec.js';
+  import { getImageData, quantise } from './js/create-non-prime.js';
   import { GreyImageData } from './js/grey-image-data.js';
   import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
-  import { childFits } from './js/resize-text.js';
+  import { resizeText } from './js/resize-text.js';
+  import { runWhen } from './js/run-when.js';
 
-  const runWhen = (test, maxTries) =>
-    new Promise((res, rej) => {
-      let delayCount = 0;
-      requestAnimationFrame(function attempt() {
-        const testResult = test();
-
-        if (!testResult) {
-          delayCount = delayCount + 1;
-
-          if (delayCount > maxTries) {
-            rej(new Error(`Could not set initial number config values after ${maxTries} attempt(s)`));
-          } else {
-            requestAnimationFrame(attempt);
-          }
-        } else {
-          res();
-        }
-      });
-    });
 
   const app = Elm.Main.fullscreen();
 
@@ -144,28 +126,6 @@
   });
 
   /* Automatic text resizing */
-
-  function resizeText($node) {
-    // TODO: check not null
-    const $parent = $node.parentNode;
-
-    let intFontSize = parseInt(getComputedStyle($node).getPropertyValue('font-size'));
-
-    if (isNaN(intFontSize))
-      throw new Error('Invalid font size read');
-
-    /* increase font size util it does not fit */
-
-    for (; intFontSize < 100 && childFits($node, $parent); ++intFontSize) {
-      $node.style.setProperty('font-size', intFontSize + 'px');
-    }
-
-    /* decrease font size to fit */
-
-    for (; intFontSize > 0 && !childFits($node, $parent); --intFontSize) {
-      $node.style.setProperty('font-size', intFontSize + 'px');
-    }
-  }
 
   function resizeAllTexts() {
     for (let node of document.querySelectorAll('.display-panel .image-number')) {
