@@ -1,13 +1,21 @@
-module Config exposing ( maxStage
-                       , imageInputId
-                       , nonPrimeImageNumberId
-                       )
+module Config
+    exposing
+        ( imageInputId
+        , maxStage
+        , nonPrimeImageNumberId
+        )
+
+
 maxStage : Int
-maxStage = 2
+maxStage =
+    2
+
 
 imageInputId : String
-imageInputId = "file"
+imageInputId =
+    "file"
+
 
 nonPrimeImageNumberId : String
-nonPrimeImageNumberId = "nonPrimeImageNumberId"
-
+nonPrimeImageNumberId =
+    "nonPrimeImageNumberId"

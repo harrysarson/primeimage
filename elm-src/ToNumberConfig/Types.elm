@@ -1,19 +1,20 @@
-module ToNumberConfig.Types exposing ( Model
-                                     , Msg(..)
-                                     , Errorable
-                                     , makeErrorable
-                                     , errorsInModel
-                                     )
+module ToNumberConfig.Types
+    exposing
+        ( Errorable
+        , Model
+        , Msg(..)
+        , errorsInModel
+        , makeErrorable
+        )
 
 import Array exposing (Array)
-
 import Lib.FilterMaybes exposing (filterMaybes)
 
 
 type alias Model =
     { width : Errorable Int
-    , height: Errorable Int
-    , levels: Array (Errorable Int)
+    , height : Errorable Int
+    , levels : Array (Errorable Int)
     }
 
 
@@ -40,19 +41,19 @@ makeErrorable value =
 
 errorsInModel : Model -> List ( String, String )
 errorsInModel model =
-  let
-    errorTuple : String -> Errorable a -> Maybe ( String, String )
-    errorTuple name =
-        .error
-          >> Maybe.map (\error -> ( name,  error ))
-  in
+    let
+        errorTuple : String -> Errorable a -> Maybe ( String, String )
+        errorTuple name =
+            .error
+                >> Maybe.map (\error -> ( name, error ))
+    in
     (model.width |> errorTuple "width")
-    :: (model.height |> errorTuple "height")
-    :: (model.levels
-          |> Array.indexedMap (\index level ->
-                level |> errorTuple ("level " ++ toString (index + 1))
-            )
-          |> Array.toList
-        )
-       |> filterMaybes
-
+        :: (model.height |> errorTuple "height")
+        :: (model.levels
+                |> Array.indexedMap
+                    (\index level ->
+                        level |> errorTuple ("level " ++ toString (index + 1))
+                    )
+                |> Array.toList
+           )
+        |> filterMaybes

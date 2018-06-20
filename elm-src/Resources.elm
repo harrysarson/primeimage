@@ -1,9 +1,12 @@
-module Resources exposing ( defaultImage
-                          , corpusImageNumber
-                          )
+module Resources
+    exposing
+        ( corpusImageNumber
+        , defaultImage
+        )
 
 import Regex
 import Types
+
 
 corpusImageNumber : Types.ImageNumber
 corpusImageNumber =
@@ -58,6 +61,7 @@ corpusImageNumber =
               0000055550000000000555550000088888800000555550000000000550120397
             """
     }
+
 
 defaultImage : { filename : String, contents : String }
 defaultImage =
