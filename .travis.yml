@@ -40,7 +40,7 @@ before_deploy:
     export GIT_DIFF_EXIT_CODE=$?
     if [[ $GIT_DIFF_EXIT_CODE -ne 1 ]]
     then
-      printf "Exit code was $GIT_DIFF_EXIT_CODE, Probably to publish a new version. Exiting.\n";
+      printf "Exit code was $GIT_DIFF_EXIT_CODE, Probably need to publish a new version. Exiting.\n";
       exit 1;
     fi
   # build elm files
