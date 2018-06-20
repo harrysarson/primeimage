@@ -6,7 +6,9 @@
   "scripts": {
     "preversion": "npm test",
     "postversion": "git push --tags && git push",
-    "lint": "eslint .",
+    "lint:js": "xo",
+    "lint:elm": "elm-format elm-src --validate",
+    "lint": "npm run lint:js && npm run lint:elm  ",
     "test:elm": "elm test 'elm-tests/**/*.elm'",
     "test:js": "karma start --single-run --browsers FirefoxHeadless",
     "test": "npm run test:elm && npm run test:js",
@@ -18,6 +20,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "elm": "^0.18.0",
+    "elm-format": "^0.7.0-exp",
     "elm-test": "^0.18.12",
     "karma": "^2.0.2",
     "karma-chai": "^0.1.0",
