@@ -81,7 +81,7 @@ instructions props =
           , p []
                 [ text "Click "
                 , stageButton 1 props [ text "Next" ]
-                , text "to begin."
+                , text " to begin."
                 ]
           ]
         , [ h1 [] [ text "Select Image" ]
