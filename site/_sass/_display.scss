@@ -54,6 +54,10 @@
 
     > * {
       margin: 0em auto;
+      &:not(.auto-resize) {
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
 
     &:not(:last-child) {

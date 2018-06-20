@@ -51,7 +51,7 @@ displays props =
                 |> maybeSingleton
     in
     [ [ span
-            [ class "image-number" ]
+            [ class "image-number auto-resize" ]
             [ text <|
                 imageNumber2displayString Resources.corpusImageNumber
             ]
@@ -63,7 +63,7 @@ displays props =
             []
       ]
     , [ span
-            [ class "image-number"
+            [ class "image-number auto-resize"
             , id Config.nonPrimeImageNumberId
             ]
             nonPrimeImageList
