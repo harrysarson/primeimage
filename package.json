@@ -8,6 +8,7 @@
     "postversion": "git push --tags && git push",
     "lint:js": "xo",
     "lint:elm": "elm-format elm-src --validate",
+    "lint:scss": "stylelint site/**/*.scss",
     "lint": "npm run lint:js && npm run lint:elm  ",
     "test:elm": "elm test 'elm-tests/**/*.elm'",
     "test:js": "karma start --single-run --browsers FirefoxHeadless",
@@ -30,6 +31,10 @@
     "karma-webpack": "^3.0.0",
     "mocha": "^5.2.0",
     "node-elm-lint": "^1.0.0-beta.1",
+    "stylelint": "^9.3.0",
+    "stylelint-config-rational-order": "0.0.2",
+    "stylelint-config-standard": "^18.2.0",
+    "stylelint-scss": "^3.1.3",
     "webpack": "^4.12.0",
     "xo": "^0.21.1"
   },
@@ -40,5 +45,33 @@
       "browser"
     ],
     "import/extensions": "ignorePackages"
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-rational-order"
+    ],
+    "plugins": [
+      "stylelint-scss"
+    ],
+    "rules": {
+      "at-rule-no-unknown": [
+        true,
+        {
+          "ignoreAtRules": [
+            "function",
+            "if",
+            "each",
+            "include",
+            "mixin"
+          ]
+        }
+      ],
+      "order/order": [
+        "custom-properties",
+        "declarations"
+      ],
+      "order/properties-alphabetical-order": true
+    }
   }
 }
