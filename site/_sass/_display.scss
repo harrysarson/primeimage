@@ -2,28 +2,28 @@
   --show-stage: 0;
   --stages-to-show-at-a-time: 2;
   --position-of-selected-stage: 0.5;
-
   --arrow-size: 20px;
   --padding-between-stages: calc(var(--padding) * 1.1);
-  --spacing-between-stages: calc(
-    var(--arrow-size) + 2 * var(--padding-between-stages)
-  );
-
-  transform: translateY(
+  --spacing-between-stages:
     calc(
-      -1 / var(--stages-to-show-at-a-time) *
+      var(--arrow-size) + 2 * var(--padding-between-stages)
+    );
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--padding);
+  overflow: visible;
+  transform:
+    translateY(
+      calc(
+        -1 / var(--stages-to-show-at-a-time) *
         (
           100% - 2 * var(--padding) + var(--spacing-between-stages)
         ) * (var(--show-stage) - var(--position-of-selected-stage))
-    )
-  );
+      )
+    );
   transition: transform 0.5s linear;
-  display: flex;
-  flex-direction: column;
-  padding: var(--padding);
-  height: 100%;
-  overflow: visible;
-
   pointer-events: none;
 
   > .current-stage {
@@ -31,30 +31,29 @@
   }
 
   > * {
-    --height: calc((100% + var(--spacing-between-stages))/ var(--stages-to-show-at-a-time));
-    flex: 0 0 var(--height);
-    transition-property: flex-basis;
-    transition-duration: inherit;
-    transition-timing-function: inherit;
-
-    font-size: 2em;
-    max-height: var(--height);
+    --height: calc((100% + var(--spacing-between-stages)) / var(--stages-to-show-at-a-time));
     position: relative;
-    width: 100%;
-    max-width: var(--height);
-    margin: 0 auto;
-
-    background: grey content-box;
-    overflow: visible;
-    text-align: center;
-
     display: flex;
-    align-items: center;
+    flex: 0 0 var(--height);
     justify-content: center;
 
+    align-items: center;
+    width: 100%;
+    max-width: var(--height);
+    max-height: var(--height);
+    margin: 0 auto;
+    overflow: visible;
+    font-size: 2em;
+    text-align: center;
+    background: grey content-box;
+    transition-timing-function: inherit;
+    transition-duration: inherit;
+    transition-property: flex-basis;
+
     > * {
-      margin: 0em auto;
+      margin: 0 auto;
       border: 1em solid transparent;
+
       &:not(.auto-resize) {
         max-width: 100%;
         max-height: 100%;
@@ -63,40 +62,39 @@
 
     &:not(:last-child) {
       --border-width: 2px;
+
       @import 'mixin/nice-button';
+
       @include nice-button(':after', var(--border-width));
 
-      border: 0px solid transparent;
+      border: 0 solid transparent;
       border-bottom-width: var(--spacing-between-stages);
 
-      &:not([disabled]):after {
-        pointer-events: auto;
-      }
-
-      &:after {
+      &::after {
         position: absolute;
-        box-sizing: content-box;
         top: calc(100% + var(--padding-between-stages) - var(--border-width));
         left: calc(50% - var(--arrow-size) / 2);
-
         display: block;
+        box-sizing: content-box;
         width: var(--arrow-size);
         height: var(--arrow-size);
         font-size: var(--arrow-size);
         line-height: var(--arrow-size);
-
-
         text-align: center;
         content: "⯆";
+      }
+
+      &:not([disabled])::after {
+        pointer-events: auto;
       }
     }
   }
 }
 
 .image-number {
+  font-weight: bold;
   font-size: 0.8em;
   line-height: 0.8em;
-  font-weight: bold;
-  text-align: center;
   white-space: pre;
+  text-align: center;
 }
