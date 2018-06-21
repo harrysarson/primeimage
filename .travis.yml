@@ -21,6 +21,7 @@ env:
   - COMMAND="npm run test:js"
   - COMMAND="$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run lint:elm"
   - COMMAND="npm run lint:js"
+  - COMMAND="npm run lint:scss"
 
 script:
   - $COMMAND
