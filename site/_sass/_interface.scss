@@ -1,5 +1,6 @@
 & {
   --side-length: calc(var(--panel-width) - 2 * var(--padding));
+
   display: flex;
   flex: 0 0 var(--side-length);
   flex-direction: column;
@@ -8,7 +9,6 @@
   height: 0;
   margin-right: auto;
   margin-left: auto;
-
   background: white;
 }
 
@@ -39,9 +39,9 @@
 
 .image-pick {
   --outline-inset: 20px;
+
   position: relative;
   width: 100%;
-
   height: 100%;
   margin: 0;
   padding: calc(var(--outline-inset) + 0.5em);

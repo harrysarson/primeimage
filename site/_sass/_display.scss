@@ -32,11 +32,11 @@
 
   > * {
     --height: calc((100% + var(--spacing-between-stages)) / var(--stages-to-show-at-a-time));
+
     position: relative;
     display: flex;
     flex: 0 0 var(--height);
     justify-content: center;
-
     align-items: center;
     width: 100%;
     max-width: var(--height);
