@@ -1,9 +1,8 @@
-module ToNumberConfig.Config
-    exposing
-        ( maxImageSize
-        , maxLevel
-        , numberOfLevels
-        )
+module ToNumberConfig.Config exposing
+    ( maxImageSize
+    , maxLevel
+    , numberOfLevels
+    )
 
 
 maxImageSize : Int

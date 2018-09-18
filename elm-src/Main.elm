@@ -1,17 +1,21 @@
 module Main exposing (main)
 
-import Html
+import Browser
 import State exposing (initialState, update)
 import Subscriptions exposing (subscriptions)
 import Types
 import View exposing (view)
 
 
-main : Program Never Types.Model Types.Msg
+main : Program () Types.Model Types.Msg
 main =
-    Html.program
-        { init = initialState
+    Browser.document
+        { init = \() -> initialState
         , update = update
         , subscriptions = subscriptions
-        , view = view
+        , view =
+            \model ->
+                { title = "Prime Image"
+                , body = [ view model ]
+                }
         }

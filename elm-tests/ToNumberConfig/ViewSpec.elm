@@ -59,7 +59,7 @@ tests =
                             |> Array.indexedMap
                                 (\i _ ->
                                     Query.index (2 + i)
-                                      >> Query.has [ text "level", text <| toString (i + 1) ]
+                                      >> Query.has [ text "level", text <| String.fromInt (i + 1) ]
                                 )
                           )
                       ))
@@ -86,7 +86,7 @@ tests =
                                     (\i _ ->
                                         Query.find
                                             [ tag "input"
-                                            , attribute <| Attr.attribute "data-input-name" ("level" ++ toString (i + 1))
+                                            , attribute <| Attr.attribute "data-input-name" ("level" ++ String.fromInt (i + 1))
                                             ]
                                         >> always Expect.pass
                                     )
@@ -128,7 +128,7 @@ view model =
   let
     levelInputs =
         List.indexedMap
-          (\level -> inputBox { msg = Types.SetLevel 0, name = "level " ++ toString (level + 1) })
+          (\level -> inputBox { msg = Types.SetLevel 0, name = "level " ++ String.fromInt (level + 1) })
           (Array.toList model.levels)
     children =
         inputBox { msg = Types.SetWidth, name = "width" } model.width

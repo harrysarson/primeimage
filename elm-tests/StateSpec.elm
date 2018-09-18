@@ -126,7 +126,8 @@ tests =
 intOutsideRange : Int -> Int -> Fuzzer Int
 intOutsideRange lo hi =
     if hi < lo then
-        Err <| "intOutsideRange was given a lower bound of " ++ toString lo ++ " which is greater than the upper bound, " ++ toString hi ++ "."
+        Err <| "intOutsideRange was given a lower bound of " ++ 
+                    String.fromInt lo ++ " which is greater than the upper bound, " ++ String.fromInt hi ++ "."
     else
         Fuzz.frequency
             [ ( toFloat (lo - Random.minInt), Fuzz.intRange Random.minInt (lo - 1) )
@@ -136,14 +137,14 @@ intOutsideRange lo hi =
 updateNumberConfigMsgFuzz =
     Fuzz.oneOf
         [ Fuzz.int
-            |> Fuzz.map toString
+            |> Fuzz.map String.fromInt
             |> Fuzz.map ToNumberConfig.Types.SetWidth
         , Fuzz.int
-            |> Fuzz.map toString
+            |> Fuzz.map String.fromInt
             |> Fuzz.map ToNumberConfig.Types.SetHeight
         , Fuzz.int
             |> Fuzz.map ToNumberConfig.Types.SetLevel
-            |> Fuzz.andMap (Fuzz.int |> Fuzz.map toString)
+            |> Fuzz.andMap (Fuzz.int |> Fuzz.map String.fromInt)
         ]
 
 

@@ -1,9 +1,8 @@
-module Config
-    exposing
-        ( imageInputId
-        , maxStage
-        , nonPrimeImageNumberId
-        )
+module Config exposing
+    ( imageInputId
+    , maxStage
+    , nonPrimeImageNumberId
+    )
 
 
 maxStage : Int

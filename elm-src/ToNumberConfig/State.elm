@@ -1,8 +1,7 @@
-module ToNumberConfig.State
-    exposing
-        ( initialState
-        , update
-        )
+module ToNumberConfig.State exposing
+    ( initialState
+    , update
+    )
 
 import Array
 import Json.Decode as Decode
@@ -47,19 +46,21 @@ validateSize : String -> Int -> Result String Int
 validateSize dimName width =
     if width > 0 && width <= Config.maxImageSize then
         Ok width
+
     else
-        Err (dimName ++ " must be positive integer less than " ++ toString Config.maxImageSize)
+        Err (dimName ++ " must be positive integer less than " ++ String.fromInt Config.maxImageSize)
 
 
 validateLevel : Int -> Result String Int
 validateLevel level =
     if level >= 0 && level <= Config.maxLevel then
         Ok level
+
     else
-        Err ("level must be positive integer less than " ++ toString Config.maxLevel)
+        Err ("level must be positive integer less than " ++ String.fromInt Config.maxLevel)
 
 
-updateErrorable : (Int -> Result String Int) -> String -> Errorable Int -> Errorable Int
+updateErrorable : (Int -> Result String Int) -> String -> Errorable -> Errorable
 updateErrorable validate attemptedValue errorable =
     let
         parsedSize =
@@ -82,6 +83,6 @@ updateErrorable validate attemptedValue errorable =
             }
 
 
-setAttempted : String -> Errorable a -> Errorable a
+setAttempted : String -> Errorable -> Errorable
 setAttempted attemptedValue errorable =
     { errorable | attemptedValue = attemptedValue }

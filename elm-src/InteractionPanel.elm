@@ -52,13 +52,15 @@ stageButton change props =
         enabled =
             if change > 0 then
                 props.canGoNext
+
             else if change < 0 then
                 props.canGoBack
+
             else
                 False
     in
     button
-        [ attribute "data-stage-change" (toString change)
+        [ attribute "data-stage-change" (String.fromInt change)
         , onClick (Types.ChangeStage change)
         , disabled <| not enabled
         ]
@@ -100,7 +102,7 @@ instructions props =
                 ]
             :: p
                 []
-                [ text ("The " ++ toString (Array.length props.toNumberConfig.levels) ++ """
+                [ text ("The " ++ String.fromInt (Array.length props.toNumberConfig.levels) ++ """
                 level(s) determine the which pixel values map to each number.
                 Play around with these to get the clearest number image.
                 """)
@@ -157,8 +159,8 @@ interactions props =
         ]
 
 
-default_instructions : int -> List (Html Types.Msg)
+default_instructions : Int -> List (Html Types.Msg)
 default_instructions stage =
     [ h1 [] [ text "Unknown stage" ]
-    , p [] [ text ("Stage " ++ toString stage ++ " could not be found") ]
+    , p [] [ text ("Stage " ++ String.fromInt stage ++ " could not be found") ]
     ]

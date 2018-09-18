@@ -14,7 +14,7 @@ const writeFile = promisify(fs.writeFile);
   const elmEsm =
     '\n' +
     'const scope = {};\n' +
-    elmEs3.replace('}).call(this);', '}).call(scope);') +
+    elmEs3.replace('}(this));', '}(scope));') +
     'export const { Elm } = scope;\n' +
     '\n';
 

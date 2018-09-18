@@ -1,8 +1,7 @@
-module State
-    exposing
-        ( initialState
-        , update
-        )
+module State exposing
+    ( initialState
+    , update
+    )
 
 import Config
 import Ports
@@ -56,13 +55,14 @@ update msg model =
                     setIntialVal =
                         if change /= 0 && newStage == 2 then
                             setInitialValues model.toNumberConfig
+
                         else
                             Cmd.none
                 in
                 ( { model | stage = newStage }
                 , Cmd.batch
                     [ setIntialVal
-                    , setCssProp ( ".display-panel", "--show-stage", toString newStage )
+                    , setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage )
                     ]
                 )
 
@@ -93,6 +93,7 @@ update msg model =
                     ( { updatedModel | nonPrime = Nothing }
                     , Cmd.none
                     )
+
                 else
                     ( updatedModel
                     , model.image

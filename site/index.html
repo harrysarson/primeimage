@@ -5,11 +5,7 @@
 
 <head>
   <meta charset="utf-8"/>
-  <title>Prime Image</title>
   <link rel="stylesheet" href="main.css"/>
-</head>
-
-<body>
 <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
@@ -19,7 +15,7 @@
   import { runWhen } from './js/run-when.js';
 
 
-  const app = Elm.Main.fullscreen();
+  const app = Elm.Main.init();
 
 
   app.ports.logError.subscribe(function (description) {
@@ -160,6 +156,9 @@
 
 </script>
 
+</head>
+
+<body>
 </body>
 
 </html>

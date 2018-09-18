@@ -28,6 +28,7 @@ view props =
                     [ onClick (Types.ChangeStage 1) ]
                         ++ (if not props.canGoNext then
                                 [ attribute "disabled" "" ]
+
                             else
                                 []
                            )
@@ -92,6 +93,7 @@ imageNumber2rows imageNumber =
     in
     if number == "" then
         []
+
     else
         String.left width number :: imageNumber2rows { imageNumber | number = String.dropLeft width number }
 
