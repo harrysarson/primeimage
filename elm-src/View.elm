@@ -12,7 +12,17 @@ view model =
     let
         -- todo: find a more elegant way to set these props
         canGoNext =
-            model.stage < Config.maxStage
+            case model.stage of
+                0 ->
+                    True
+                1 ->
+                    model.image /= Nothing
+                2 ->
+                    True
+                3 ->
+                    False
+                _ ->
+                    False
 
         displayProps =
             { stage = model.stage

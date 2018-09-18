@@ -89,6 +89,11 @@ instructions props =
         , [ h1 [] [ text "Select Image" ]
           , p [] [ text "First you must select an image to turn into a prime number." ]
           , p [] [ text "Use the box below to open an image." ]
+          , p [] 
+                [ text "Once you have opened an image, click "
+                , stageButton 1 props [ text "Next" ]
+                , text " to convert the image to a number"
+                ]
           ]
         , h1 [] [ text "Convert Image To Number" ]
             :: p [] [ text "Use the controls below to convert the image to a number." ]
