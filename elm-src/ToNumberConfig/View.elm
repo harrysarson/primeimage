@@ -14,7 +14,7 @@ view model =
     let
         levelInputs =
             List.indexedMap
-                (\level -> inputBox { msg = Types.SetLevel level, name = "level " ++ toString (level + 1) })
+                (\level -> inputBox { msg = Types.SetLevel level, name = "level " ++ String.fromInt (level + 1) })
                 (Array.toList model.levels)
 
         children =
@@ -27,7 +27,7 @@ view model =
         children
 
 
-inputBox : { msg : String -> msg, name : String } -> Types.Errorable Int -> Html msg
+inputBox : { msg : String -> msg, name : String } -> Types.Errorable -> Html msg
 inputBox { msg, name } errorable =
     let
         isError =

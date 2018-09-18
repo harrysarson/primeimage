@@ -21,7 +21,7 @@ tests =
             , fuzz Fuzz.int ".attemptedValue" <|
                 \i -> makeErrorable i
                   |> .attemptedValue
-                  |> Expect.equal (toString i)
+                  |> Expect.equal (String.fromInt i)
             , test ".error" <|
                 \() -> makeErrorable "a value"
                   |> .error

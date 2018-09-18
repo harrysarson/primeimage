@@ -1,10 +1,9 @@
-module Types
-    exposing
-        ( Image
-        , ImageNumber
-        , Model
-        , Msg(..)
-        )
+module Types exposing
+    ( Image
+    , ImageNumber
+    , Model
+    , Msg(..)
+    )
 
 import ToNumberConfig.Types
 

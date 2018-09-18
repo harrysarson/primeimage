@@ -1,8 +1,7 @@
-module Resources
-    exposing
-        ( corpusImageNumber
-        , defaultImage
-        )
+module Resources exposing
+    ( corpusImageNumber
+    , defaultImage
+    )
 
 import Regex
 import Types
@@ -12,10 +11,7 @@ corpusImageNumber : Types.ImageNumber
 corpusImageNumber =
     { width = 64
     , number =
-        Regex.replace
-            Regex.All
-            (Regex.regex "\\s")
-            (always "")
+        (String.split " " >> String.join "" >> String.split "\n" >> String.join "")
             """
               1001010777777777777770777777777777777777770777777777777777777777
               1010010777777777777702077777777777777777702077777777777777777777

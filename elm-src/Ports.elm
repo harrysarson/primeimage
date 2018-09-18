@@ -1,16 +1,15 @@
-port module Ports
-    exposing
-        ( fileContentRead
-        , fileSelected
-        , logError
-        , nonPrimeError
-        , nonPrimeGenerated
-        , prettyPrintState
-        , requestNonPrime
-        , resizeImageNumber
-        , setCssProp
-        , setInitialValues
-        )
+port module Ports exposing
+    ( fileContentRead
+    , fileSelected
+    , logError
+    , nonPrimeError
+    , nonPrimeGenerated
+    , prettyPrintState
+    , requestNonPrime
+    , resizeImageNumber
+    , setCssProp
+    , setInitialValues
+    )
 
 import ToNumberConfig.Types
 import Types

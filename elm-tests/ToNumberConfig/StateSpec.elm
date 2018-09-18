@@ -31,7 +31,7 @@ tests =
                               [ Expect.greaterThan 0
                               , Expect.atMost Config.maxImageSize
                               ]
-                      , \{value, attemptedValue} -> Expect.equal (toString value) attemptedValue
+                      , \{value, attemptedValue} -> Expect.equal (String.fromInt value) attemptedValue
                       , .error
                           >> Expect.equal Nothing
 
@@ -56,7 +56,7 @@ tests =
                               , expectAllInList (Expect.atMost Config.maxLevel)
                               ]
                       , expectAllInList <|
-                            \{value, attemptedValue} -> Expect.equal (toString value) attemptedValue
+                            \{value, attemptedValue} -> Expect.equal (String.fromInt value) attemptedValue
 
                       , expectAllInList <|
                             .error
@@ -66,24 +66,24 @@ tests =
         , describe "update"
             [ describe "SetWidth message" <|
                   [ fuzz (Fuzz.tuple ( model, validImageSizeFuzz )) "valid width" <|
-                      \( model, newWidth ) -> update (Types.SetWidth (toString newWidth)) model
+                      \( model, newWidth ) -> update (Types.SetWidth (String.fromInt newWidth)) model
                         |> .width
                         |> Expect.all
                             [ .value
                                 >> Expect.equal newWidth
                             , .attemptedValue
-                                >> Expect.equal (toString newWidth)
+                                >> Expect.equal (String.fromInt newWidth)
                             , .error
                                 >> Expect.equal Nothing
                             ]
                   , fuzz (Fuzz.tuple ( model, invalidImageSizeFuzz )) "invalid numeric width" <|
-                      \( model, newWidth ) -> update (Types.SetWidth (toString newWidth)) model
+                      \( model, newWidth ) -> update (Types.SetWidth (String.fromInt newWidth)) model
                         |> .width
                         |> Expect.all
                             [ .value
                                 >> Expect.equal model.width.value
                             , .attemptedValue
-                                >> Expect.equal (toString newWidth)
+                                >> Expect.equal (String.fromInt newWidth)
                             , .error
                                 >> Expect.notEqual Nothing
                             ]
@@ -101,24 +101,24 @@ tests =
                   ]
             , describe "SetHeight message" <|
                   [ fuzz (Fuzz.tuple ( model, validImageSizeFuzz )) "valid height" <|
-                      \( model, newHeight ) -> update (Types.SetHeight (toString newHeight)) model
+                      \( model, newHeight ) -> update (Types.SetHeight (String.fromInt newHeight)) model
                         |> .height
                         |> Expect.all
                             [ .value
                                 >> Expect.equal newHeight
                             , .attemptedValue
-                                >> Expect.equal (toString newHeight)
+                                >> Expect.equal (String.fromInt newHeight)
                             , .error
                                 >> Expect.equal Nothing
                             ]
                   , fuzz (Fuzz.tuple ( model, invalidImageSizeFuzz )) "invalid numeric height" <|
-                      \( model, newHeight ) -> update (Types.SetHeight (toString newHeight)) model
+                      \( model, newHeight ) -> update (Types.SetHeight (String.fromInt newHeight)) model
                         |> .height
                         |> Expect.all
                             [ .value
                                 >> Expect.equal model.height.value
                             , .attemptedValue
-                                >> Expect.equal (toString newHeight)
+                                >> Expect.equal (String.fromInt newHeight)
                             , .error
                                 >> Expect.notEqual Nothing
                             ]
@@ -138,7 +138,7 @@ tests =
                   [ fuzz
                       (Fuzz.tuple3 ( model, validLevelIndexFuzz, validLevelFuzz ))
                       "valid level and index"
-                      <| \( model, index, newLevel ) -> update (Types.SetLevel index (toString newLevel)) model
+                      <| \( model, index, newLevel ) -> update (Types.SetLevel index (String.fromInt newLevel)) model
                         |> .levels
                         |> Expect.all
                             (Array.toList <|
@@ -151,7 +151,7 @@ tests =
                                                       [ .value
                                                           >> Expect.equal newLevel
                                                       , .attemptedValue
-                                                          >> Expect.equal (toString newLevel)
+                                                          >> Expect.equal (String.fromInt newLevel)
                                                       , .error
                                                            >> Expect.equal Nothing
                                                       ]
@@ -167,7 +167,7 @@ tests =
                           ( model
                           , invalidLevelIndexFuzz
                           , Fuzz.oneOf
-                              [ Fuzz.map toString Fuzz.int
+                              [ Fuzz.map String.fromInt Fuzz.int
                               , Fuzz.constant "not a number"
                               ]
                           )
@@ -179,7 +179,7 @@ tests =
                   , fuzz
                       (Fuzz.tuple3 ( model, validLevelIndexFuzz, invalidLevelFuzz ))
                       "invalid level"
-                      <| \( model, index, newLevel ) -> update (Types.SetLevel index (toString newLevel)) model
+                      <| \( model, index, newLevel ) -> update (Types.SetLevel index (String.fromInt newLevel)) model
                         |> .levels
                         |> Expect.all
                             -- make sure there is at least one expectation for Expect.all
@@ -193,7 +193,7 @@ tests =
                                                       [ .value
                                                           >> Expect.equal lev.value
                                                       , .attemptedValue
-                                                          >> Expect.equal (toString newLevel)
+                                                          >> Expect.equal (String.fromInt newLevel)
                                                       , .error
                                                            >> Expect.notEqual Nothing
                                                       ]
