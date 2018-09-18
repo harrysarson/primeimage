@@ -4,7 +4,6 @@ port module Ports exposing
     , logError
     , nonPrimeError
     , nonPrimeGenerated
-    , prettyPrintState
     , requestNonPrime
     , resizeImageNumber
     , setCssProp
@@ -31,14 +30,6 @@ port nonPrimeGenerated : (Types.ImageNumber -> msg) -> Sub msg
 
 
 port nonPrimeError : (String -> msg) -> Sub msg
-
-
-prettyPrintState : ( Types.Model, Cmd msg ) -> ( Types.Model, Cmd msg )
-prettyPrintState ( model, msg ) =
-    ( model, Cmd.batch [ msg, ppState model ] )
-
-
-port ppState : Types.Model -> Cmd msg
 
 
 port logError : String -> Cmd msg

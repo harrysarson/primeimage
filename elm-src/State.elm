@@ -7,8 +7,6 @@ import Config
 import Ports
     exposing
         ( fileSelected
-        , logError
-        , prettyPrintState
         , requestNonPrime
         , resizeImageNumber
         , setCssProp
@@ -25,6 +23,7 @@ initialState =
       , image = Nothing
       , toNumberConfig = ToNumberConfig.State.initialState
       , nonPrime = Nothing
+      , prime = Nothing
       }
     , Cmd.batch
         [ setInitialValues ToNumberConfig.State.initialState
@@ -45,68 +44,67 @@ initialState =
 
 update : Types.Msg -> Types.Model -> ( Types.Model, Cmd Types.Msg )
 update msg model =
-    prettyPrintState <|
-        case msg of
-            Types.ChangeStage change ->
-                let
-                    newStage =
-                        max 0 <| min Config.maxStage (model.stage + change)
+   case msg of
+        Types.ChangeStage change ->
+            let
+                newStage =
+                    max 0 <| min Config.maxStage (model.stage + change)
 
-                    setIntialVal =
-                        if change /= 0 && newStage == 2 then
-                            setInitialValues model.toNumberConfig
+                setIntialVal =
+                    if change /= 0 && newStage == 2 then
+                        setInitialValues model.toNumberConfig
 
-                        else
-                            Cmd.none
-                in
-                ( { model | stage = newStage }
-                , Cmd.batch
-                    [ setIntialVal
-                    , setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage )
-                    ]
+                    else
+                        Cmd.none
+            in
+            ( { model | stage = newStage }
+            , Cmd.batch
+                [ setIntialVal
+                , setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage )
+                ]
+            )
+
+        Types.ImageSelected ->
+            ( model
+            , fileSelected Config.imageInputId
+            )
+
+        Types.ImageRead image ->
+            ( { model | image = Just image }
+            , requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
+            )
+
+        Types.UpdateNumberConfig updateNumberConfigMsg ->
+            let
+                toNumberConfig =
+                    ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
+
+                isError =
+                    ToNumberConfig.Types.errorsInModel toNumberConfig
+                        |> List.isEmpty
+                        |> not
+
+                updatedModel =
+                    { model | toNumberConfig = toNumberConfig }
+            in
+            if isError then
+                ( { updatedModel | nonPrime = Nothing }
+                , Cmd.none
                 )
 
-            Types.ImageSelected ->
-                ( model
-                , fileSelected Config.imageInputId
+            else
+                ( updatedModel
+                , model.image
+                    |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
+                    |> Maybe.withDefault Cmd.none
                 )
 
-            Types.ImageRead image ->
-                ( { model | image = Just image }
-                , requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
-                )
+        Types.NonPrimeGenerated nonPrime ->
+            ( { model | nonPrime = Just nonPrime }
+            , resizeImageNumber Config.nonPrimeImageNumberId
+            )
 
-            Types.UpdateNumberConfig updateNumberConfigMsg ->
-                let
-                    toNumberConfig =
-                        ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
-
-                    isError =
-                        ToNumberConfig.Types.errorsInModel toNumberConfig
-                            |> List.isEmpty
-                            |> not
-
-                    updatedModel =
-                        { model | toNumberConfig = toNumberConfig }
-                in
-                if isError then
-                    ( { updatedModel | nonPrime = Nothing }
-                    , Cmd.none
-                    )
-
-                else
-                    ( updatedModel
-                    , model.image
-                        |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
-                        |> Maybe.withDefault Cmd.none
-                    )
-
-            Types.NonPrimeGenerated nonPrime ->
-                ( { model | nonPrime = Just nonPrime }
-                , resizeImageNumber Config.nonPrimeImageNumberId
-                )
-
-            Types.NonPrimeError error ->
-                ( { model | nonPrime = Nothing }
-                , logError error
-                )
+        Types.NonPrimeError error ->
+            ( { model | nonPrime = Nothing }
+            , Ports.logError error
+            )

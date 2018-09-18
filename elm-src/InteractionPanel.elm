@@ -110,6 +110,9 @@ instructions props =
             :: (ToNumberConfig.Types.errorsInModel props.toNumberConfig
                     |> List.map makeErrorP
                )
+        , [ h1 [] [ text "Create a Prime Number" ]
+          , p [] [ text "Click below to find a prime number similar to the current number."]
+          ]
         ]
 
 
@@ -156,6 +159,7 @@ interactions props =
                 Types.UpdateNumberConfig
                 (ToNumberConfig.View.view props.toNumberConfig)
           ]
+        , [ text "todo - click here" ]
         ]
 
 

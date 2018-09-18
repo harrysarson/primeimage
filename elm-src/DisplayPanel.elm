@@ -13,6 +13,7 @@ type alias Props =
     , canGoNext : Bool
     , imagePreview : Maybe Types.Image
     , nonPrimeImage : Maybe Types.ImageNumber
+    , primeImage : Maybe Types.ImageNumber
     }
 
 
@@ -50,6 +51,12 @@ displays props =
                 |> Maybe.map imageNumber2displayString
                 |> Maybe.map text
                 |> maybeSingleton
+
+        primeImageList =
+            props.primeImage
+                |> Maybe.map imageNumber2displayString
+                |> Maybe.map text
+                |> maybeSingleton
     in
     [ [ span
             [ class "image-number"
@@ -71,6 +78,12 @@ displays props =
             , id Config.nonPrimeImageNumberId
             ]
             nonPrimeImageList
+      ]
+    , [ span
+            [ class "image-number"
+            , class "auto-resize"
+            ]
+            primeImageList
       ]
     ]
 
