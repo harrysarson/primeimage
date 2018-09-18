@@ -19,6 +19,7 @@ view model =
             , canGoNext = canGoNext
             , imagePreview = model.image
             , nonPrimeImage = model.nonPrime
+            , primeImage = model.prime
             }
 
         interactionProps =

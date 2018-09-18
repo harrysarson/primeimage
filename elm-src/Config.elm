@@ -7,7 +7,7 @@ module Config exposing
 
 maxStage : Int
 maxStage =
-    2
+    3
 
 
 imageInputId : String

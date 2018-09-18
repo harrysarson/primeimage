@@ -25,6 +25,7 @@ type alias Model =
     , image : Maybe Image
     , toNumberConfig : ToNumberConfig.Types.Model
     , nonPrime : Maybe ImageNumber
+    , prime : Maybe ImageNumber
     }
 
 
