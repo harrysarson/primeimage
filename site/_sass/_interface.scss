@@ -20,7 +20,7 @@
 
   > input {
     float: right;
-    width: 4em;
+    width: calc(var(--panel-width) / 2);
     color: inherit;
     background-color: inherit;
     border-style: none;

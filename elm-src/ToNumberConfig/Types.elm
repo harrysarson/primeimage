@@ -28,6 +28,8 @@ type Msg
     = SetWidth String
     | SetHeight String
     | SetLevel Int String
+    | FinishedChanging
+    | ReorderLevels
 
 
 makeErrorable : Int -> Errorable

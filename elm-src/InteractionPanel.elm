@@ -89,7 +89,7 @@ instructions props =
         , [ h1 [] [ text "Select Image" ]
           , p [] [ text "First you must select an image to turn into a prime number." ]
           , p [] [ text "Use the box below to open an image." ]
-          , p [] 
+          , p []
                 [ text "Once you have opened an image, click "
                 , stageButton 1 props [ text "Next" ]
                 , text " to convert the image to a number"
@@ -116,7 +116,7 @@ instructions props =
                     |> List.map makeErrorP
                )
         , [ h1 [] [ text "Create a Prime Number" ]
-          , p [] [ text "Click below to find a prime number similar to the current number."]
+          , p [] [ text "Click below to find a prime number similar to the current number." ]
           ]
         ]
 
