@@ -15,7 +15,7 @@ export async function getImageData(url, width) {
 
   const aspectRatio = img.height / img.width;
 
-  const height =  width * aspectRatio;
+  const height = width * aspectRatio;
 
   canvas.width = width;
   canvas.height = height;
