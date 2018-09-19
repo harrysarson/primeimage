@@ -2,38 +2,41 @@
   --side-length: calc(var(--panel-width) - 2 * var(--padding));
 
   display: flex;
-  flex: 0 0 var(--side-length);
+  flex: 0 0 auto;
   flex-direction: column;
   justify-content: space-evenly;
   width: calc(var(--panel-width) - 2 * var(--padding));
-  height: 0;
+  height: auto;
   margin-right: auto;
   margin-left: auto;
   background: white;
 }
 
-.to-number-config label {
-  display: block;
-  padding: var(--box-padding);
-  border: var(--border-width) none grey;
-  border-bottom-style: solid;
-
-  > input {
-    float: right;
-    width: calc(var(--panel-width) / 2);
-    color: inherit;
-    background-color: inherit;
-    border-style: none;
-  }
-
-  &::after {
+.to-number-config{
+  margin: 0;
+  & label {
     display: block;
-    clear: both;
-    content: "";
-  }
+    padding: var(--box-padding);
+    border: var(--border-width) none grey;
+    border-bottom-style: solid;
 
-  &:first-child {
-    border-top-style: solid;
+    > input {
+      float: right;
+      width: calc(var(--panel-width) / 2);
+      color: inherit;
+      background-color: inherit;
+      border-style: none;
+    }
+
+    &::after {
+      display: block;
+      clear: both;
+      content: "";
+    }
+
+    &:last-child {
+      border-bottom-style: none;
+    }
   }
 }
 

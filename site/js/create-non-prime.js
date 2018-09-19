@@ -1,4 +1,4 @@
-export async function getImageData(url, width, height) {
+export async function getImageData(url, width) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
@@ -12,6 +12,10 @@ export async function getImageData(url, width, height) {
     });
     img.src = url;
   });
+
+  const aspectRatio = img.height / img.width;
+
+  const height =  width * aspectRatio;
 
   canvas.width = width;
   canvas.height = height;

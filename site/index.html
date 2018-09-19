@@ -48,14 +48,13 @@
   });
 
 
-  app.ports.requestNonPrime.subscribe(async ({ toNumberConfig, image }) => {
+  app.ports.requestNonPrime.subscribe(debounce(async ({ toNumberConfig, image }) => {
     const {
       width: { value: width },
-      height: { value: height },
       levels: errorableLevels,
     } = toNumberConfig;
 
-    const numberLookup = [4, 8, 1, 7];
+    const numberLookup = [8, 6, 5, 7];
 
     const levels = errorableLevels.map(x => x.value);
 
@@ -67,9 +66,9 @@
     }
     let number;
     try {
-      const color = await getImageData(image.contents, width, height);
+      const color = await getImageData(image.contents, width);
       const grey = GreyImageData.fromColorImage(color);
-      const quantised = quantise(grey.data, new Uint8Array(width * height), levels);
+      const quantised = quantise(grey.data, new Uint8Array(grey.data.length), levels);
       number = quantised.map(x => numberLookup[x]);
     } catch (e) {
       app.ports.nonPrimeError.send(`${e}`);
@@ -80,7 +79,7 @@
       number: number.join(''),
       width,
     });
-  });
+  }), 100);
 
   
   app.ports.setCssProp.subscribe(([selector, prop, value]) => {
