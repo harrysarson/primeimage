@@ -6,6 +6,9 @@
 <head>
   <meta charset="utf-8"/>
   <link rel="stylesheet" href="main.css"/>
+  
+
+<script type="text/javascript" src="built/prime_search.js"></script>
 <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
@@ -13,6 +16,17 @@
   import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
+
+
+  prime_search().then(Module => {
+      console.log("init");
+      const input = '2912512512633232';
+      const buffer = Module._malloc(input.length + 1);
+      Module.stringToUTF8(input, buffer, input.length + 1);  
+      Module._find_candidate(buffer);
+      console.log(`done, result = ${Module.Pointer_stringify(buffer)}`);
+      Module._free(buffer);
+  });
 
 
   const app = Elm.Main.init();
@@ -80,8 +94,8 @@
       width,
     });
   }), 100);
-
   
+
   app.ports.setCssProp.subscribe(([selector, prop, value]) => {
     for (const $el of document.querySelectorAll(selector)) {
       $el.style.setProperty(prop, value);

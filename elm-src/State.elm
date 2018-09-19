@@ -86,3 +86,29 @@ update msg model =
         Types.NonPrimeError error ->
             { model | nonPrime = Nothing }
                 |> Cmd.Extra.with (Ports.logError error)
+            
+        Types.RequestPrime ->
+            model
+                |> (case model.nonPrime of
+                        Just { number } ->
+                            Cmd.Extra.with (Ports.requestPrime number)
+
+                        Nothing ->
+                            Cmd.Extra.pure
+                    )
+
+        Types.PrimeGenerated number ->
+            { model
+            | prime =
+                Just
+                    { number = number
+                    , width =
+                        case model.nonPrime of
+                            Just { width } ->
+                                width
+
+                            Nothing ->
+                                100
+                    }
+            }
+                |> Cmd.Extra.pure

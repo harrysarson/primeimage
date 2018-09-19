@@ -4,7 +4,9 @@ port module Ports exposing
     , logError
     , nonPrimeError
     , nonPrimeGenerated
+    , primeGenerated
     , requestNonPrime
+    , requestPrime
     , resizeImageNumber
     , setCssProp
     )
@@ -26,6 +28,12 @@ port requestNonPrime : { toNumberConfig : ToNumberConfig.Types.Model, image : Ty
 
 
 port nonPrimeGenerated : (Types.ImageNumber -> msg) -> Sub msg
+
+
+port requestPrime : String -> Cmd msg
+
+
+port primeGenerated : (String -> msg) -> Sub msg
 
 
 port nonPrimeError : (String -> msg) -> Sub msg

@@ -36,3 +36,5 @@ type Msg
     | UpdateNumberConfig ToNumberConfig.Types.Msg
     | NonPrimeGenerated ImageNumber
     | NonPrimeError String
+    | RequestPrime
+    | PrimeGenerated String

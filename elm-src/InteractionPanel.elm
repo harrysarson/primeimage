@@ -164,7 +164,10 @@ interactions props =
                 Types.UpdateNumberConfig
                 (ToNumberConfig.View.view props.toNumberConfig)
           ]
-        , [ text "todo - click here" ]
+        , [ button
+                [ onClick Types.RequestPrime ]
+                [ text "Generate Prime" ]
+          ]
         ]
 
 
