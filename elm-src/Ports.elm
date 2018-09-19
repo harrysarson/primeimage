@@ -7,7 +7,6 @@ port module Ports exposing
     , requestNonPrime
     , resizeImageNumber
     , setCssProp
-    , setInitialValues
     )
 
 import ToNumberConfig.Types
@@ -33,9 +32,6 @@ port nonPrimeError : (String -> msg) -> Sub msg
 
 
 port logError : String -> Cmd msg
-
-
-port setInitialValues : ToNumberConfig.Types.Model -> Cmd msg
 
 
 port resizeImageNumber : String -> Cmd msg

@@ -15,12 +15,16 @@ view model =
             case model.stage of
                 0 ->
                     True
+
                 1 ->
                     model.image /= Nothing
+
                 2 ->
                     True
+
                 3 ->
                     False
+
                 _ ->
                     False
 

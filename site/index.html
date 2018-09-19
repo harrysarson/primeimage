@@ -55,7 +55,7 @@
       levels: errorableLevels,
     } = toNumberConfig;
 
-    const numberLookup = [8, 4, 1, 7];
+    const numberLookup = [4, 8, 1, 7];
 
     const levels = errorableLevels.map(x => x.value);
 
@@ -82,34 +82,6 @@
     });
   });
 
-  app.ports.setInitialValues.subscribe(async ({ width, height, levels }) => {
-    const getInput = name => document.querySelector(`.to-number-config-input[data-input-name="${name}"]`);
-
-    try {
-      await runWhen(() => getInput('width') != null, 5);
-    } catch (e) {
-      console.error(`Given up setting initial values due to error:\n${e}`);
-      return;
-    }
-    const $width = getInput('width');
-    const $height = getInput('height');
-    const $levels = [...(function* () {
-      let $level;
-      let i = 1;
-      while (($level = getInput(`level ${i}`)) != null) {
-        yield $level;
-        ++i;
-      }
-    })()];
-
-    $width.value = width.attemptedValue;
-    $height.value = height.attemptedValue;
-
-    const numLevels = Math.min($levels.length, levels.length);
-    for (let i = 0; i < numLevels; ++i) {
-      $levels[i].value = levels[i].attemptedValue;
-    }
-  });
   
   app.ports.setCssProp.subscribe(([selector, prop, value]) => {
     for (const $el of document.querySelectorAll(selector)) {

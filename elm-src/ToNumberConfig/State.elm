@@ -4,7 +4,10 @@ module ToNumberConfig.State exposing
     )
 
 import Array
+import Cmd.Extra
 import Json.Decode as Decode
+import Process
+import Task
 import ToNumberConfig.Config as Config
 import ToNumberConfig.Types as Types exposing (Errorable, makeErrorable)
 
@@ -22,24 +25,45 @@ initialState =
     }
 
 
-update : Types.Msg -> Types.Model -> Types.Model
+update : Types.Msg -> Types.Model -> ( Types.Model, Cmd Types.Msg )
 update msg model =
     case msg of
         Types.SetWidth widthStr ->
             { model
                 | width = updateErrorable (validateSize "width") widthStr model.width
             }
+                |> Cmd.Extra.pure
 
         Types.SetHeight heightStr ->
             { model
                 | height = updateErrorable (validateSize "height") heightStr model.height
             }
+                |> Cmd.Extra.pure
 
         Types.SetLevel index levelStr ->
             Array.get index model.levels
                 |> Maybe.map (\oldLevel -> updateErrorable validateLevel levelStr oldLevel)
                 |> Maybe.map (\newLevel -> { model | levels = Array.set index newLevel model.levels })
                 |> Maybe.withDefault model
+                |> Cmd.Extra.pure
+
+        Types.FinishedChanging ->
+            model
+                |> Cmd.Extra.with
+                    (Task.perform
+                        (always Types.ReorderLevels)
+                        (Process.sleep 500)
+                    )
+
+        Types.ReorderLevels ->
+            { model
+                | levels =
+                    model.levels
+                        |> Array.toList
+                        |> List.sortBy .value
+                        |> Array.fromList
+            }
+                |> Cmd.Extra.pure
 
 
 validateSize : String -> Int -> Result String Int

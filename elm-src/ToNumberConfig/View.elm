@@ -2,8 +2,8 @@ module ToNumberConfig.View exposing (view)
 
 import Array
 import Html exposing (Html, div, form, input, label, text)
-import Html.Attributes exposing (attribute, class, classList, name, type_)
-import Html.Events exposing (on)
+import Html.Attributes exposing (attribute, class, classList, name, type_, value)
+import Html.Events exposing (on, onMouseUp)
 import Json.Decode as Decode
 import List
 import ToNumberConfig.Types as Types
@@ -14,12 +14,12 @@ view model =
     let
         levelInputs =
             List.indexedMap
-                (\level -> inputBox { msg = Types.SetLevel level, name = "level " ++ String.fromInt (level + 1) })
+                levelBox
                 (Array.toList model.levels)
 
         children =
-            inputBox { msg = Types.SetWidth, name = "width" } model.width
-                :: inputBox { msg = Types.SetHeight, name = "height" } model.height
+            dimensionBox { msg = Types.SetWidth, name = "width" } model.width
+                :: dimensionBox { msg = Types.SetHeight, name = "height" } model.height
                 :: levelInputs
     in
     form
@@ -27,8 +27,47 @@ view model =
         children
 
 
-inputBox : { msg : String -> msg, name : String } -> Types.Errorable -> Html msg
-inputBox { msg, name } errorable =
+levelBox : Int -> Types.Errorable -> Html Types.Msg
+levelBox level errorable =
+    let
+        msg =
+            Types.SetLevel level
+
+        name =
+            "level " ++ String.fromInt (level + 1)
+
+        isError =
+            case errorable.error of
+                Just _ ->
+                    True
+
+                Nothing ->
+                    False
+    in
+    label
+        [ classList
+            [ ( "error-in-field", isError )
+            ]
+        ]
+        [ text name
+        , input
+            [ type_ "range"
+            , class "to-number-config-input"
+            , Html.Attributes.attribute "min" "0"
+            , Html.Attributes.attribute "max" "255"
+            , attribute "data-input-name" name
+            , value errorable.attemptedValue
+            , onMouseUp Types.FinishedChanging
+            , on
+                "input"
+                (Decode.map msg (Decode.at [ "target", "value" ] Decode.string))
+            ]
+            []
+        ]
+
+
+dimensionBox : { msg : String -> Types.Msg, name : String } -> Types.Errorable -> Html Types.Msg
+dimensionBox { msg, name } errorable =
     let
         isError =
             case errorable.error of
@@ -48,6 +87,7 @@ inputBox { msg, name } errorable =
             [ type_ "text"
             , class "to-number-config-input"
             , attribute "data-input-name" name
+            , value errorable.attemptedValue
             , on
                 "input"
                 (Decode.map msg (Decode.at [ "target", "value" ] Decode.string))
