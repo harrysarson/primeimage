@@ -19,7 +19,6 @@ view model =
 
         children =
             dimensionBox { msg = Types.SetWidth, name = "width" } model.width
-                :: dimensionBox { msg = Types.SetHeight, name = "height" } model.height
                 :: levelInputs
     in
     form

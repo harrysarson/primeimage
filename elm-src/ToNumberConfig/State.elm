@@ -15,7 +15,6 @@ import ToNumberConfig.Types as Types exposing (Errorable, makeErrorable)
 initialState : Types.Model
 initialState =
     { width = makeErrorable 50
-    , height = makeErrorable 50
     , levels =
         List.range 1 Config.numberOfLevels
             |> List.map (\x -> toFloat (x * Config.maxLevel) / toFloat (Config.numberOfLevels + 1))
@@ -31,12 +30,6 @@ update msg model =
         Types.SetWidth widthStr ->
             { model
                 | width = updateErrorable (validateSize "width") widthStr model.width
-            }
-                |> Cmd.Extra.pure
-
-        Types.SetHeight heightStr ->
-            { model
-                | height = updateErrorable (validateSize "height") heightStr model.height
             }
                 |> Cmd.Extra.pure
 

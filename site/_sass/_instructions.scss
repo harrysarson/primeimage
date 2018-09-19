@@ -1,7 +1,8 @@
 & {
-  flex: 1 1 15em;
+  flex: 1 1 auto;
   overflow-x: hidden;
   overflow-y: auto;
+  width: calc(100% - var(--padding) / 2);
 }
 
 h1 {
@@ -11,6 +12,8 @@ h1 {
 }
 
 p {
+  border-right: solid calc(var(--padding)/2) transparent; 
   padding: var(--box-padding);
-  background: white;
+  margin: var(--padding) 0;
+  background: white padding-box;
 }

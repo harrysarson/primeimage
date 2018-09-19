@@ -12,7 +12,6 @@ import Lib.FilterMaybes exposing (filterMaybes)
 
 type alias Model =
     { width : Errorable
-    , height : Errorable
     , levels : Array Errorable
     }
 
@@ -26,7 +25,6 @@ type alias Errorable =
 
 type Msg
     = SetWidth String
-    | SetHeight String
     | SetLevel Int String
     | FinishedChanging
     | ReorderLevels
@@ -48,7 +46,6 @@ errorsInModel model =
                 >> Maybe.map (\error -> ( name, error ))
     in
     (model.width |> errorTuple "width")
-        :: (model.height |> errorTuple "height")
         :: (model.levels
                 |> Array.indexedMap
                     (\index level ->
