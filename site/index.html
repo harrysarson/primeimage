@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="main.css"/>
   
 
-<script type="text/javascript" src="built/prime_search.js"></script>
 <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
@@ -16,17 +15,6 @@
   import debounce from 'https://unpkg.com/lodash-es@4.17.10/debounce';
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
-
-
-  prime_search().then(Module => {
-      console.log("init");
-      const input = '2912512512633232';
-      const buffer = Module._malloc(input.length + 1);
-      Module.stringToUTF8(input, buffer, input.length + 1);  
-      Module._find_candidate(buffer);
-      console.log(`done, result = ${Module.Pointer_stringify(buffer)}`);
-      Module._free(buffer);
-  });
 
 
   const app = Elm.Main.init();
@@ -61,6 +49,25 @@
     reader.readAsDataURL(file);
   });
 
+  app.ports.requestPrime.subscribe(async ([endPoint, nonPrime]) => {
+    try {
+      const response = await fetch(endPoint, {
+        method: 'POST',
+        body: nonPrime,
+      });
+      
+      if (response.status >= 200 && response.status <= 300) {
+        const text = await response.text();
+
+        app.ports.probablyPrimeGenerated.send(text);
+      } else {
+        app.ports.requestPrimeError.send(`Invalid response status: ${response.status}`);
+      }
+
+    } catch (e) {
+      app.ports.requestPrimeError.send(`${e}`);
+    }
+  });
 
   app.ports.requestNonPrime.subscribe(debounce(async ({ toNumberConfig, image }) => {
     const {
@@ -89,10 +96,7 @@
       return;
     }
 
-    app.ports.nonPrimeGenerated.send({
-      number: number.join(''),
-      width,
-    });
+    app.ports.nonPrimeGenerated.send(number.join(''));
   }), 100);
   
 
@@ -124,15 +128,8 @@
 
   window.addEventListener('resize', debounce(resizeAllTexts, 200));
 
-  app.ports.resizeImageNumber.subscribe(async id => {
-    try {
-      await runWhen(() => document.getElementById(id) != null, 5);
-    } catch (e) {
-      console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
-      return;
-    }
-
-    resizeText(document.getElementById(id));
+  app.ports.resizeImageNumber.subscribe(() => {
+    requestAnimationFrame(resizeAllTexts);
   });
 
 </script>

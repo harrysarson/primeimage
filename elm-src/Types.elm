@@ -3,8 +3,10 @@ module Types exposing
     , ImageNumber
     , Model
     , Msg(..)
+    , PrimeResult(..)
     )
 
+import NumberString
 import ToNumberConfig.Types
 
 
@@ -15,7 +17,7 @@ type alias Image =
 
 
 type alias ImageNumber =
-    { number : String
+    { number : NumberString.T
     , width : Int
     }
 
@@ -23,18 +25,28 @@ type alias ImageNumber =
 type alias Model =
     { stage : Int
     , image : Maybe Image
+    , primeEndPoint : String
     , toNumberConfig : ToNumberConfig.Types.Model
-    , nonPrime : Maybe ImageNumber
-    , prime : Maybe ImageNumber
+    , nonPrime : Maybe NumberString.T
+    , prime : PrimeResult
     }
+
+
+type PrimeResult
+    = DefinatelyPrime NumberString.T
+    | ProbablyPrime NumberString.T
+    | NothingYet
+    | FetchingPrime
+    | PrimeError String
 
 
 type Msg
     = ChangeStage Int
+    | SetPrimeEndPoint String
     | ImageSelected
     | ImageRead Image
     | UpdateNumberConfig ToNumberConfig.Types.Msg
-    | NonPrimeGenerated ImageNumber
+    | NonPrimeGenerated NumberString.T
     | NonPrimeError String
     | RequestPrime
-    | PrimeGenerated String
+    | PrimeGenerated PrimeResult
