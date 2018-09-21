@@ -4,6 +4,7 @@ import Config
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import NumberString
 import Resources
 import Types
 
@@ -75,7 +76,6 @@ displays props =
     , [ span
             [ class "image-number"
             , class "auto-resize"
-            , id Config.nonPrimeImageNumberId
             ]
             nonPrimeImageList
       ]
@@ -103,12 +103,21 @@ imageNumber2rows imageNumber =
     let
         { width, number } =
             imageNumber
+
+        string =
+            NumberString.toString number
     in
-    if number == "" then
+    if string == "" then
         []
 
     else
-        String.left width number :: imageNumber2rows { imageNumber | number = String.dropLeft width number }
+        String.left width string
+            :: imageNumber2rows
+                { imageNumber
+                    | number =
+                        String.dropLeft width string
+                            |> NumberString.fromString
+                }
 
 
 imageNumber2displayString : Types.ImageNumber -> String

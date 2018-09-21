@@ -1,15 +1,4 @@
-port module Ports exposing
-    ( fileContentRead
-    , fileSelected
-    , logError
-    , nonPrimeError
-    , nonPrimeGenerated
-    , primeGenerated
-    , requestNonPrime
-    , requestPrime
-    , resizeImageNumber
-    , setCssProp
-    )
+port module Ports exposing (definatelyPrimeGenerated, fileContentRead, fileSelected, logError, nonPrimeError, nonPrimeGenerated, probablyPrimeGenerated, requestNonPrime, requestPrime, requestPrimeError, resizeImageNumber, setCssProp)
 
 import ToNumberConfig.Types
 import Types
@@ -27,13 +16,21 @@ port fileContentRead : (Types.Image -> msg) -> Sub msg
 port requestNonPrime : { toNumberConfig : ToNumberConfig.Types.Model, image : Types.Image } -> Cmd msg
 
 
-port nonPrimeGenerated : (Types.ImageNumber -> msg) -> Sub msg
+port nonPrimeGenerated : (String -> msg) -> Sub msg
 
 
-port requestPrime : String -> Cmd msg
+{-| requestPrime (url, nonPrimeNumber) = ...
+-}
+port requestPrime : ( String, String ) -> Cmd msg
 
 
-port primeGenerated : (String -> msg) -> Sub msg
+port requestPrimeError : (String -> msg) -> Sub msg
+
+
+port definatelyPrimeGenerated : (String -> msg) -> Sub msg
+
+
+port probablyPrimeGenerated : (String -> msg) -> Sub msg
 
 
 port nonPrimeError : (String -> msg) -> Sub msg
@@ -42,7 +39,7 @@ port nonPrimeError : (String -> msg) -> Sub msg
 port logError : String -> Cmd msg
 
 
-port resizeImageNumber : String -> Cmd msg
+port resizeImageNumber : () -> Cmd msg
 
 
 

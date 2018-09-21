@@ -3,6 +3,7 @@ module Resources exposing
     , defaultImage
     )
 
+import NumberString
 import Regex
 import Types
 
@@ -11,7 +12,12 @@ corpusImageNumber : Types.ImageNumber
 corpusImageNumber =
     { width = 64
     , number =
-        (String.split " " >> String.join "" >> String.split "\n" >> String.join "")
+        (String.split " "
+            >> String.join ""
+            >> String.split "\n"
+            >> String.join ""
+            >> NumberString.fromString
+        )
             """
               1001010777777777777770777777777777777777770777777777777777777777
               1010010777777777777702077777777777777777702077777777777777777777

@@ -3,7 +3,7 @@ module InteractionPanel exposing (Props, view)
 import Array
 import Config
 import Html exposing (Html, br, button, div, h1, input, label, p, section, strong, text)
-import Html.Attributes exposing (attribute, class, disabled, for, id, name, type_)
+import Html.Attributes exposing (attribute, class, classList, disabled, for, id, name, type_, value)
 import Html.Events exposing (on, onClick)
 import Json.Decode as Decode
 import Svg
@@ -18,6 +18,9 @@ type alias Props =
     , canGoBack : Bool
     , canGoNext : Bool
     , toNumberConfig : ToNumberConfig.Types.Model
+    , primeEndPoint : String
+    , primeError : Maybe String
+    , fetchingPrime : Bool
     }
 
 
@@ -118,6 +121,28 @@ instructions props =
         , [ h1 [] [ text "Create a Prime Number" ]
           , p [] [ text "Click below to find a prime number similar to the current number." ]
           ]
+            ++ (props.primeError
+                    |> Maybe.map
+                        (\error ->
+                            [ p
+                                [ class "error-in-field" ]
+                                [ text <| "Error finding a prime:"
+                                , br [] []
+                                , text <| error
+                                ]
+                            ]
+                        )
+                    |> Maybe.withDefault []
+               )
+            ++ (if props.fetchingPrime then
+                    [ p
+                        []
+                        [ text "Fetching prime number..." ]
+                    ]
+
+                else
+                    []
+               )
         ]
 
 
@@ -164,7 +189,19 @@ interactions props =
                 Types.UpdateNumberConfig
                 (ToNumberConfig.View.view props.toNumberConfig)
           ]
-        , [ button
+        , [ label
+                [ class "prime-endpoint-select" ]
+                [ text "URL of prime number generator"
+                , input
+                    [ type_ "text"
+                    , value props.primeEndPoint
+                    , on
+                        "input"
+                        (Decode.map Types.SetPrimeEndPoint (Decode.at [ "target", "value" ] Decode.string))
+                    ]
+                    []
+                ]
+          , button
                 [ onClick Types.RequestPrime ]
                 [ text "Generate Prime" ]
           ]

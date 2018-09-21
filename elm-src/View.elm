@@ -32,8 +32,24 @@ view model =
             { stage = model.stage
             , canGoNext = canGoNext
             , imagePreview = model.image
-            , nonPrimeImage = model.nonPrime
-            , primeImage = model.prime
+            , nonPrimeImage =
+                model.nonPrime
+                    |> Maybe.map
+                        (\number ->
+                            { number = number
+                            , width = model.toNumberConfig.width.value
+                            }
+                        )
+            , primeImage =
+                case model.prime of
+                    Types.ProbablyPrime number ->
+                        Just { number = number, width = model.toNumberConfig.width.value }
+
+                    Types.DefinatelyPrime number ->
+                        Just { number = number, width = model.toNumberConfig.width.value }
+
+                    _ ->
+                        Nothing
             }
 
         interactionProps =
@@ -41,6 +57,21 @@ view model =
             , canGoNext = canGoNext
             , canGoBack = model.stage > 0
             , toNumberConfig = model.toNumberConfig
+            , primeEndPoint = model.primeEndPoint
+            , primeError =
+                case model.prime of
+                    Types.PrimeError e ->
+                        Just e
+
+                    _ ->
+                        Nothing
+            , fetchingPrime =
+                case model.prime of
+                    Types.FetchingPrime ->
+                        True
+
+                    _ ->
+                        False
             }
     in
     node "main"

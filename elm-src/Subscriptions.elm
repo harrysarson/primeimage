@@ -1,18 +1,17 @@
 module Subscriptions exposing (subscriptions)
 
+import NumberString
 import Ports
-    exposing
-        ( fileContentRead
-        , nonPrimeError
-        , nonPrimeGenerated
-        )
 import Types
 
 
 subscriptions : Types.Model -> Sub Types.Msg
 subscriptions model =
     Sub.batch
-        [ fileContentRead Types.ImageRead
-        , nonPrimeGenerated Types.NonPrimeGenerated
-        , nonPrimeError Types.NonPrimeError
+        [ Ports.fileContentRead Types.ImageRead
+        , Ports.nonPrimeGenerated (NumberString.fromString >> Types.NonPrimeGenerated)
+        , Ports.nonPrimeError Types.NonPrimeError
+        , Ports.probablyPrimeGenerated (NumberString.fromString >> Types.ProbablyPrime >> Types.PrimeGenerated)
+        , Ports.definatelyPrimeGenerated (NumberString.fromString >> Types.DefinatelyPrime >> Types.PrimeGenerated)
+        , Ports.requestPrimeError (Types.PrimeError >> Types.PrimeGenerated)
         ]

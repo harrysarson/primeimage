@@ -6,3 +6,4 @@ site/built/
 cc-src/built/
 
 vendor/
+.vscode/

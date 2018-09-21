@@ -12,6 +12,18 @@
   background: white;
 }
 
+.prime-endpoint-select {
+  padding: var(--padding);
+  margin-bottom: var(--padding);
+
+  > input {
+    width: 100%;
+    color: inherit;
+    background-color: inherit;
+    border: var(--border-width) solid grey;
+  }
+}
+
 .to-number-config {
   margin: 0;
 
