@@ -4,11 +4,11 @@
 <html>
 
 <head>
-  <meta charset="utf-8"/>
-  <link rel="stylesheet" href="main.css"/>
-  
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="main.css" />
 
-<script type=module>
+
+  <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
   import { GreyImageData } from './js/grey-image-data.js';
@@ -24,38 +24,13 @@
     console.error(description);
   });
 
-  app.ports.fileSelected.subscribe(function (id) {
-    var element = document.getElementById(id);
-    if (element === null) {
-      return;
-    }
-
-    var file = element.files[0];
-    var reader = new FileReader();
-
-    reader.onload = (function (event) {
-      // The result is base64 encoded contents of the file.
-      var base64encoded = event.target.result;
-
-      var portData = {
-        contents: base64encoded,
-        filename: file.name,
-      };
-
-      app.ports.fileContentRead.send(portData);
-    });
-
-    // Connect our FileReader with the file that was selected in our `input` node.
-    reader.readAsDataURL(file);
-  });
-
   app.ports.requestPrime.subscribe(async ([endPoint, nonPrime]) => {
     try {
       const response = await fetch(endPoint, {
         method: 'POST',
         body: nonPrime,
       });
-      
+
       if (response.status >= 200 && response.status <= 300) {
         const text = await response.text();
 
@@ -98,7 +73,7 @@
 
     app.ports.nonPrimeGenerated.send(number.join(''));
   }), 100);
-  
+
 
   app.ports.setCssProp.subscribe(([selector, prop, value]) => {
     for (const $el of document.querySelectorAll(selector)) {

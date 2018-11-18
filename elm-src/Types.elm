@@ -6,6 +6,7 @@ module Types exposing
     , PrimeResult(..)
     )
 
+import File exposing (File)
 import NumberString
 import ToNumberConfig.Types
 
@@ -41,9 +42,10 @@ type PrimeResult
 
 
 type Msg
-    = ChangeStage Int
+    = Noop
+    | ChangeStage Int
     | SetPrimeEndPoint String
-    | ImageSelected
+    | ImageSelected File
     | ImageRead Image
     | UpdateNumberConfig ToNumberConfig.Types.Msg
     | NonPrimeGenerated NumberString.T
