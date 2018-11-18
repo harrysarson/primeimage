@@ -2,6 +2,7 @@ module InteractionPanel exposing (Props, view)
 
 import Array
 import Config
+import File exposing (File)
 import Html exposing (Html, br, button, div, h1, input, label, p, section, strong, text)
 import Html.Attributes exposing (attribute, class, classList, disabled, for, id, name, type_, value)
 import Html.Events exposing (on, onClick)
@@ -177,10 +178,11 @@ interactions props =
                     [ type_ "file"
                     , name "files[]"
                     , id Config.imageInputId
-                    , on "change" <| Decode.succeed Types.ImageSelected
+                    , on "change" decodeFile
                     ]
                     []
                 , label [ for "file" ]
+                    -- TODO: should label be ID?
                     [ strong [] [ text "Click here to choose a file" ]
                     ]
                 ]
@@ -213,3 +215,13 @@ default_instructions stage =
     [ h1 [] [ text "Unknown stage" ]
     , p [] [ text ("Stage " ++ String.fromInt stage ++ " could not be found") ]
     ]
+
+
+decodeFile : Decode.Decoder Types.Msg
+decodeFile =
+    Decode.at [ "target", "files" ] (Decode.list File.decoder)
+        |> Decode.map
+            (List.head
+                >> Maybe.map Types.ImageSelected
+                >> Maybe.withDefault Types.Noop
+            )

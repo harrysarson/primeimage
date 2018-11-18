@@ -5,11 +5,11 @@ module State exposing
 
 import Cmd.Extra
 import Config
+import File
 import NumberString
 import Ports
     exposing
-        ( fileSelected
-        , requestNonPrime
+        ( requestNonPrime
         , resizeImageNumber
         , setCssProp
         )
@@ -34,6 +34,10 @@ initialState =
 update : Types.Msg -> Types.Model -> ( Types.Model, Cmd Types.Msg )
 update msg model =
     case msg of
+        Types.Noop ->
+            model
+                |> Cmd.Extra.pure
+
         Types.ChangeStage change ->
             let
                 newStage =
@@ -43,10 +47,20 @@ update msg model =
                 |> Cmd.Extra.with
                     (setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
 
-        Types.ImageSelected ->
+        Types.ImageSelected file ->
+            let
+                task =
+                    File.toUrl file
+                        |> Task.map
+                            (\url ->
+                                { contents = url
+                                , filename = File.name file
+                                }
+                            )
+            in
             model
                 |> Cmd.Extra.with
-                    (fileSelected Config.imageInputId)
+                    (Task.perform Types.ImageRead task)
 
         Types.ImageRead image ->
             { model | image = Just image }
