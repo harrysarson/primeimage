@@ -4,7 +4,6 @@ node_js:
 
 
 install:
-  - npm i -g npm@5.8
   - npm ci
   - |
     if [ ! -d sysconfcpus/bin ];
