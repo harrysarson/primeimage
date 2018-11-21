@@ -1,6 +1,6 @@
 {
   "name": "primeimage",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Turn any image into an prime number.",
   "main": "main.js",
   "scripts": {
