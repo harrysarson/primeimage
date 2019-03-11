@@ -1,32 +1,31 @@
-module ToNumberConfig.TypesSpec exposing ( tests )
+module ToNumberConfig.TypesSpec exposing (tests)
 
 import Array exposing (Array)
-
-import Random.Pcg as Random
-
-import Test exposing (describe, Test, fuzz, test)
 import Expect exposing (Expectation)
 import Fuzz
-
+import Random
+import Test exposing (Test, describe, fuzz, test)
 import ToNumberConfig.Types exposing (makeErrorable)
+
 
 tests : Test
 tests =
     describe "ToNumberConfig.Types"
         [ describe "makeErrorable"
             [ fuzz Fuzz.int ".value" <|
-                \i -> makeErrorable i
-                  |> .value
-                  |> Expect.equal i
+                \i ->
+                    makeErrorable i
+                        |> .value
+                        |> Expect.equal i
             , fuzz Fuzz.int ".attemptedValue" <|
-                \i -> makeErrorable i
-                  |> .attemptedValue
-                  |> Expect.equal (String.fromInt i)
+                \i ->
+                    makeErrorable i
+                        |> .attemptedValue
+                        |> Expect.equal (String.fromInt i)
             , test ".error" <|
-                \() -> makeErrorable "a value"
-                  |> .error
-                  |> Expect.equal Nothing
+                \() ->
+                    makeErrorable 5
+                        |> .error
+                        |> Expect.equal Nothing
             ]
         ]
-
-
