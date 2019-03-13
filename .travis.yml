@@ -2,39 +2,22 @@ language: node_js
 node_js:
   - "lts/*"
 
-
 install:
   - npm ci
-  - |
-    if [ ! -d sysconfcpus/bin ];
-    then
-      git clone https://github.com/obmarg/libsysconfcpus.git;
-      cd libsysconfcpus;
-      ./configure --prefix=$TRAVIS_BUILD_DIR/sysconfcpus;
-      make && make install;
-      cd ..;
-    fi
 
 env:
-  - COMMAND="$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run test:elm"
-  - COMMAND="npm run test:js"
-  - COMMAND="$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run lint:elm"
-  - COMMAND="npm run lint:js"
-  - COMMAND="npm run lint:scss"
+  - COMMAND="test:elm"
+  - COMMAND="test:js"
+  - COMMAND="lint:elm"
+  - COMMAND="lint:js"
+  - COMMAND="lint:scss"
 
 script:
-  - $COMMAND
-
-notifications:
-  email:
-    on_success: never # default: change
-    on_failure: always # default: always
+  - npm run $COMMAND
 
 jobs:
   include:
     - stage: publish website
-      env:
-        - COMMAND="echo 'Publishing website'"
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
         # quit if version matches latest in gh-pages
@@ -48,7 +31,7 @@ jobs:
             exit 1;
           fi
         # build elm files
-        - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 npm run build
+        - npm run build
         # stage built files
         - git add site/built -f
         - git add site/version.txt
@@ -61,8 +44,3 @@ jobs:
         keep-history: true
         on:
           branch: master
-
-cache:
-  directories:
-    - "$HOME/.npm"
-    - sysconfcpus
