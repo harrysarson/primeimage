@@ -38,6 +38,7 @@ export function quantise(input, output, levels) {
     while (j < numberOfLevels && input[i] > levels[j]) {
       j++;
     }
+
     output[i] = j;
   }
 

@@ -20,5 +20,5 @@ const writeFile = promisify(fs.writeFile);
 
   await writeFile(elmPath, elmEsm);
 
-  console.log(`Finished.`);
+  console.log('Finished.');
 })();
