@@ -10,7 +10,7 @@
     "lint:elm": "elm-format elm-src --validate",
     "lint:scss": "stylelint site/**/*.scss",
     "lint": "npm run lint:js && npm run lint:elm && npm run lint:scss",
-    "test:elm": "echo 'waiting for html tests' || elm test 'elm-tests/**/*.elm'",
+    "test:elm": "elm-test 'tests/**/*.elm'",
     "test:js": "karma start --single-run --browsers FirefoxHeadless",
     "test": "npm run test:elm && npm run test:js",
     "build": "elm make elm-src/Main.elm --output site/built/elm.js && node util/elm2esm site/built/elm.js",
