@@ -22,7 +22,7 @@
     "chai": "4.1.2",
     "elm": "0.19.0",
     "elm-format": "0.8.0",
-    "elm-test": "0.19.0",
+    "elm-test": "0.19.0-rev6",
     "karma": "4.0.1",
     "karma-chai": "0.1.0",
     "karma-firefox-launcher": "1.1.0",
