@@ -1,8 +1,5 @@
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-});
+const ReadLine = require('readline');
+const prime_search = require('./prime_search')();
 
 
 if (process.argv.length == 2 || (process.argv.length > 2 && (process.argv[1] == "-h") || process.argv[1] == "--help")) {
@@ -18,7 +15,7 @@ if (process.argv.length == 2 || (process.argv.length > 2 && (process.argv[1] == 
         "\t\thttps://gmplib.org/manual/Number-Theoretic-Functions.html).");
     process.exit(1);
 } else {
-    require('./prime_search')({}).then(Module => {
+    prime_search.then(Module => {
         // Get reps from CL args's.
 
         const reps = Number(process.argv[2]);
@@ -30,6 +27,12 @@ if (process.argv.length == 2 || (process.argv.length > 2 && (process.argv[1] == 
         // Get input from stdin.
 
         console.log("Enter the number to convert to a prime and press enter:");
+
+        const readline = ReadLine.createInterface({
+            input: process.stdin,
+            output: null,
+            terminal: false,
+        });
 
         readline.once('line', number => {
             const alloc_amount = Module.lengthBytesUTF8(number) + 1;
