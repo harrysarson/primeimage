@@ -41,6 +41,7 @@ int main(int argc, char **argv)
     size_t number_length = 0;
 
     char buffer[BUFFER_LENGTH];
+    fprintf(stdout, "Enter the number to convert to a prime and press enter:\n");
 
     do
     {

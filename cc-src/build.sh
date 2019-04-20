@@ -7,22 +7,21 @@ set -e
 
 source $HOME/emsdk/emsdk_env.sh
 
-gcc main.c prime_search.c -Wall -lgmp -o prime_search.out
+CFLAGS="-Wall -Werror -lgmp -O3"
 
-#
-# FORCE_FILESYSTEM=1 is needed for flushing of printf without newlines.
-#
+gcc main.c prime_search.c $CFLAGS -o prime_search.out
 
-emcc prime_search.c -lgmp \
+echo "Native cli build complete"
+
+emcc prime_search.c $CFLAGS \
     --profiling \
     -o prime_search.js \
     -s ALLOW_MEMORY_GROWTH=1 \
-    -s EXPORTED_FUNCTIONS='["_find_candidate_with_progress", "_find_candidate"]' \
+    -s EXPORTED_FUNCTIONS='["_find_candidate_with_progress", "_find_candidate_stdout", "_malloc", "_free"]' \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["stringToUTF8", "UTF8ToString"]' \
     -s MODULARIZE=1 -s 'EXPORT_NAME="prime_search"' \
-    -s FORCE_FILESYSTEM=1 \
 
 cp prime_search.js ../site/built/
 cp prime_search.wasm ../site/built/
 
-echo "Build complete"
+echo "WASM build complete"

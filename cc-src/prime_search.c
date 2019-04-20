@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-char get_tweaked_char(char c)
+#define PROGRESS_TEMPLATE \
+  "Trying to find prime by swapping %d digits (%10d/%d)"
+
+static const int MAX_ITERATIONS_BETWEEN_PRINT = 50;
+
+static char get_tweaked_char(char c)
 {
   switch (c)
   {
@@ -46,12 +51,12 @@ char get_tweaked_char(char c)
   }
 }
 
-void tweak_string(char *s, int i)
+static void tweak_string(char *s, int i)
 {
   s[i] = get_tweaked_char(s[i]);
 }
 
-int miller_rabin(const char *img, int reps)
+static int miller_rabin(const char *img, int reps)
 {
   mpz_t n;
   mpz_init(n);
@@ -61,18 +66,18 @@ int miller_rabin(const char *img, int reps)
   return ret;
 }
 
-int bitset_get(uint8_t *bitset, int i)
+static int bitset_get(uint8_t *bitset, int i)
 {
   return bitset[i / 8] & (1UL << (i % 8));
 }
 
-void bitset_set(uint8_t *bitset, int i, int new_value)
+static void bitset_set(uint8_t *bitset, int i, int new_value)
 {
   unsigned long newbit = !!new_value;
   bitset[i / 8] ^= (-newbit ^ bitset[i / 8]) & (1UL << (i % 8));
 }
 
-int prev_perm(uint8_t *bitset, int N)
+static int prev_perm(uint8_t *bitset, int N)
 {
   int pivot = N - 1;
 
@@ -114,7 +119,7 @@ int prev_perm(uint8_t *bitset, int N)
   return 1;
 }
 
-long long nCr(int n, int r)
+static long long nCr(int n, int r)
 {
   if (r > n - r)
   {
@@ -133,14 +138,6 @@ long long nCr(int n, int r)
   return ans;
 }
 
-/*
- *
- * Return codes:
- *  0 = no candidates found in max_iterations.
- * -1 = no candidates found and all permutations of bitmask tried.
- *  1 = found probably prime number.
- *  2 = found definitely prime number.
- */
 int find_candidate_using_bitmask(char *input, int reps, uint8_t *const bitmask, int max_iterations)
 {
   int iteration_count, j;
@@ -181,8 +178,6 @@ find_candidate_using_bitmask_cleanup:
 
 int find_candidate_with_progress(char *input, int reps, FILE *const progress)
 {
-#define MAX_ITERATIONS_BETWEEN_PRINT 100
-#define PROGRESS_TEMPLATE "Trying to find prime by swapping %d digits (%10d/%d)\n"
   int i, j;
   int res = 0;
 
@@ -211,7 +206,7 @@ int find_candidate_with_progress(char *input, int reps, FILE *const progress)
     fflush(progress);
   }
 
-  for (i = 0; i < len; i++)
+  for (i = 1; i < len; i++)
   {
     // Set first j i bits of bitmask.
     for (j = 0; j < len; j++)
@@ -281,7 +276,7 @@ find_candidate_with_progress_cleanup:
   return res;
 }
 
-int find_candidate(char *input, int reps)
+int find_candidate_stdout(char *numberAsString, int reps)
 {
-  return find_candidate_with_progress(input, reps, stderr);
+  return find_candidate_with_progress(numberAsString, reps, stdout);
 }
