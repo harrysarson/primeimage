@@ -19,23 +19,30 @@ int main(int argc, char **argv)
                     "\n"
                     "k\t\tDetermine the probability that the generated number is prime\n"
                     "\t\tand is passed to mpz_probab_prime_p (see\n"
-                    "\t\thttps://gmplib.org/manual/Number-Theoretic-Functions.html).\n"
-                    "progress-file\tProgress information is writen to a to this file if "
-                    "provided.\n"
-                    "\n");
+                    "\t\thttps://gmplib.org/manual/Number-Theoretic-Functions.html).\n");
     return 1;
   }
   else
   {
-    FILE *progress = NULL;
-    if (argc > 2)
+    // Get reps from CL args's.
+
+    char *str_end;
+    int reps = strtol(argv[1], &str_end, 10);
+    if (errno == ERANGE)
     {
-      progress = fopen(argv[2], "w");
-      if (progress == NULL)
-      {
-        perror("prime_search, opening progress file failed");
-      }
+      fprintf(stderr, "prime_search: %s is not a valid value for reps",
+              argv[1]);
+      exit(1);
     }
+    if (str_end == argv[1])
+    {
+      fprintf(stderr, "prime_search: %s is not a valid value for reps",
+              argv[1]);
+      exit(1);
+    }
+
+    // Get input from stdin.
+
     char *number = malloc(1);
     number[0] = '\0';
     size_t number_length = 0;
@@ -63,29 +70,14 @@ int main(int argc, char **argv)
       strcat(number, buffer);
     } while (feof(stdin) == 0 && number[number_length - 1] != '\n');
 
-    char *str_end;
-    int reps = strtol(argv[1], &str_end, 10);
-    if (errno == ERANGE)
-    {
-      fprintf(stderr, "prime_search: %s is not a valid value for reps",
-              argv[1]);
-      exit(1);
-    }
-    if (str_end == argv[1])
-    {
-      fprintf(stderr, "prime_search: %s is not a valid value for reps",
-              argv[1]);
-      exit(1);
-    }
-
-    int res = find_candidate_with_progress(number, reps, progress);
+    int res = find_candidate_with_progress(number, reps);
     int return_code = 10;
 
     switch (res)
     {
     case 1:
     case 2:
-      printf("%s\n", number);
+      printf("Found prime candidate:\n%s\n", number);
       return_code = 0;
       break;
     case 0:
@@ -96,10 +88,7 @@ int main(int argc, char **argv)
       fprintf(stderr, "Error: got return code = %d\n", res);
       return_code = res;
     }
-    if (progress != NULL)
-    {
-      fclose(progress);
-    }
+    free(number);
     return return_code;
   }
 }

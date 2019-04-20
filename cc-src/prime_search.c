@@ -176,7 +176,7 @@ find_candidate_using_bitmask_cleanup:
   return res;
 }
 
-int find_candidate_with_progress(char *input, int reps, FILE *const progress)
+int find_candidate_with_progress(char *input, int reps)
 {
   int i, j;
   int res = 0;
@@ -198,13 +198,10 @@ int find_candidate_with_progress(char *input, int reps, FILE *const progress)
   // Create bitmask with more bits in than there are bytes in input.
   uint8_t *const bitmask = malloc((len - 1) / 8 + 1);
 
-  if (progress)
-  {
-    fprintf(progress, "Comencing search for a prime candidate"
-                      ", target is %d digits long.\n",
-            len);
-    fflush(progress);
-  }
+  fprintf(stderr, "Comencing search for a prime candidate"
+                  ", target is %d digits long.\n",
+          len);
+  fflush(stderr);
 
   for (i = 1; i < len; i++)
   {
@@ -227,12 +224,9 @@ int find_candidate_with_progress(char *input, int reps, FILE *const progress)
 
     int total_iteration_count = 0;
 
-    if (progress)
-    {
-      fprintf(progress, PROGRESS_TEMPLATE,
-              i, total_iteration_count, numberOfPerumations);
-      fflush(progress);
-    }
+    fprintf(stderr, PROGRESS_TEMPLATE,
+            i, total_iteration_count, numberOfPerumations);
+    fflush(stderr);
 
     int find_res;
     do
@@ -240,33 +234,23 @@ int find_candidate_with_progress(char *input, int reps, FILE *const progress)
       find_res = find_candidate_using_bitmask(str, reps, bitmask,
                                               MAX_ITERATIONS_BETWEEN_PRINT);
       total_iteration_count += MAX_ITERATIONS_BETWEEN_PRINT;
-      if (progress)
-      {
-        fprintf(progress, "\r" PROGRESS_TEMPLATE,
-                i, total_iteration_count, numberOfPerumations);
-        fflush(progress);
-      }
+      fprintf(stderr, "\r" PROGRESS_TEMPLATE,
+              i, total_iteration_count, numberOfPerumations);
+      fflush(stderr);
     } while (find_res == 0);
     if (find_res == 1 || find_res == 2)
     {
       res = find_res;
       strcpy(input, str);
-      if (progress)
-      {
-        fprintf(progress, ": Found prime!\n");
-        fflush(progress);
-      }
-      printf("Found prime candidate:\n%s", input);
+      fprintf(stderr, ": Found prime!\n");
+      fflush(stderr);
       goto find_candidate_with_progress_cleanup;
     }
     else
     {
       assert(find_res == -1);
-      if (progress)
-      {
-        fprintf(progress, ": Could not find any primes.\n");
-        fflush(progress);
-      }
+      fprintf(stderr, ": Could not find any primes.\n");
+      fflush(stderr);
     }
   }
 
@@ -274,9 +258,4 @@ find_candidate_with_progress_cleanup:
   free(bitmask);
   free(str);
   return res;
-}
-
-int find_candidate_stdout(char *numberAsString, int reps)
-{
-  return find_candidate_with_progress(numberAsString, reps, stdout);
 }

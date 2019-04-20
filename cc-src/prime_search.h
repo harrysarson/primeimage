@@ -23,17 +23,12 @@ int find_candidate_using_bitmask(char *input, int reps, uint8_t *bitmask, int ma
  * `numberAsString` if found. The probability of the resulting number being prime is
  * determined by `reps` which is passsed to `mpz_probab_prime_p()`.
  *
- * Textual progress is written `progress` if it is not null.
+ * Textual progress is written to `stderr`.
  *
  * Return codes:
  *  1 = found probably prime number.
  *  2 = found definitely prime number.
  */
-int find_candidate_with_progress(char *numberAsString, int reps,
-                                 FILE *progress);
-
-/* Like `find_candidate_with_progress` where progress is printed on stdout.
- */
-int find_candidate_stdout(char *numberAsString, int reps);
+int find_candidate_with_progress(char *numberAsString, int reps);
 
 #endif // PRIME_SEARCH_H
