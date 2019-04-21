@@ -14,12 +14,10 @@ Generate a CLI program to do prime conversions. After installing gmp (either fro
 
 Generate a node script which should produce the exact same output as the native version.
 Building this script requires [emscripten](https://emscripten.org/) downloaded and the `emcc` and `emconfigure` programs on your path.
-To build a webassembly versions of the gmp library follow the steps in https://raw.githubusercontent.com/TrueBitFoundation/wasm-ports/master/gmp.sh.
+To build a webassembly versions of the gmp library follow the steps in <https://raw.githubusercontent.com/TrueBitFoundation/wasm-ports/master/gmp.sh>.
 Finally run `$ make prime_search.js` and use `$ node main` to run the CLI.
 
 ### JavaScript library
 
 The point of this directory is to generate the prime search functions needed for the website.
 Integrating the webassembly into the website is the next step here.
-
-
