@@ -16,9 +16,9 @@ jobs:
     - name: test c
       before_install:
         - cd cc-src
-        - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-tag-1.34.4-64bit bash
+        - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-tag-1.38.30-64bit bash
         - curl -sS https://raw.githubusercontent.com/TrueBitFoundation/wasm-ports/master/gmp.sh | bash
-        - make && make test
+        - docker exec -it emscripten make && make test
     - stage: publish website
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
