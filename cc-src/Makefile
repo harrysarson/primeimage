@@ -8,7 +8,7 @@ EMCFLAGS	= --profiling \
 
 WEBSITE_BUILT_DIR = ../site/built
 
-.PHONEY: clean all install_website
+.PHONEY: clean all test install_website
 
 all: prime_search.out prime_search.js
 
@@ -25,6 +25,8 @@ install_website: prime_search.js prime_search.wasm
 	cp prime_search.js $(WEBSITE_BUILT_DIR)/
 	cp prime_search.wasm $(WEBSITE_BUILT_DIR)/
 
+test: all
+	echo "No tests yet"
 
 clean:
 	$(RM) prime_search.out prime_search.js prime_search.wasm

@@ -1,22 +1,23 @@
 language: node_js
+
 node_js:
   - "lts/*"
 
-install:
-  - npm ci
-
-env:
-  - COMMAND="test:elm"
-  - COMMAND="test:js"
-  - COMMAND="lint:elm"
-  - COMMAND="lint:js"
-  - COMMAND="lint:scss"
-
-script:
-  - npm run $COMMAND
+services:
+  - docker
 
 jobs:
   include:
+    - stage: test
+      name: test
+      script: npm run test
+    - name: lint
+      script: npm run lint
+    - name: test c
+      before_install:
+        - cd cc-src
+        - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-1.38.30-64bit bash
+        - make && make test
     - stage: publish website
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
