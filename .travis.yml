@@ -6,6 +6,11 @@ node_js:
 services:
   - docker
 
+cache:
+  npm: true
+  directories:
+    - ci/build
+
 jobs:
   include:
     - stage: test
@@ -16,10 +21,7 @@ jobs:
     - name: test c
       before_install:
         - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-tag-1.38.30-64bit bash
-        - docker exec -it emscripten cd ci
-        - docker exec -it emscripten ./build-gmp.sh
-        - docker exec -it emscripten cd -
-        - docker exec -it emscripten cd cc-src
+        - docker exec -it emscripten ./ci/before-install-c.sh
         - docker exec -it emscripten make && make test
     - stage: publish website
       before_deploy:
