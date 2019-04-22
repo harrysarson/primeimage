@@ -3,9 +3,6 @@ language: node_js
 node_js:
   - "lts/*"
 
-services:
-  - docker
-
 cache:
   npm: true
   directories:
@@ -20,11 +17,8 @@ jobs:
       script: npm run lint
     - name: test c
       before_install:
-        - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-tag-1.38.30-64bit bash
-        - bash ./ci/download-gmp.sh
-        - docker exec -it emscripten bash ./ci/build-gmp.sh
-        - bash ./ci/install-gmp.sh
-        - docker exec -it emscripten make && make test
+        - bash ./ci/download.sh
+        - cd cc-src && make && make test
     - stage: publish website
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
