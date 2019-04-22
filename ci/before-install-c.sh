@@ -7,6 +7,9 @@ set -e
 mkdir -p ci/build
 cd ci/build
 
+sudo apt update
+sudo apt install lzip
+
 # download
 
 wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.lz
