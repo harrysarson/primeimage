@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -v
 
 mkdir -p ci/build
 cd ci/build

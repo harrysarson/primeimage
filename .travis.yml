@@ -24,7 +24,7 @@ jobs:
       script: npm run lint
     - name: test c
       before_install:
-        - bash ./ci/download.sh
+        - source ./ci/download.sh
         - cd cc-src && make && make test
     - stage: publish website
       before_deploy:
