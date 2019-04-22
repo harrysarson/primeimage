@@ -21,7 +21,9 @@ jobs:
     - name: test c
       before_install:
         - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-tag-1.38.30-64bit bash
-        - docker exec -it -u root emscripten bash ./ci/before-install-c.sh
+        - bash ./ci/download-gmp.sh
+        - docker exec -it emscripten bash ./ci/build-gmp.sh
+        - bash ./ci/install-gmp.sh
         - docker exec -it emscripten make && make test
     - stage: publish website
       before_deploy:
