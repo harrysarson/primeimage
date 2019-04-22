@@ -3,15 +3,15 @@
 set -e
 
 mkdir -p ci/build
-cd ci/build
+pushd ci/build
 
 # Get emsdk
 git clone https://github.com/emscripten-core/emsdk.git
-cd emsdk
+pushd emsdk
 ./emsdk install sdk-1.38.30-64bit
 ./emsdk activate sdk-1.38.30-64bit
 source ./emsdk_env.sh
-cd -
+popd
 
 # download
 
@@ -24,7 +24,7 @@ fi
 
 # Make gmp webassembly
 
-cd gmp-wasm
+pushd gmp-wasm
 sed -i '2igmp_asm_syntax_testing=no' configure
 
 emconfigure ./configure --disable-assembly --disable-shared --prefix=$EMSCRIPTEN/system
@@ -40,7 +40,8 @@ ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/* $EMSDK/clang/lib/clang/6.0
 make -j 2
 make install
 
-cd -
+popd
+popd
 
 
 
