@@ -6,7 +6,7 @@ mkdir -p ci/build
 cd ci/build
 
 sudo apt update
-sudo apt install lzip
+sudo apt install lzip m4
 
 # download
 
