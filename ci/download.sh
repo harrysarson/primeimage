@@ -1,12 +1,13 @@
 #!/bin/bash
 
 set -e
+set -v
 
 mkdir -p ci/build
 cd ci/build
 
 sudo apt update
-sudo apt install lzip m4
+sudo apt install lzip m4 python
 
 # Get emsdk
 git clone https://github.com/emscripten-core/emsdk.git
