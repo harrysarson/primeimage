@@ -9,6 +9,12 @@ cache:
   directories:
     - ci/build
 
+addons:
+  apt:
+    packages:
+      - lzip
+      - libgmp-dev
+
 jobs:
   include:
     - stage: test
