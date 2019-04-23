@@ -157,7 +157,6 @@ int find_candidate_using_bitmask(char *input, int reps, uint8_t *const bitmask, 
         tweak_string(buffer, j);
     }
     int miller_rabin_res = miller_rabin(buffer, reps);
-    iteration_count++;
     if (miller_rabin_res != 0)
     {
       assert(miller_rabin_res == 1 || miller_rabin_res == 2);
