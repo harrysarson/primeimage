@@ -1,8 +1,8 @@
 const ReadLine = require('readline');
-const primeSearch = require('./prime_search')(); // eslint-disable-line import/no-unresolved
+const primeSearch = require('./prime-search')(); // eslint-disable-line import/no-unresolved
 
 if (process.argv.length === 2 || (process.argv.length > 2 && (process.argv[1] === '-h' || process.argv[1] === '--help'))) {
-  console.log('Usage: prime_search k [progress-file]\n' +
+  console.log('Usage: near-prime k [progress-file]\n' +
     '\n' +
     'Convert a number to a prime.\n' +
     '\n' +
@@ -19,7 +19,7 @@ if (process.argv.length === 2 || (process.argv.length > 2 && (process.argv[1] ==
 
     const reps = Number(process.argv[2]);
     if (!Number.isInteger(reps)) {
-      console.error(`prime_search: ${process.argv[2]} is not a valid value for reps`);
+      console.error(`near-prime: ${process.argv[2]} is not a valid value for reps`);
       process.exit(1); // eslint-disable-line unicorn/no-process-exit
     }
 

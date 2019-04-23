@@ -1,4 +1,5 @@
 
+#include "prime-search.h"
 #include <assert.h>
 #include <ctype.h>
 #include <gmp.h>

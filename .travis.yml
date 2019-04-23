@@ -24,8 +24,8 @@ jobs:
       script: npm run lint
     - name: test c
       before_install:
-        - source ./ci/download.sh
-        - cd cc-src && make && make test
+        - source ./ci/build-near-prime.sh
+        - cd near-prime && make && make test
     - stage: publish website
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt

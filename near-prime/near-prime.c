@@ -1,4 +1,4 @@
-#include "prime_search.h"
+#include "prime-search.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +10,7 @@ int main(int argc, char **argv)
   if (argc == 1 || (argc > 1 && (strcmp(argv[1], "-h") == 0 ||
                                  strcmp(argv[1], "--help") == 0)))
   {
-    fprintf(stdout, "Usage: prime_search k [progress-file]\n"
+    fprintf(stdout, "Usage: near-prime k [progress-file]\n"
                     "\n"
                     "Convert a number to a prime.\n"
                     "\n"
@@ -30,13 +30,13 @@ int main(int argc, char **argv)
     int reps = strtol(argv[1], &str_end, 10);
     if (errno == ERANGE)
     {
-      fprintf(stderr, "prime_search: %s is not a valid value for reps",
+      fprintf(stderr, "near-prime: %s is not a valid value for reps",
               argv[1]);
       exit(1);
     }
     if (str_end == argv[1])
     {
-      fprintf(stderr, "prime_search: %s is not a valid value for reps",
+      fprintf(stderr, "near-prime: %s is not a valid value for reps",
               argv[1]);
       exit(1);
     }
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
       if (ferror(stdin))
       {
-        perror("prime_search cannot read number");
+        perror("near-prime cannot read number");
         exit(1);
       }
 
