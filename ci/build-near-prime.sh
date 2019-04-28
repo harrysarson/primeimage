@@ -36,9 +36,11 @@ echo '#define HAVE_MEMSET 1' >> config.h
 echo '#define HAVE_STRNLEN 1' >> config.h
 echo '#define HAVE_VSNPRINTF 1' >> config.h
 
-mkdir -p $EMSDK/clang/lib/clang/6.0.1/include
-ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include/* $EMSDK/clang/lib/clang/6.0.1/include
-ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/* $EMSDK/clang/lib/clang/6.0.1/include
+if [[ ! -d $EMSDK/clang/lib/clang/6.0.1/include ]]; then
+    mkdir $EMSDK/clang/lib/clang/6.0.1/include
+    ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include/* $EMSDK/clang/lib/clang/6.0.1/include
+    ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/* $EMSDK/clang/lib/clang/6.0.1/include
+fi
 
 make -j 2
 make install
