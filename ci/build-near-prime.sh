@@ -6,7 +6,10 @@ mkdir -p ci/build
 pushd ci/build
 
 # Get emsdk
-git clone https://github.com/emscripten-core/emsdk.git
+if [[ ! -d gmp-wasm ]]; then
+    git clone https://github.com/emscripten-core/emsdk.git
+fi
+git pull
 pushd emsdk
 ./emsdk install sdk-1.38.30-64bit
 ./emsdk activate sdk-1.38.30-64bit
