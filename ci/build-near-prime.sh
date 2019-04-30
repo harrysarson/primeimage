@@ -41,7 +41,7 @@ echo | gcc -E -Wp,-v -
 echo | clang -E -Wp,-v -
 
 if [[ ! -d $EMSDK/clang/lib/clang/6.0.1/include ]]; then
-    mkdir $EMSDK/clang/lib/clang/6.0.1/include
+    mkdir -p $EMSDK/clang/lib/clang/6.0.1/include
     ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include/* $EMSDK/clang/lib/clang/6.0.1/include
     ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/* $EMSDK/clang/lib/clang/6.0.1/include
 fi
