@@ -1,6 +1,7 @@
 _site/
 elm-stuff/
 node_modules/
+site/built/
 
 vendor/
 .vscode/
