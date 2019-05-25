@@ -49,6 +49,7 @@ jobs:
         # stage built files
         - git add site/built -f
         - git add site/version.txt
+        - git status
       deploy:
         local-dir: site
         provider: pages
