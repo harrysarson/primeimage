@@ -43,7 +43,10 @@
       "mocha",
       "browser"
     ],
-    "import/extensions": "ignorePackages"
+    "import/extensions": "ignorePackages",
+    "rules": {
+      "eslint-comments/no-unused-disable": "warn"
+    }
   },
   "stylelint": {
     "extends": [
