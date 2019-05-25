@@ -16,6 +16,7 @@
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
 
+  const primeSearchWorker = new Worker('./js/prime-search-worker.js', {type:'module'});
 
   const app = Elm.Main.init();
 
@@ -24,25 +25,10 @@
     console.error(description);
   });
 
-  app.ports.requestPrime.subscribe(async ([endPoint, nonPrime]) => {
-    try {
-      const response = await fetch(endPoint, {
-        method: 'POST',
-        body: nonPrime,
-      });
-
-      if (response.status >= 200 && response.status <= 300) {
-        const text = await response.text();
-
-        app.ports.probablyPrimeGenerated.send(text);
-      } else {
-        app.ports.requestPrimeError.send(`Invalid response status: ${response.status}`);
-      }
-
-    } catch (e) {
-      app.ports.requestPrimeError.send(`${e}`);
-    }
+  app.ports.requestPrime.subscribe(async ([_, nonPrime]) => {
+    primeSearchWorker.postMessage(nonPrime);
   });
+  primeSearchWorker.onmessage = app.ports.probablyPrimeGenerated.send;
 
   app.ports.requestNonPrime.subscribe(debounce(async ({ toNumberConfig, image }) => {
     const {

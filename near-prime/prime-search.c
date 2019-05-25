@@ -8,8 +8,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PROGRESS_TEMPLATE \
+#define OVERWRITE 0
+#define PROGRESS_TEXT \
   "Trying to find prime by swapping %d digits (%10d/%d)"
+
+#if OVERWRITE
+#define PROGRESS_TEMPLATE PROGRESS_TEXT
+#else
+#define PROGRESS_TEMPLATE PROGRESS_TEXT "\n"
+#endif
 
 static const int MAX_ITERATIONS_BETWEEN_PRINT = 50;
 

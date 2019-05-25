@@ -27,6 +27,9 @@ jobs:
         - source ./ci/build-near-prime.sh
         - cd near-prime && make && make test
     - stage: publish website
+      script: skip
+      before_install:
+        - source ./ci/build-near-prime.sh
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
         # quit if version matches latest in gh-pages
@@ -41,6 +44,8 @@ jobs:
           fi
         # build elm files
         - npm run build
+        # build wasm files
+        - make -C near-prime install-website
         # stage built files
         - git add site/built -f
         - git add site/version.txt

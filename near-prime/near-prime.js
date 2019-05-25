@@ -1,5 +1,5 @@
 const ReadLine = require('readline');
-const primeSearch = require('./prime-search')(); // eslint-disable-line import/no-unresolved
+const primeSearch = require('./built/prime-search')(); // eslint-disable-line import/no-unresolved
 
 if (process.argv.length === 2 || (process.argv.length > 2 && (process.argv[1] === '-h' || process.argv[1] === '--help'))) {
   console.log('Usage: near-prime k [progress-file]\n' +
