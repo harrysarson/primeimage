@@ -20,10 +20,15 @@
 
   const app = Elm.Main.init();
 
-  new ClipboardJS('.copy-me')
-    .on('success', (event) => {
-      event.clearSelection();
-    });
+  try {
+    new ClipboardJS('.copy-me')
+      .on('success', (event) => {
+        event.clearSelection();
+      });
+  } catch (error) {
+    console.error(`Error setting up clipboard.js! Copy button will not work`);
+    console.error(error);
+  }
 
   app.ports.logError.subscribe(function (description) {
     console.error(description);
