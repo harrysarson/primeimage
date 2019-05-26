@@ -14,7 +14,7 @@ type alias Props =
     , canGoNext : Bool
     , imagePreview : Maybe Types.Image
     , nonPrimeImage : Maybe Types.ImageNumber
-    , primeImage : Maybe Types.ImageNumber
+    , primeImage : Types.LoadedResource Types.ImageNumber
     }
 
 
@@ -54,10 +54,17 @@ displays props =
                 |> maybeSingleton
 
         primeImageList =
-            props.primeImage
-                |> Maybe.map imageNumber2displayString
-                |> Maybe.map text
-                |> maybeSingleton
+            case props.primeImage of
+                Types.Loaded imageNumber ->
+                    [ text (imageNumber2displayString imageNumber) ]
+                Types.Loading ->
+                    [
+                        div
+                            [ class "lds-spinner" ]
+                            (List.repeat 12 (div [] []))
+                    ]
+                Types.NotLoading ->
+                    []
     in
     [ [ span
             [ class "image-number"

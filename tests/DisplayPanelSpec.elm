@@ -45,7 +45,7 @@ props =
                 randomBool
                 (Random.constant (Just displayImage))
                 (Random.constant (Just sampleNonPrimeImage))
-                (Random.constant (Just sampleNonPrimeImage))
+                (Random.constant (Types.Loaded sampleNonPrimeImage))
 
         shrinker =
             \{ stage, canGoNext, imagePreview, nonPrimeImage, primeImage } ->

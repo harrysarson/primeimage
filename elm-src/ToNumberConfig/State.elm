@@ -14,7 +14,7 @@ import ToNumberConfig.Types as Types exposing (Errorable, makeErrorable)
 
 initialState : Types.Model
 initialState =
-    { width = makeErrorable 50
+    { width = makeErrorable 20
     , levels =
         List.range 1 Config.numberOfLevels
             |> List.map (\x -> toFloat (x * Config.maxLevel) / toFloat (Config.numberOfLevels + 1))

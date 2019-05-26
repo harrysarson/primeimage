@@ -91,6 +91,7 @@ button {
 
 .display-panel {
   @import "display";
+  @import "spinner";
 }
 
 .show-only-selected > *:not(.current-stage) {

@@ -1,5 +1,6 @@
 module Types exposing
     ( Image
+    , LoadedResource(..)
     , ImageNumber
     , Model
     , Msg(..)
@@ -10,6 +11,10 @@ import File exposing (File)
 import NumberString
 import ToNumberConfig.Types
 
+type LoadedResource a
+    = NotLoading
+    | Loading
+    | Loaded a
 
 type alias Image =
     { contents : String

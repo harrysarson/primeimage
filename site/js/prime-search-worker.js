@@ -23,13 +23,22 @@ onmessage = function (e) {
       switch (res) {
         case 1:
         case 2:
-          console.log(`Found prime candidate:\n${PrimeSearch.UTF8ToString(buffer)}`); // eslint-disable-line new-cap
+          postMessage({
+            type: res === 1 ? 'probablyPrimeGenerated' : 'definatelyPrimeGenerated',
+            payload: PrimeSearch.UTF8ToString(buffer) // eslint-disable-line new-cap
+          });
           break;
         case 0:
-          console.error('Error: cannot find a prime number');
+          postMessage({
+            type: 'requestPrimeError',
+            payload: 'Cannot find prime number'
+          });
           break;
         default:
-          console.error(`Error: got return code = ${res}`);
+          postMessage({
+            type: 'requestPrimeError',
+            payload: `Webassembly function returned unknown error code ${res}`
+          });
       }
     } finally {
       PrimeSearch._free(buffer);
