@@ -57,12 +57,13 @@ displays props =
             case props.primeImage of
                 Types.Loaded imageNumber ->
                     [ text (imageNumber2displayString imageNumber) ]
+
                 Types.Loading ->
-                    [
-                        div
-                            [ class "lds-spinner" ]
-                            (List.repeat 12 (div [] []))
+                    [ div
+                        [ class "lds-spinner" ]
+                        (List.repeat 12 (div [] []))
                     ]
+
                 Types.NotLoading ->
                     []
     in
