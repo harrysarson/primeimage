@@ -37,6 +37,18 @@ view props =
                 )
                 (displays props)
             )
+        , div
+            [ class "menu-bar" ]
+            [ button
+                [ attribute "data-clipboard-target"
+                    (".display-panel > div:nth-child("
+                        ++ String.fromInt (props.stage + 1)
+                        ++ ") > *"
+                    )
+                , class "copy-me"
+                ]
+                [ text "COPY" ]
+            ]
         ]
 
 

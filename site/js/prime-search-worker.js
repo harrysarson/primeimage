@@ -11,8 +11,6 @@ const PrimeSearch = exports.prime_search({
 onmessage = function (e) {
   PrimeSearch.then(() => {
     const {data: number} = e;
-    console.log(number);
-    console.log(PrimeSearch);
 
     const allocAmount = PrimeSearch.lengthBytesUTF8(number) + 1;
     const buffer = PrimeSearch._malloc(allocAmount);

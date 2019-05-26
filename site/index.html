@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
   <link rel="stylesheet" href="main.css" />
 
-
+  <script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
   <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
@@ -16,10 +16,14 @@
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
 
-  const primeSearchWorker = new Worker('./js/prime-search-worker.js', {type:'module'});
+  const primeSearchWorker = new Worker('./js/prime-search-worker.js');
 
   const app = Elm.Main.init();
 
+  new ClipboardJS('.copy-me')
+    .on('success', (event) => {
+      event.clearSelection();
+    });
 
   app.ports.logError.subscribe(function (description) {
     console.error(description);
