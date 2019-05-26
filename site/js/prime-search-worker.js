@@ -3,8 +3,8 @@
 const exports = {};
 importScripts('../built/prime-search.js');
 const PrimeSearch = exports.prime_search({
-  locateFile(path) {
-    return `/built/${path}`;
+  locateFile(path, scriptDir) {
+    return `${scriptDir}../built/${path}`;
   }
 });
 
