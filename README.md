@@ -20,7 +20,7 @@ gem install bundle
 bundle install
 ```
 
-## Running Localy
+## Running Locally
 
 ```bash
 npm run build
@@ -31,5 +31,5 @@ To recompile on changes use:
 
 ```bash
 npm install -g chokidar-cli
-chokidar elm-src -c "npm run build" --intial"
+chokidar elm-src -c "npm run build" --initial"
 ```
