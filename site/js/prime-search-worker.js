@@ -2,8 +2,11 @@
 
 const exports = {};
 importScripts('../built/prime-search.js');
-console.log(exports);
-const PrimeSearch = exports.prime_search();
+const PrimeSearch = exports.prime_search({
+  locateFile(path) {
+    return `/built/${path}`;
+  }
+});
 
 onmessage = function (e) {
   PrimeSearch.then(() => {
