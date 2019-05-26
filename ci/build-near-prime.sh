@@ -6,7 +6,7 @@ mkdir -p ci/build
 pushd ci/build
 
 # Get emsdk
-if [[ ! -d gmp-wasm ]]; then
+if [[ ! -d emsdk ]]; then
     git clone https://github.com/emscripten-core/emsdk.git
 fi
 git pull
@@ -51,6 +51,3 @@ make install
 
 popd
 popd
-
-
-
