@@ -57,6 +57,14 @@ displays props =
     let
         imagePreview =
             props.imagePreview
+                |> Maybe.map
+                    (\image ->
+                        img
+                            [ src image.contents
+                            , title image.filename
+                            ]
+                            []
+                    )
                 |> Maybe.withDefault Resources.defaultImage
 
         nonPrimeImageList =
@@ -87,11 +95,7 @@ displays props =
                 imageNumber2displayString Resources.corpusImageNumber
             ]
       ]
-    , [ img
-            [ src imagePreview.contents
-            , title imagePreview.filename
-            ]
-            []
+    , [ imagePreview
       ]
     , [ span
             [ class "image-number"
