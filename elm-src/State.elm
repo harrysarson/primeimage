@@ -77,7 +77,7 @@ update msg model =
         Types.ImageRead image ->
             { model | image = Just image }
                 |> Cmd.Extra.with
-                    (case model.image of
+                    (case model.nonPrime of
                         Just _ ->
                             requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
 
