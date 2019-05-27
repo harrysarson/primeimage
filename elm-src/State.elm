@@ -42,10 +42,22 @@ update msg model =
             let
                 newStage =
                     max 0 <| min Config.maxStage (model.stage + change)
+
+                requestNonPrimeCmd =
+                    case ( model.image, newStage ) of
+                        ( Just image, 2 ) ->
+                            requestNonPrime
+                                { toNumberConfig = model.toNumberConfig
+                                , image = image
+                                }
+
+                        _ ->
+                            Cmd.none
             in
             { model | stage = newStage }
                 |> Cmd.Extra.with
                     (setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
+                |> Cmd.Extra.add requestNonPrimeCmd
 
         Types.ImageSelected file ->
             let
@@ -65,7 +77,13 @@ update msg model =
         Types.ImageRead image ->
             { model | image = Just image }
                 |> Cmd.Extra.with
-                    (requestNonPrime { toNumberConfig = model.toNumberConfig, image = image })
+                    (case model.image of
+                        Just _ ->
+                            requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
+
+                        Nothing ->
+                            Cmd.none
+                    )
 
         Types.UpdateNumberConfig updateNumberConfigMsg ->
             let
