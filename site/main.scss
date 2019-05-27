@@ -39,6 +39,7 @@ main {
   padding: calc(var(--horizontal-spacing) / 2);
   overflow: hidden;
   > * {
+    position: relative;
     background: black;
 
     flex: 3 1 auto;
@@ -67,6 +68,16 @@ button {
     overflow: hidden;
   }
 }
+
+
+.menu-bar {
+  position: absolute;
+  bottom: var(--border-width);
+  right: var(--border-width);
+  background: grey;
+  border-top: var(--border-width) solid black;
+}
+
 
 .interaction-control {
   flex: 0 0 auto;

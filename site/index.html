@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
   <link rel="stylesheet" href="main.css" />
 
-
+  <script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
   <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
@@ -16,33 +16,52 @@
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
 
+  const primeSearchWorker = new Worker('./js/prime-search-worker.js');
 
   const app = Elm.Main.init();
 
+  try {
+    new ClipboardJS('.copy-me')
+      .on('success', (event) => {
+        event.clearSelection();
+      });
+  } catch (error) {
+    console.error(`Error setting up clipboard.js! Copy button will not work`);
+    console.error(error);
+  }
 
   app.ports.logError.subscribe(function (description) {
     console.error(description);
   });
 
-  app.ports.requestPrime.subscribe(async ([endPoint, nonPrime]) => {
-    try {
-      const response = await fetch(endPoint, {
-        method: 'POST',
-        body: nonPrime,
-      });
-
-      if (response.status >= 200 && response.status <= 300) {
-        const text = await response.text();
-
-        app.ports.probablyPrimeGenerated.send(text);
-      } else {
-        app.ports.requestPrimeError.send(`Invalid response status: ${response.status}`);
-      }
-
-    } catch (e) {
-      app.ports.requestPrimeError.send(`${e}`);
-    }
+  app.ports.requestPrime.subscribe(async ([_, nonPrime]) => {
+    primeSearchWorker.postMessage(nonPrime);
   });
+
+  primeSearchWorker.onmessage = ({data}) => {
+    switch (data.type) {
+      case 'probablyPrimeGenerated':
+      {
+        app.ports.probablyPrimeGenerated.send(data.payload);
+        break;
+      }
+      case 'definatelyPrimeGenerated':
+      {
+        app.ports.definatelyPrimeGenerated.send(data.payload);
+        break;
+      }
+      case 'requestPrimeError':
+      {
+        app.ports.requestPrimeError.send(data.payload);
+        break;
+      }
+      default:
+      {
+        app.ports.requestPrimeError.send(`Unexpected message from prime search web worker: ${data}`);
+        break;
+      }
+    }
+  };
 
   app.ports.requestNonPrime.subscribe(debounce(async ({ toNumberConfig, image }) => {
     const {

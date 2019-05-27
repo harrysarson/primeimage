@@ -25,8 +25,8 @@
     },
     "test-dependencies": {
         "direct": {
-            "elm-explorations/test": "1.2.0",
-            "elm-community/random-extra": "3.0.0"
+            "elm-community/random-extra": "3.0.0",
+            "elm-explorations/test": "1.2.0"
         },
         "indirect": {
             "elm/random": "1.0.0"

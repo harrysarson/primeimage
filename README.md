@@ -3,7 +3,7 @@
 Turn any image into an prime number.
 See https://harrysarson.github.io/primeimage.
 
-**Master**: [![Build Status](https://travis-ci.com/harrysarson/primeimage.svg?branch=master)](https://travis-ci.com/harrysarson/primeimage) [![Greenkeeper badge](https://badges.greenkeeper.io/harrysarson/primeimage.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/harrysarson/primeimage.svg?branch=master)](https://travis-ci.com/harrysarson/primeimage) [![Greenkeeper badge](https://badges.greenkeeper.io/harrysarson/primeimage.svg)](https://greenkeeper.io/)
 
 ## Installation Instructions
 
@@ -20,7 +20,7 @@ gem install bundle
 bundle install
 ```
 
-## Running Localy
+## Running Locally
 
 ```bash
 npm run build
@@ -31,5 +31,5 @@ To recompile on changes use:
 
 ```bash
 npm install -g chokidar-cli
-chokidar elm-src -c "npm run build" --intial"
+chokidar elm-src -c "npm run build" --initial"
 ```

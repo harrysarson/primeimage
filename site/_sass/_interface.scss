@@ -12,15 +12,12 @@
   background: white;
 }
 
-.prime-endpoint-select {
-  margin-bottom: var(--padding);
+.prime-generate {
   padding: var(--padding);
+  cursor: pointer;
 
-  > input {
+  > button {
     width: 100%;
-    color: inherit;
-    background-color: inherit;
-    border: var(--border-width) solid grey;
   }
 }
 

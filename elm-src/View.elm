@@ -43,13 +43,16 @@ view model =
             , primeImage =
                 case model.prime of
                     Types.ProbablyPrime number ->
-                        Just { number = number, width = model.toNumberConfig.width.value }
+                        Types.Loaded { number = number, width = model.toNumberConfig.width.value }
 
                     Types.DefinatelyPrime number ->
-                        Just { number = number, width = model.toNumberConfig.width.value }
+                        Types.Loaded { number = number, width = model.toNumberConfig.width.value }
+
+                    Types.FetchingPrime ->
+                        Types.Loading
 
                     _ ->
-                        Nothing
+                        Types.NotLoading
             }
 
         interactionProps =

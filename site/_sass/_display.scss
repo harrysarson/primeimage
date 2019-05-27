@@ -9,6 +9,8 @@
       var(--arrow-size) + 2 * var(--padding-between-stages)
     );
 
+  @import "spinner";
+
   display: flex;
   flex-direction: column;
   height: 100%;

@@ -121,6 +121,7 @@ instructions props =
                )
         , [ h1 [] [ text "Create a Prime Number" ]
           , p [] [ text "Click below to find a prime number similar to the current number." ]
+          , p [] [ text "Please be aware that if the width is much more than 20, then this could take a very long time." ]
           ]
             ++ (props.primeError
                     |> Maybe.map
@@ -138,7 +139,7 @@ instructions props =
             ++ (if props.fetchingPrime then
                     [ p
                         []
-                        [ text "Fetching prime number..." ]
+                        [ text "Calculating prime number..." ]
                     ]
 
                 else
@@ -192,20 +193,11 @@ interactions props =
                 (ToNumberConfig.View.view props.toNumberConfig)
           ]
         , [ label
-                [ class "prime-endpoint-select" ]
-                [ text "URL of prime number generator"
-                , input
-                    [ type_ "text"
-                    , value props.primeEndPoint
-                    , on
-                        "input"
-                        (Decode.map Types.SetPrimeEndPoint (Decode.at [ "target", "value" ] Decode.string))
-                    ]
-                    []
+                [ class "prime-generate" ]
+                [ button
+                    [ onClick Types.RequestPrime ]
+                    [ text "Generate Prime" ]
                 ]
-          , button
-                [ onClick Types.RequestPrime ]
-                [ text "Generate Prime" ]
           ]
         ]
 
