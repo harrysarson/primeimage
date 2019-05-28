@@ -63,6 +63,11 @@
   outline-offset: calc(0 - var(--outline-inset));
   transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
 
+  &,
+  * {
+    cursor: pointer;
+  }
+
   &.is-dragover {
     background-color: #fff;
     outline-color: #c8dadf;
@@ -89,21 +94,18 @@
     font-weight: 700;
     background-color: #39bfd3;
     opacity: 0;
+  }
 
-    & + label {
-      display: inline-block;
-      max-width: 80%;
-      text-overflow: ellipsis;
-      cursor: pointer;
-    }
+  .file-label {
+    display: inline-block;
+    max-width: 80%;
+    text-overflow: ellipsis;
+  }
 
-    & + label:hover strong,
-    &:focus + label strong,
-    &:focus + label,
-    &:hover,
-    &:focus {
-      background-color: #0f3c4b;
-    }
+  &:hover .file-label strong,
+  input[type="file"]:focus + label strong,
+  input[type="file"]:focus + label {
+    background-color: #0f3c4b;
   }
 }
 
