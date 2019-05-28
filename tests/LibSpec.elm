@@ -1,16 +1,17 @@
-module LibSpec exposing (..)
+module LibSpec exposing (stageFuzzer, tests)
 
-
-import Types
-import Lib
-import Fuzz exposing(Fuzzer)
-import Expect
 import Config
+import Expect
+import Fuzz exposing (Fuzzer)
+import Lib
 import Test exposing (Test, describe, fuzz, fuzz2, fuzz3, test)
+import Types
+
 
 stageFuzzer : Fuzzer Int
 stageFuzzer =
     Fuzz.intRange 0 Config.maxStage
+
 
 tests : Test
 tests =
@@ -19,8 +20,7 @@ tests =
             [ fuzz3 Fuzz.int stageFuzzer (Fuzz.maybe (Fuzz.constant ())) "Never more negative than current stage" <|
                 \change stage image ->
                     Lib.saturateStageChange { stage = stage, image = image } change
-                        |> Expect.atLeast (-stage)
-
+                        |> Expect.atLeast -stage
             , fuzz3 Fuzz.int stageFuzzer (Fuzz.maybe (Fuzz.constant ())) "At most max - currentStage" <|
                 \change stage image ->
                     Lib.saturateStageChange { stage = stage, image = image } change

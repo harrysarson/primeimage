@@ -1,4 +1,4 @@
-module Util exposing (queryInOrder, stringGen, randomBool)
+module Util exposing (queryInOrder, randomBool, stringGen)
 
 import Char
 import Expect exposing (Expectation)

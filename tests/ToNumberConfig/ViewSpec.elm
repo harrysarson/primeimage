@@ -22,7 +22,7 @@ import Util exposing (stringGen)
 
 tests : Test
 tests =
-   describe "ToNumberConfig.View"
+    describe "ToNumberConfig.View"
         [ fuzz
             model
             "there are correct number of inputs"
@@ -112,9 +112,10 @@ tests =
                         ([ Query.index 0
                             >> Event.simulate (Event.input str)
                             >> Event.expect (Types.SetWidth str)
-                        --  , Query.index 1
-                        --     >> Event.simulate (Event.input str)
-                        --     >> Event.expect (Types.SetHeight str)
+
+                         --  , Query.index 1
+                         --     >> Event.simulate (Event.input str)
+                         --     >> Event.expect (Types.SetHeight str)
                          ]
                             ++ Array.toList
                                 (model.levels

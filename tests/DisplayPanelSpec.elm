@@ -3,6 +3,7 @@ module DisplayPanelSpec exposing (tests)
 import DisplayPanel exposing (Props, view)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer)
+import NumberString
 import Random
 import Resources
 import Shrink
@@ -12,7 +13,6 @@ import Test.Html.Event as Event
 import Test.Html.Query as Query
 import Test.Html.Selector exposing (class, tag)
 import Types
-import NumberString
 import Util exposing (queryInOrder, randomBool)
 
 
