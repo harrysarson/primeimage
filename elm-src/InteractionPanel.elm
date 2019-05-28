@@ -106,13 +106,11 @@ instructions props =
                 ]
           ]
         , h1 [] [ text "Convert Image To Number" ]
-            :: p [] [ text "Use the controls below to convert the image to a number." ]
             :: p
                 []
                 [ text """
-                Set the dimensions of the number image using width and height,
-                although remember that larger numbers may take a very long time
-                to convert to a prime.
+                Set the number of digits to use for your image using width.
+                Be warned that images with a large number of digits may take a very long time to convert to a prime.
                 """
                 ]
             :: p
