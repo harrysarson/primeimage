@@ -7,6 +7,7 @@ import Html exposing (Html, br, button, div, h1, input, label, p, section, stron
 import Html.Attributes exposing (attribute, class, classList, disabled, for, id, name, type_, value)
 import Html.Events exposing (on, onClick)
 import Json.Decode as Decode
+import Resources
 import Svg
 import Svg.Attributes
 import ToNumberConfig.Types
@@ -164,23 +165,7 @@ interactions props =
                 [ class "image-pick" ]
                 [ label
                     []
-                    [ Svg.svg
-                        [ Svg.Attributes.class "icon"
-                        , Svg.Attributes.width "50"
-                        , Svg.Attributes.height "43"
-                        , Svg.Attributes.viewBox "0 0 50 43"
-                        ]
-                        [ Svg.path
-                            [ Svg.Attributes.d """
-                        M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0
-                        .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5
-                        1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4
-                        0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4
-                        0s-.7 1.7 0 2.4l10 11.6z
-                        """
-                            ]
-                            []
-                        ]
+                    [ Resources.fileUploadIcon
                     , input
                         [ type_ "file"
                         , name "files[]"

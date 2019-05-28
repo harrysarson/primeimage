@@ -1,6 +1,7 @@
 module Resources exposing
     ( corpusImageNumber
     , defaultImage
+    , fileUploadIcon
     )
 
 import NumberString
@@ -77,6 +78,27 @@ defaultImage =
         [ Svg.path
             [ Svg.Attributes.d """
         M 4 4 C 2.9069372 4 2 4.9069372 2 6 L 2 18 C 2 19.093063 2.9069372 20 4 20 L 20 20 C 21.093063 20 22 19.093063 22 18 L 22 6 C 22 4.9069372 21.093063 4 20 4 L 4 4 z M 4 6 L 20 6 L 20 18 L 4 18 L 4 6 z M 14.5 11 L 11 15 L 8.5 12.5 L 5.7773438 16 L 18.25 16 L 14.5 11 z
+        """
+            ]
+            []
+        ]
+
+
+fileUploadIcon : Svg.Svg never
+fileUploadIcon =
+    Svg.svg
+        [ Svg.Attributes.class "icon"
+        , Svg.Attributes.width "50"
+        , Svg.Attributes.height "43"
+        , Svg.Attributes.viewBox "0 0 50 43"
+        ]
+        [ Svg.path
+            [ Svg.Attributes.d """
+        M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0
+        .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5
+        1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4
+        0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4
+        0s-.7 1.7 0 2.4l10 11.6z
         """
             ]
             []
