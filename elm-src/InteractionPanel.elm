@@ -165,17 +165,20 @@ interactions props =
                 [ class "image-pick" ]
                 [ label
                     []
-                    [ Resources.fileUploadIcon
-                    , input
-                        [ type_ "file"
-                        , name "files[]"
-                        , id Config.imageInputId
-                        , on "change" decodeFile
-                        ]
-                        []
-                    , div [ class "file-label" ]
-                        -- TODO: should label be ID?
-                        [ strong [] [ text "Click here to choose a file" ]
+                    [ div
+                        [ class "content" ]
+                        [ Resources.fileUploadIcon
+                        , input
+                            [ type_ "file"
+                            , name "files[]"
+                            , id Config.imageInputId
+                            , on "change" decodeFile
+                            ]
+                            []
+                        , div [ class "file-label" ]
+                            -- TODO: should label be ID?
+                            [ strong [] [ text "Click here to choose a file" ]
+                            ]
                         ]
                     ]
                 ]

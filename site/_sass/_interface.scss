@@ -57,11 +57,14 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: calc(var(--outline-inset) + 0.5em);
   text-align: center;
   outline: 2px dashed #92b0b3;
   outline-offset: calc(0 - var(--outline-inset));
   transition: outline-offset 0.15s ease-in-out, background-color 0.15s linear;
+
+  .content {
+    padding: calc(var(--outline-inset) + 0.5em);
+  }
 
   &,
   * {
