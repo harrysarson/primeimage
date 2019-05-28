@@ -115,8 +115,16 @@ tests =
                     |> Expect.all
                         [ Query.count (Expect.equal 2)
                         , Query.index 0
-                            >> Query.has [ disabled (not p.canGoBack) ]
+                            >> (if p.canGoBack then
+                                    Query.hasNot
+                                else
+                                    Query.has
+                                ) [ class "disabled" ]
                         , Query.index 1
-                            >> Query.has [ disabled (not p.canGoNext) ]
+                            >> (if p.canGoNext then
+                                    Query.hasNot
+                                else
+                                    Query.has
+                                ) [ class "disabled" ]
                         ]
         ]

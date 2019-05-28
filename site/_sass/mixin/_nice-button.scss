@@ -5,9 +5,10 @@
     background: white;
     color: grey;
     font: inherit;
+    padding: 0 var(--padding);
   }
 
-  &:not([disabled]) {
+  &:not(.disabled) {
     &#{$selector} {
       color: black;
     }

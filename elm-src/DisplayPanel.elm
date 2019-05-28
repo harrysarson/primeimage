@@ -26,10 +26,9 @@ view props =
             ]
             (List.map
                 (div <|
-                    -- hack because you should not set disabled for a div, replace with a .disabled class
                     [ onClick (Types.ChangeStage 1) ]
                         ++ (if not props.canGoNext then
-                                [ attribute "disabled" "" ]
+                                [ class "disabled" ]
 
                             else
                                 []

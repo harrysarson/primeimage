@@ -66,7 +66,13 @@ stageButton change props =
     button
         [ attribute "data-stage-change" (String.fromInt change)
         , onClick (Types.ChangeStage change)
-        , disabled <| not enabled
+        , class
+            (if enabled then
+                ""
+
+             else
+                "disabled"
+            )
         ]
 
 

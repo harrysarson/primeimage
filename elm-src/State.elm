@@ -6,6 +6,7 @@ module State exposing
 import Cmd.Extra
 import Config
 import File
+import Lib
 import NumberString
 import Ports
     exposing
@@ -41,18 +42,22 @@ update msg model =
         Types.ChangeStage change ->
             let
                 newStage =
-                    max 0 <| min Config.maxStage (model.stage + change)
+                    model.stage + Lib.saturateStageChange model change
 
                 requestNonPrimeCmd =
-                    case ( model.image, newStage ) of
-                        ( Just image, 2 ) ->
-                            requestNonPrime
-                                { toNumberConfig = model.toNumberConfig
-                                , image = image
-                                }
+                    if newStage == Config.imageInputStage then
+                        case model.image of
+                            Just image ->
+                                requestNonPrime
+                                    { toNumberConfig = model.toNumberConfig
+                                    , image = image
+                                    }
 
-                        _ ->
-                            Cmd.none
+                            _ ->
+                                Cmd.none
+
+                    else
+                        Cmd.none
             in
             { model | stage = newStage }
                 |> Cmd.Extra.with

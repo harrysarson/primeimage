@@ -86,7 +86,7 @@
         content: "⯆";
       }
 
-      &:not([disabled])::after {
+      &:not(.disabled)::after {
         pointer-events: auto;
       }
     }

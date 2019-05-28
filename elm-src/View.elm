@@ -4,6 +4,7 @@ import Config
 import DisplayPanel
 import Html exposing (Html, node)
 import InteractionPanel
+import Lib
 import Types
 
 
@@ -12,21 +13,7 @@ view model =
     let
         -- todo: find a more elegant way to set these props
         canGoNext =
-            case model.stage of
-                0 ->
-                    True
-
-                1 ->
-                    model.image /= Nothing
-
-                2 ->
-                    True
-
-                3 ->
-                    False
-
-                _ ->
-                    False
+            Lib.saturateStageChange model 1 == 1
 
         displayProps =
             { stage = model.stage
@@ -58,7 +45,7 @@ view model =
         interactionProps =
             { stage = model.stage
             , canGoNext = canGoNext
-            , canGoBack = model.stage > 0
+            , canGoBack = Lib.saturateStageChange model -1 == -1
             , toNumberConfig = model.toNumberConfig
             , primeEndPoint = model.primeEndPoint
             , primeError =
