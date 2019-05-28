@@ -19,17 +19,16 @@
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/core.min.js"></script>
 
   <script type=module>
-    import { Elm } from './built/elm.js';
-    import { getImageData, quantise } from './js/create-non-prime.js';
-    import { GreyImageData } from './js/grey-image-data.js';
-    import { resizeText } from './js/resize-text.js';
-    import { runWhen } from './js/run-when.js';
+    /* global lodash, ClipboardJS */
+    import {Elm} from './built/elm.js';
+    import {getImageData, quantise} from './js/create-non-prime.js';
+    import {GreyImageData} from './js/grey-image-data.js';
+    import {resizeText} from './js/resize-text.js';
+    import {runWhen} from './js/run-when.js';
 
-
-
-    const debounce = typeof lodash !== 'undefined'
-      ? lodash.debounce
-      : (console.error('Could not load lodash, primeimage will not debounce input!'), x => x);
+    const debounce = typeof lodash === 'undefined' ?
+  (console.error('Could not load lodash, primeimage will not debounce input!'), x => x) :
+  lodash.debounce;
 
     const primeSearchWorker = new Worker('./js/prime-search-worker.js');
 
@@ -37,51 +36,54 @@
 
     try {
       new ClipboardJS('.copy-me')
-        .on('success', (event) => {
+        .on('success', event => {
           event.clearSelection();
         });
     } catch (error) {
-      console.error(`Error setting up clipboard.js! Copy button will not work`);
+      console.error('Error setting up clipboard.js! Copy button will not work');
       console.error(error);
     }
 
-    app.ports.logError.subscribe(function (description) {
-      console.error(description);
-    });
+    app.ports.logError.subscribe(description => {
+  console.error(description);
+});
 
     app.ports.requestPrime.subscribe(async ([_, nonPrime]) => {
       primeSearchWorker.postMessage(nonPrime);
     });
 
-    primeSearchWorker.onmessage = ({data}) => {
+    primeSearchWorker.addEventListener('message', ({data}) => {
       switch (data.type) {
         case 'probablyPrimeGenerated':
         {
           app.ports.probablyPrimeGenerated.send(data.payload);
           break;
         }
+
         case 'definatelyPrimeGenerated':
         {
           app.ports.definatelyPrimeGenerated.send(data.payload);
           break;
         }
+
         case 'requestPrimeError':
         {
           app.ports.requestPrimeError.send(data.payload);
           break;
         }
+
         default:
         {
           app.ports.requestPrimeError.send(`Unexpected message from prime search web worker: ${data}`);
           break;
         }
       }
-    };
+    });
 
-    app.ports.requestNonPrime.subscribe(debounce(async ({ toNumberConfig, image }) => {
+    app.ports.requestNonPrime.subscribe(debounce(async ({toNumberConfig, image}) => {
       const {
-        width: { value: width },
-        levels: errorableLevels,
+        width: {value: width},
+        levels: errorableLevels
       } = toNumberConfig;
 
       const numberLookup = [8, 6, 5, 7];
@@ -94,20 +96,20 @@
         );
         return;
       }
+
       let number;
       try {
         const color = await getImageData(image.contents, width);
         const grey = GreyImageData.fromColorImage(color);
         const quantised = quantise(grey.data, new Uint8Array(grey.data.length), levels);
         number = quantised.map(x => numberLookup[x]);
-      } catch (e) {
-        app.ports.nonPrimeError.send(`${e}`);
+      } catch (error) {
+        app.ports.nonPrimeError.send(`${error}`);
         return;
       }
 
       app.ports.nonPrimeGenerated.send(number.join(''));
     }), 100);
-
 
     app.ports.setCssProp.subscribe(([selector, prop, value]) => {
       for (const $el of document.querySelectorAll(selector)) {
@@ -118,21 +120,20 @@
     /* Automatic text resizing */
 
     function resizeAllTexts() {
-      for (let node of document.querySelectorAll('.auto-resize')) {
+      for (const node of document.querySelectorAll('.auto-resize')) {
         resizeText(node);
       }
     }
 
     (async () => {
       try {
-        await runWhen(() => document.querySelector('.display-panel') != null, 5);
-      } catch (e) {
-        console.log(`Given up trying to automatically resize image number text due to error:\n${e}`);
+        await runWhen(() => document.querySelector('.display-panel') !== null, 5);
+      } catch (error) {
+        console.log(`Given up trying to automatically resize image number text due to error:\n${error}`);
         return;
       }
 
       resizeAllTexts();
-
     })();
 
     window.addEventListener('resize', debounce(resizeAllTexts, 200));
