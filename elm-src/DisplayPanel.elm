@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import NumberString
 import Resources
+import Set
 import Types
 
 
@@ -44,7 +45,13 @@ view props =
                         ++ String.fromInt (props.stage + 1)
                         ++ ") > *"
                     )
-                , class "copy-me"
+                , class
+                    (if Set.member props.stage Config.copyableStages then
+                        "copy-me"
+
+                     else
+                        "disabled"
+                    )
                 ]
                 [ text "COPY" ]
             ]
