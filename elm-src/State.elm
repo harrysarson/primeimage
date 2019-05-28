@@ -45,7 +45,7 @@ update msg model =
                     model.stage + Lib.saturateStageChange model change
 
                 requestNonPrimeCmd =
-                    if newStage == Config.imageInputStage then
+                    if newStage == Config.nonPrimeStage then
                         case model.image of
                             Just image ->
                                 requestNonPrime
