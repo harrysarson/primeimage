@@ -7,14 +7,29 @@
   <meta charset="utf-8" />
   <link rel="stylesheet" href="main.css" />
 
+  <!--
+    These _should_ be esm imports but clipboard doesn't bundle a
+    dependency-less module and we can use static import as we want
+    to be able to recover from network issues [1]. As Edge does not
+    support `import()` we have to use legacy script loading.
+
+    [1]: https://stackoverflow.com/questions/38946112/es6-import-error-handling
+  -->
   <script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/core.min.js"></script>
+
   <script type=module>
   import { Elm } from './built/elm.js';
   import { getImageData, quantise } from './js/create-non-prime.js';
   import { GreyImageData } from './js/grey-image-data.js';
-  import debounce from 'https://unpkg.com/lodash-es@4.17.11/debounce';
   import { resizeText } from './js/resize-text.js';
   import { runWhen } from './js/run-when.js';
+
+
+
+  const debounce = typeof lodash !== 'undefined'
+    ? lodash.debounce
+    : (console.error('Could not load lodash, primeimage will not debounce input!'), x => x);
 
   const primeSearchWorker = new Worker('./js/prime-search-worker.js');
 
