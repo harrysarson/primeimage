@@ -176,7 +176,6 @@ interactions props =
                             ]
                             []
                         , div [ class "file-label" ]
-                            -- TODO: should label be ID?
                             [ strong [] [ text "Click here to choose a file" ]
                             ]
                         ]
