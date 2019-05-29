@@ -65,30 +65,8 @@
     &:not(:last-child) {
       --border-width: 2px;
 
-      @import 'mixin/nice-button';
-
-      @include nice-button(':after', var(--border-width));
-
       border: 0 solid transparent;
       border-bottom-width: var(--spacing-between-stages);
-
-      &::after {
-        position: absolute;
-        top: calc(100% + var(--padding-between-stages) - var(--border-width));
-        left: calc(50% - var(--arrow-size) / 2);
-        display: block;
-        box-sizing: content-box;
-        width: var(--arrow-size);
-        height: var(--arrow-size);
-        font-size: var(--arrow-size);
-        line-height: var(--arrow-size);
-        text-align: center;
-        content: "⯆";
-      }
-
-      &:not([disabled])::after {
-        pointer-events: auto;
-      }
     }
   }
 }

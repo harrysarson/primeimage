@@ -6,6 +6,7 @@ module State exposing
 import Cmd.Extra
 import Config
 import File
+import Lib
 import NumberString
 import Ports
     exposing
@@ -41,11 +42,27 @@ update msg model =
         Types.ChangeStage change ->
             let
                 newStage =
-                    max 0 <| min Config.maxStage (model.stage + change)
+                    model.stage + Lib.saturateStageChange model change
+
+                requestNonPrimeCmd =
+                    if newStage == Config.nonPrimeStage then
+                        case model.image of
+                            Just image ->
+                                requestNonPrime
+                                    { toNumberConfig = model.toNumberConfig
+                                    , image = image
+                                    }
+
+                            _ ->
+                                Cmd.none
+
+                    else
+                        Cmd.none
             in
             { model | stage = newStage }
                 |> Cmd.Extra.with
                     (setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
+                |> Cmd.Extra.add requestNonPrimeCmd
 
         Types.ImageSelected file ->
             let
@@ -65,7 +82,13 @@ update msg model =
         Types.ImageRead image ->
             { model | image = Just image }
                 |> Cmd.Extra.with
-                    (requestNonPrime { toNumberConfig = model.toNumberConfig, image = image })
+                    (case model.nonPrime of
+                        Just _ ->
+                            requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
+
+                        Nothing ->
+                            Cmd.none
+                    )
 
         Types.UpdateNumberConfig updateNumberConfigMsg ->
             let

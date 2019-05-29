@@ -39,7 +39,7 @@ props =
                 |> Random.Extra.andMap (Random.constant sampleToNumberConfig)
                 |> Random.Extra.andMap (Random.constant "prime end point")
                 |> Random.Extra.andMap (Random.constant Nothing)
-                |> Random.Extra.andMap (Random.Extra.bool)
+                |> Random.Extra.andMap Random.Extra.bool
 
         shrinker =
             \{ stage, canGoBack, canGoNext, toNumberConfig, primeEndPoint, primeError, fetchingPrime } ->
@@ -115,8 +115,20 @@ tests =
                     |> Expect.all
                         [ Query.count (Expect.equal 2)
                         , Query.index 0
-                            >> Query.has [ disabled (not p.canGoBack) ]
+                            >> (if p.canGoBack then
+                                    Query.hasNot
+
+                                else
+                                    Query.has
+                               )
+                                [ class "disabled" ]
                         , Query.index 1
-                            >> Query.has [ disabled (not p.canGoNext) ]
+                            >> (if p.canGoNext then
+                                    Query.hasNot
+
+                                else
+                                    Query.has
+                               )
+                                [ class "disabled" ]
                         ]
         ]

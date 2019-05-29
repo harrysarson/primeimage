@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import NumberString
 import Resources
+import Set
 import Types
 
 
@@ -26,10 +27,9 @@ view props =
             ]
             (List.map
                 (div <|
-                    -- hack because you should not set disabled for a div, replace with a .disabled class
                     [ onClick (Types.ChangeStage 1) ]
                         ++ (if not props.canGoNext then
-                                [ attribute "disabled" "" ]
+                                [ class "disabled" ]
 
                             else
                                 []
@@ -45,7 +45,13 @@ view props =
                         ++ String.fromInt (props.stage + 1)
                         ++ ") > *"
                     )
-                , class "copy-me"
+                , class
+                    (if Set.member props.stage Config.copyableStages then
+                        "copy-me"
+
+                     else
+                        "disabled"
+                    )
                 ]
                 [ text "COPY" ]
             ]
@@ -57,6 +63,14 @@ displays props =
     let
         imagePreview =
             props.imagePreview
+                |> Maybe.map
+                    (\image ->
+                        img
+                            [ src image.contents
+                            , title image.filename
+                            ]
+                            []
+                    )
                 |> Maybe.withDefault Resources.defaultImage
 
         nonPrimeImageList =
@@ -87,11 +101,7 @@ displays props =
                 imageNumber2displayString Resources.corpusImageNumber
             ]
       ]
-    , [ img
-            [ src imagePreview.contents
-            , title imagePreview.filename
-            ]
-            []
+    , [ imagePreview
       ]
     , [ span
             [ class "image-number"

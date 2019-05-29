@@ -43,6 +43,7 @@ tests =
                         |> Tuple.first
                         |> .toNumberConfig
                         |> Expect.equal ToNumberConfig.State.initialState
+
             -- , test ".initialState produces the setInitialValues command" <|
             --     \() ->
             --         initialState
@@ -63,7 +64,15 @@ tests =
                         in
                         update (Types.ChangeStage change) model
                             |> Tuple.first
-                            |> Expect.equal { model | stage = newStage }
+                            |> Expect.equal
+                                { model
+                                    | stage =
+                                        if model.image == Nothing && change > 0 then
+                                            min newStage Config.imageInputStage
+
+                                        else
+                                            newStage
+                                }
                 , fuzz2
                     model
                     (Fuzz.intRange Random.minInt -1)
@@ -89,8 +98,17 @@ tests =
                         in
                         update (Types.ChangeStage change) model
                             |> Tuple.first
-                            |> Expect.equal { model | stage = Config.maxStage }
+                            |> Expect.equal
+                                { model
+                                    | stage =
+                                        if model.image == Nothing then
+                                            Config.imageInputStage
+
+                                        else
+                                            Config.maxStage
+                                }
                 ]
+
             -- , describe "ImageSelected message"
             --     [ fuzz
             --         model
@@ -165,6 +183,7 @@ updateNumberConfigMsgFuzz =
         [ Fuzz.int
             |> Fuzz.map String.fromInt
             |> Fuzz.map ToNumberConfig.Types.SetWidth
+
         -- , Fuzz.int
         --     |> Fuzz.map String.fromInt
         --     |> Fuzz.map ToNumberConfig.Types.SetHeight

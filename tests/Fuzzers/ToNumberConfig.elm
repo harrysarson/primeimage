@@ -8,7 +8,7 @@ import Random.Extra
 import Shrink exposing (Shrinker)
 import ToNumberConfig.Config as Config
 import ToNumberConfig.Types as Types exposing (makeErrorable)
-import Util exposing (stringGen, randomBool)
+import Util exposing (randomBool, stringGen)
 
 
 model : Fuzzer Types.Model

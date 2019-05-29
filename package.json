@@ -1,15 +1,19 @@
 {
   "name": "primeimage",
-  "version": "0.6.0",
+  "version": "0.7.0-0",
   "description": "Turn any image into an prime number.",
   "main": "main.js",
   "scripts": {
     "preversion": "npm test",
     "postversion": "git push --tags && git push",
     "lint:js": "xo",
-    "lint:elm": "elm-format elm-src --validate",
+    "lint:elm": "elm-format elm-src tests --validate",
     "lint:scss": "stylelint site/**/*.scss",
     "lint": "npm run lint:js && npm run lint:elm && npm run lint:scss",
+    "format:js": "xo --fix",
+    "format:elm": "elm-format elm-src tests --yes",
+    "format:scss": "stylelint site/**/*.scss --fix",
+    "format": "npm run format:js && npm run format:elm && npm run format:scss",
     "test:elm": "elm-test 'tests/**/*.elm'",
     "test:js": "karma start --single-run --browsers FirefoxHeadless",
     "test": "npm run test:elm && npm run test:js",
@@ -23,6 +27,7 @@
     "elm": "0.19.0-no-deps",
     "elm-format": "0.8.1",
     "elm-test": "0.19.0-rev6",
+    "eslint-plugin-html": "5.0.5",
     "karma": "4.1.0",
     "karma-chai": "0.1.0",
     "karma-firefox-launcher": "1.1.0",
@@ -45,8 +50,15 @@
     ],
     "import/extensions": "ignorePackages",
     "rules": {
+      "import/extensions": "off",
       "eslint-comments/no-unused-disable": "warn"
-    }
+    },
+    "plugins": [
+      "html"
+    ],
+    "extensions": [
+      "html"
+    ]
   },
   "stylelint": {
     "extends": [

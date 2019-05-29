@@ -31,6 +31,7 @@ tests =
                             , .error
                                 >> Expect.equal Nothing
                             ]
+
             -- , test ".height" <|
             --     \() ->
             --         initialState
@@ -103,6 +104,7 @@ tests =
                                     >> Expect.notEqual Nothing
                                 ]
                 ]
+
             -- , describe "SetHeight message" <|
             --     [ fuzz (Fuzz.tuple ( model, validImageSizeFuzz )) "valid height" <|
             --         \( model, newHeight ) ->

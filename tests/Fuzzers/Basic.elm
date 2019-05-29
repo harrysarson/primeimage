@@ -5,9 +5,9 @@ import Char
 import Config
 import Fuzz exposing (Fuzzer)
 import Fuzzers.ToNumberConfig
+import NumberString
 import Random exposing (Generator, Seed)
 import Shrink exposing (Shrinker)
-import NumberString
 import ToNumberConfig.Config
 import Types
 import Util exposing (stringGen)
@@ -44,6 +44,7 @@ image =
             }
     in
     Fuzz.maybe <| Fuzz.constant sampleImage
+
 
 imageNumber : Fuzzer NumberString.T
 imageNumber =
