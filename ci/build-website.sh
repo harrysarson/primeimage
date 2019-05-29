@@ -1,10 +1,12 @@
 
 if [[ "$TRAVIS_TAG" == "" ]]; then
     echo "DRAFT BUILD"
+    export DEPLOY_REPO="$TRAVIS_REPO_SLUG-preview"
     printf "DRAFT " > site/version.txt
     git rev-parse HEAD >> site/version.txt
 else
     echo "TAGGED BUILD"
+    export DEPLOY_REPO="$TRAVIS_REPO_SLUG"
     node -e "console.log(require('./package.json').version)" > site/version.txt
 fi
 

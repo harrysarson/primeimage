@@ -28,13 +28,15 @@ jobs:
         - cd near-prime && make && make test
     - stage: publish website
       if: type = push and (branch = master OR tag IS present)
+      env:
+        - TARGET_REPO=
       script: skip
       before_install:
         - source ./ci/build-near-prime.sh
       before_deploy:
-        - bash ./ci/build-website.sh
+        - source ./ci/build-website.sh
       deploy:
-        repo: if [[ "$TRAVIS_TAG" == "" ]]; then "$TRAVIS_REPO_SLUG-preview"; else "$TRAVIS_REPO_SLUG"; fi
+        repo: $DEPLOY_REPO # set by ci/build-website.sh
         local-dir: site
         provider: pages
         skip-cleanup: true
