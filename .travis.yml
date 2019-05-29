@@ -27,6 +27,7 @@ jobs:
         - source ./ci/build-near-prime.sh
         - cd near-prime && make && make test
     - stage: publish website
+      if: branch = master OR tag IS present
       script: skip
       before_install:
         - source ./ci/build-near-prime.sh
@@ -42,4 +43,3 @@ jobs:
         keep-history: true
         on:
           all_banches: true
-          condition: "$TRAVIS_BRANCH" == "master" || "$TRAVIS_TAG" != ""
