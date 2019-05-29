@@ -32,16 +32,6 @@ jobs:
         - source ./ci/build-near-prime.sh
       before_deploy:
         - node -e "console.log(require('./package.json').version)" > site/version.txt
-        # quit if version matches latest in gh-pages
-        - git fetch origin gh-pages:gh-pages
-        - |
-          git diff --exit-code gh-pages:version.txt site/version.txt
-          export GIT_DIFF_EXIT_CODE=$?
-          if [[ $GIT_DIFF_EXIT_CODE -ne 1 ]]
-          then
-            printf "Exit code was $GIT_DIFF_EXIT_CODE, Probably need to publish a new version. Exiting.\n";
-            exit 1;
-          fi
         # build elm files
         - npm run build
         # build wasm files
