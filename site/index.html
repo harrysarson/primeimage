@@ -9,7 +9,7 @@
 
   <!--
     These _should_ be esm imports but clipboard doesn't bundle a
-    dependency-less module and we can use static import as we want
+    dependency-less module and we cannot use static import as we want
     to be able to recover from network issues [1]. As Edge does not
     support `import()` we have to use legacy script loading.
 
