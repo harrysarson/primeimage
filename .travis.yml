@@ -8,6 +8,7 @@ cache:
   npm: true
   directories:
     - ci/build
+    - $HOME/.emscripten_cache
 
 addons:
   apt:
