@@ -29,8 +29,6 @@ jobs:
         - cd near-prime && make && make test
     - stage: publish website
       if: type = push and (branch = master OR tag IS present)
-      env:
-        - TARGET_REPO=
       script: skip
       before_install:
         - source ./ci/build-near-prime.sh
