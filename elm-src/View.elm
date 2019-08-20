@@ -1,6 +1,5 @@
 module View exposing (view)
 
-import Config
 import DisplayPanel
 import Html exposing (Html, node)
 import InteractionPanel

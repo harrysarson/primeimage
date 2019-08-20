@@ -5,7 +5,6 @@ module Resources exposing
     )
 
 import NumberString
-import Regex
 import Svg
 import Svg.Attributes
 import Types

@@ -26,7 +26,7 @@ toDirection string =
 
 
 subscriptions : Types.Model -> Sub Types.Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
         [ Ports.fileContentRead Types.ImageRead
         , Ports.nonPrimeGenerated (NumberString.fromString >> Types.NonPrimeGenerated)

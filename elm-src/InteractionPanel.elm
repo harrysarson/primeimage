@@ -2,14 +2,12 @@ module InteractionPanel exposing (Props, view)
 
 import Array
 import Config
-import File exposing (File)
+import File
 import Html exposing (Html, br, button, div, h1, input, label, p, section, strong, text)
-import Html.Attributes exposing (attribute, class, classList, disabled, for, id, name, type_, value)
+import Html.Attributes exposing (attribute, class, id, name, type_)
 import Html.Events exposing (on, onClick)
 import Json.Decode as Decode
 import Resources
-import Svg
-import Svg.Attributes
 import ToNumberConfig.Types
 import ToNumberConfig.View
 import Types
@@ -151,10 +149,6 @@ instructions props =
                     []
                )
         ]
-
-
-
--- todo: xmlns="http://www.w3.org/2000/svg"
 
 
 interactions : Props -> Array.Array (List (Html Types.Msg))
