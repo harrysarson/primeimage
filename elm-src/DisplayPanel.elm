@@ -1,9 +1,9 @@
 module DisplayPanel exposing (Props, view)
 
 import Config
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html exposing (button, div, img, span, text)
+import Html.Attributes exposing (attribute, class, src, title)
+import Html.Events exposing (onClick)
 import NumberString
 import Resources
 import Set
