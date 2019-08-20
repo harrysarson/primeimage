@@ -98,8 +98,3 @@ updateErrorable validate attemptedValue errorable =
             , attemptedValue = attemptedValue
             , error = Just err
             }
-
-
-setAttempted : String -> Errorable -> Errorable
-setAttempted attemptedValue errorable =
-    { errorable | attemptedValue = attemptedValue }

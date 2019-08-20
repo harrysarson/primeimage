@@ -1,5 +1,3 @@
----
----
 
 * {
   box-sizing: border-box;
@@ -7,22 +5,22 @@
 
 html,
 body {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 body {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   font-family: "Lucida Console", Monaco, monospace;
 }
 
 header {
   width: 100%;
-  background: black;
   color: grey;
   text-align: center;
+  background: black;
 }
 
 header > h1 {
@@ -33,23 +31,25 @@ main {
   --horizontal-spacing: 1em;
   --padding: 10px;
   --border-width: 3px;
-  background: white;
-  flex: 1 0;
+
   display: flex;
+  flex: 1 0;
   padding: calc(var(--horizontal-spacing) / 2);
   overflow: hidden;
+  background: white;
+
   > * {
     position: relative;
-    background: black;
-
     flex: 3 1 auto;
     margin: calc(var(--horizontal-spacing) / 2);
     overflow: hidden;
+    background: black;
   }
 }
 
 button {
   @import 'mixin/nice-button';
+
   @include nice-button($border-width: var(--border-width));
 }
 
@@ -57,37 +57,35 @@ button {
   --panel-width: 20em;
   --box-padding: 0.6em 0.3em;
 
-  flex: 0 0 var(--panel-width);
   display: flex;
+  flex: 0 0 var(--panel-width);
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--padding)/2);
+  padding: calc(var(--padding) / 2);
 
   & > * {
-    margin: calc(var(--padding)/2);
+    margin: calc(var(--padding) / 2);
     overflow: hidden;
   }
 }
 
-
 .menu-bar {
   position: absolute;
-  bottom: var(--border-width);
   right: var(--border-width);
+  bottom: var(--border-width);
   background: grey;
   border-top: var(--border-width) solid black;
 }
 
-
 .interaction-control {
-  flex: 0 0 auto;
   display: flex;
+  flex: 0 0 auto;
   justify-content: space-between;
   overflow: hidden;
 
   > button {
-    flex: 0 1;
     position: relative;
+    flex: 0 1;
     font-size: 2em;
   }
 }
@@ -109,6 +107,6 @@ button {
 }
 
 .error-in-field {
-  background: #ffb7b7 !important;
   color: #850002 !important;
+  background: #ffb7b7 !important;
 }

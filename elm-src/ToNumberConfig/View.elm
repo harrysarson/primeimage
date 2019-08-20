@@ -1,8 +1,8 @@
 module ToNumberConfig.View exposing (view)
 
 import Array
-import Html exposing (Html, div, form, input, label, text)
-import Html.Attributes exposing (attribute, class, classList, name, type_, value)
+import Html exposing (Html, form, input, label, text)
+import Html.Attributes exposing (attribute, class, classList, type_, value)
 import Html.Events exposing (on, onMouseUp)
 import Json.Decode as Decode
 import List
