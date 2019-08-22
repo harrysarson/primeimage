@@ -12,54 +12,49 @@ const PrimeSearch = exports.prime_search({
   }
 });
 
-onmessage = function ({data: payload}) {
-  PrimeSearch.then(() => {
+onmessage = message => {
+  console.error('Message sent to prime worker before initialisation complete!', message);
+};
+
+// const STATES = {
+//   IDLE: Symbol('IDLE'),
+//   RUNNING: Symbol('RUNNING')
+// };
+
+PrimeSearch.then(() => {
+  // Let state = STATES.IDLE;
+  // let buffer = PrimeSearch._malloc(0);
+  onmessage = ({data: payload}) => {
     switch (payload.type) {
       case 'Start': {
         const reps = 10;
         const {nonPrimeNumber} = payload;
-
         const allocAmount = PrimeSearch.lengthBytesUTF8(nonPrimeNumber) + 1;
         const buffer = PrimeSearch._malloc(allocAmount);
 
         try {
           PrimeSearch.stringToUTF8(nonPrimeNumber, buffer, allocAmount);
           // Const res = PrimeSearch._find_candidate_with_progress(buffer, reps);
-          const [res, primeNumber] = findCandidateWithProgress(nonPrimeNumber, reps);
-          switch (res) {
-            case 1:
-            case 2: {
-              const log2ProbPrime = res === 1 ? 0 : 0.25 ** reps;
-              postMessage({
-                type: 'FoundPrime',
-                log2ProbPrime,
-                primeNumber // : PrimeSearch.UTF8ToString(buffer) // eslint-disable-line new-cap
-              });
-              break;
-            }
-
-            case 0: {
-              postMessage({
-                type: 'Error',
-                message: 'Cannot find prime number'
-              });
-              break;
-            }
-
-            default: {
-              postMessage({
-                type: 'Error',
-                payload: `Webassembly function returned unknown error code ${res}`
-              });
-            }
-          }
+          const {log2ProbPrime, primeNumber} = findCandidateWithProgress(nonPrimeNumber, {
+            reps,
+            startingSwaps: 1,
+            swapStride: 1
+          });
+          postMessage({
+            type: 'FoundPrime',
+            log2ProbPrime,
+            primeNumber,
+          })
+        } catch (error) {
+          postMessage({
+            type: 'Error',
+            payload: `Prime search failed: ${error}`
+          });
         } finally {
           PrimeSearch._free(buffer);
         }
-
         break;
       }
-
       default: {
         postMessage({
           type: 'Error',
@@ -67,10 +62,10 @@ onmessage = function ({data: payload}) {
         });
       }
     }
-  });
-};
+  };
+});
 
-function findCandidateWithProgress(input, reps) {
+function findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
   let res = [0, ''];
 
   const trimmed = input.trim();
@@ -85,7 +80,7 @@ function findCandidateWithProgress(input, reps) {
 
     console.warn(`Comencing search for a prime candidate, target is ${len} digits long.`);
 
-    for (let i = 1; i < len; i++) {
+    for (let i = startingSwaps; i < len; i += swapStride) {
       // Set first j i bits of bitmask.
       for (let j = 0; j < len; j++) {
         if (j < i) {
@@ -109,19 +104,22 @@ function findCandidateWithProgress(input, reps) {
       } while (findRes === 0);
 
       if (findRes === 1 || findRes === 2) {
-        res = [findRes, PrimeSearch.UTF8ToString(str)]; // eslint-disable-line new-cap
         console.warn(': Found prime!');
-        break;
+        const log2ProbPrime = findRes === 1 ? 0 : 0.25 ** reps;
+        return {
+          log2ProbPrime,
+          primeNumber: PrimeSearch.UTF8ToString(str) // eslint-disable-line new-cap
+        };
       } else if (findRes === -1) {
         console.warn(': Could not find any primes.');
+      } else {
+        throw new Error('Could not find any primes.');
       }
     }
   } finally {
     PrimeSearch._free(bitmask);
     PrimeSearch._free(str);
   }
-
-  return res;
 }
 
 function nCr(n, r) {
