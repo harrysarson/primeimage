@@ -1,15 +1,10 @@
 port module Ports exposing
-    ( definatelyPrimeGenerated
-    , fileContentRead
-    , fileSelected
-    , logError
+    ( logError
     , nonPrimeError
     , nonPrimeGenerated
     , onPrimeResponse
-    , probablyPrimeGenerated
     , requestNonPrime
     , requestPrime
-    , requestPrimeError
     , resizeImageNumber
     , setCssProp
     )
@@ -20,36 +15,10 @@ import ToNumberConfig.Types
 import Types
 
 
-{-| Allow file upload on click
-credit to <https://www.paramander.com/blog/using-ports-to-deal-with-files-in-elm-0-17>
--}
-port fileSelected : String -> Cmd msg
-
-
-port fileContentRead : (Types.Image -> msg) -> Sub msg
-
-
 port requestNonPrime : { toNumberConfig : ToNumberConfig.Types.Model, image : Types.Image } -> Cmd msg
 
 
 port nonPrimeGenerated : (String -> msg) -> Sub msg
-
-
-{-| requestPrime (url, nonPrimeNumber) = ...
--}
-
-
-
--- port requestPrime : ( String, String ) -> Cmd msg
-
-
-port requestPrimeError : (String -> msg) -> Sub msg
-
-
-port definatelyPrimeGenerated : (String -> msg) -> Sub msg
-
-
-port probablyPrimeGenerated : (String -> msg) -> Sub msg
 
 
 port nonPrimeError : (String -> msg) -> Sub msg

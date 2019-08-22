@@ -67,28 +67,3 @@ onmessage = function ({data: payload}) {
   });
 };
 
-// Switch (data.type) {
-//   case 'probablyPrimeGenerated':
-//   {
-//     app.ports.probablyPrimeGenerated.send(data.payload);
-//     break;
-//   }
-
-//   case 'definatelyPrimeGenerated':
-//   {
-//     app.ports.definatelyPrimeGenerated.send(data.payload);
-//     break;
-//   }
-
-//   case 'requestPrimeError':
-//   {
-//     app.ports.requestPrimeError.send(data.payload);
-//     break;
-//   }
-
-//   default:
-//   {
-//     app.ports.requestPrimeError.send(`Unexpected message from prime search web worker: ${data}`);
-//     break;
-//   }
-// }
