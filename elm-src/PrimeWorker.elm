@@ -1,9 +1,14 @@
-module PrimeWorker exposing (PrimeRequestData(..), PrimeresponseData(..), encodePrimeRequestData, primeResponseDataDecoder)
+module PrimeWorker exposing
+    ( PrimeRequestData(..)
+    , encodePrimeRequestData
+    , primeResponseDataDecoder
+    )
 
-import Duration exposing (Duration)
+import Duration
 import Json.Decode
 import Json.Encode
 import NumberString
+import Types
 
 
 type PrimeRequestData
@@ -11,20 +16,6 @@ type PrimeRequestData
     | Stop
     | Pause
     | Resume
-
-
-type PrimeresponseData
-    = InProgress
-        (List
-            { combinationsChecked : Int
-            , averageCheckTime : Duration
-            }
-        )
-    | FoundPrime
-        { log2ProbPrime : Float
-        , primeNumber : NumberString.T
-        }
-    | Error String
 
 
 encodePrimeRequestData : PrimeRequestData -> Json.Encode.Value
@@ -49,31 +40,38 @@ encodePrimeRequestData data =
                 [ ( "type", Json.Encode.string "Resume" ) ]
 
 
-primeResponseDataDecoder : Json.Decode.Decoder PrimeresponseData
+primeResponseDataDecoder : Json.Decode.Decoder Types.PrimeResult
 primeResponseDataDecoder =
     Json.Decode.field "type" Json.Decode.string
         |> Json.Decode.andThen
             (\type_ ->
                 case type_ of
                     "InProgress" ->
-                        Json.Decode.list
-                            (Json.Decode.map2
-                                (\c a ->
-                                    { combinationsChecked = c
-                                    , averageCheckTime = a
-                                    }
-                                )
-                                (Json.Decode.field "combinationsChecked" Json.Decode.int)
-                                (Json.Decode.field "averageCheckTime" Json.Decode.float
-                                    |> Json.Decode.map Duration.seconds
+                        Json.Decode.field
+                            "progress"
+                            (Json.Decode.list
+                                (Json.Decode.maybe
+                                    (Json.Decode.map3
+                                        (\c t a ->
+                                            { combinationsChecked = c
+                                            , totalCombinations = t
+                                            , averageCheckTime = a
+                                            }
+                                        )
+                                        (Json.Decode.field "combinationsChecked" Json.Decode.int)
+                                        (Json.Decode.field "totalCombinations" Json.Decode.int)
+                                        (Json.Decode.field "averageCheckTime" Json.Decode.float
+                                            |> Json.Decode.map Duration.seconds
+                                        )
+                                    )
                                 )
                             )
-                            |> Json.Decode.map InProgress
+                            |> Json.Decode.map Types.InProgress
 
                     "FoundPrime" ->
                         Json.Decode.map2
                             (\p n ->
-                                FoundPrime
+                                Types.FoundPrime
                                     { log2ProbPrime = p
                                     , primeNumber = n
                                     }
@@ -85,7 +83,7 @@ primeResponseDataDecoder =
 
                     "Error" ->
                         Json.Decode.field "message" Json.Decode.string
-                            |> Json.Decode.map Error
+                            |> Json.Decode.map Types.PrimeError
 
                     other ->
                         Json.Decode.fail

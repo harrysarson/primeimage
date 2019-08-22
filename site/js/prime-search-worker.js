@@ -16,7 +16,7 @@ onmessage = message => {
   console.error('Message sent to prime worker before initialisation complete!', message);
 };
 
-// const STATES = {
+// Const STATES = {
 //   IDLE: Symbol('IDLE'),
 //   RUNNING: Symbol('RUNNING')
 // };
@@ -32,19 +32,47 @@ PrimeSearch.then(() => {
         const allocAmount = PrimeSearch.lengthBytesUTF8(nonPrimeNumber) + 1;
         const buffer = PrimeSearch._malloc(allocAmount);
 
+        const progress = [];
+
         try {
           PrimeSearch.stringToUTF8(nonPrimeNumber, buffer, allocAmount);
           // Const res = PrimeSearch._find_candidate_with_progress(buffer, reps);
-          const {log2ProbPrime, primeNumber} = findCandidateWithProgress(nonPrimeNumber, {
+          const it = findCandidateWithProgress(nonPrimeNumber, {
             reps,
             startingSwaps: 1,
             swapStride: 1
           });
-          postMessage({
-            type: 'FoundPrime',
-            log2ProbPrime,
-            primeNumber,
-          })
+          let step;
+          for (;;) {
+            step = it.next();
+            if (step.done) {
+              const {value: {log2ProbPrime, primeNumber}} = step;
+              postMessage({
+                type: 'FoundPrime',
+                log2ProbPrime,
+                primeNumber
+              });
+              break;
+            } else {
+              const {
+                value: {
+                  swaps,
+                  combinationsChecked,
+                  totalCombinations,
+                  averageCheckTime
+                }
+              } = step;
+              progress[swaps] = {
+                combinationsChecked,
+                totalCombinations,
+                averageCheckTime
+              };
+              postMessage({
+                type: 'InProgress',
+                progress
+              });
+            }
+          }
         } catch (error) {
           postMessage({
             type: 'Error',
@@ -53,8 +81,10 @@ PrimeSearch.then(() => {
         } finally {
           PrimeSearch._free(buffer);
         }
+
         break;
       }
+
       default: {
         postMessage({
           type: 'Error',
@@ -65,9 +95,7 @@ PrimeSearch.then(() => {
   };
 });
 
-function findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
-  let res = [0, ''];
-
+function * findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
   const trimmed = input.trim();
   const len = PrimeSearch.lengthBytesUTF8(trimmed);
   const str = PrimeSearch._malloc(len + 1);
@@ -77,8 +105,6 @@ function findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
 
   try {
     PrimeSearch.stringToUTF8(trimmed, str, len + 1);
-
-    console.warn(`Comencing search for a prime candidate, target is ${len} digits long.`);
 
     for (let i = startingSwaps; i < len; i += swapStride) {
       // Set first j i bits of bitmask.
@@ -96,24 +122,40 @@ function findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
 
       console.warn(progressToString(i, totalIterationCount, numberOfPermuations));
 
+      yield {
+        swaps: i,
+        combinationsChecked: 0,
+        totalCombinations: numberOfPermuations,
+        averageCheckTime: 0
+      };
+
+      const start = performance.now();
       let findRes;
+
       do {
         findRes = PrimeSearch._find_candidate_using_bitmask(str, reps, bitmask, MAX_ITERATIONS_BETWEEN_PRINT);
         totalIterationCount += MAX_ITERATIONS_BETWEEN_PRINT;
-        console.warn(progressToString(i, totalIterationCount, numberOfPermuations));
+        const averageCheckTime = (performance.now() - start) / totalIterationCount / 1000;
+        yield {
+          swaps: i,
+          combinationsChecked: totalIterationCount,
+          totalCombinations: numberOfPermuations,
+          averageCheckTime
+        };
       } while (findRes === 0);
 
       if (findRes === 1 || findRes === 2) {
-        console.warn(': Found prime!');
-        const log2ProbPrime = findRes === 1 ? 0 : 0.25 ** reps;
+        const log2ProbPrime = findRes === 2 ? 0 : 0.25 ** reps;
         return {
           log2ProbPrime,
           primeNumber: PrimeSearch.UTF8ToString(str) // eslint-disable-line new-cap
         };
-      } else if (findRes === -1) {
+      }
+
+      if (findRes === -1) {
         console.warn(': Could not find any primes.');
       } else {
-        throw new Error('Could not find any primes.');
+        throw new Error('Invalid exit code from prime search.');
       }
     }
   } finally {

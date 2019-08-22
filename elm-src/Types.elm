@@ -7,6 +7,7 @@ module Types exposing
     , PrimeResult(..)
     )
 
+import Duration exposing (Duration)
 import File exposing (File)
 import Json.Decode
 import NumberString
@@ -36,15 +37,24 @@ type alias Model =
     , image : Maybe Image
     , toNumberConfig : ToNumberConfig.Types.Model
     , nonPrime : Maybe NumberString.T
-    , prime : PrimeResult
+    , prime : Maybe PrimeResult
     }
 
 
 type PrimeResult
-    = DefinatelyPrime NumberString.T
-    | ProbablyPrime NumberString.T
-    | NothingYet
-    | FetchingPrime
+    = InProgress
+        (List
+            (Maybe
+                { combinationsChecked : Int
+                , totalCombinations : Int
+                , averageCheckTime : Duration
+                }
+            )
+        )
+    | FoundPrime
+        { log2ProbPrime : Float
+        , primeNumber : NumberString.T
+        }
     | PrimeError String
 
 
@@ -57,5 +67,4 @@ type Msg
     | NonPrimeGenerated NumberString.T
     | NonPrimeError String
     | RequestPrime
-    | PrimeGenerated PrimeResult
-    | Primeresponse Json.Decode.Value
+    | PrimeResponse Json.Decode.Value

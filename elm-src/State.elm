@@ -28,7 +28,7 @@ initialState =
     , image = Nothing
     , toNumberConfig = ToNumberConfig.State.initialState
     , nonPrime = Nothing
-    , prime = Types.NothingYet
+    , prime = Nothing
     }
         |> Cmd.Extra.pure
 
@@ -129,7 +129,7 @@ update msg model =
                 |> Cmd.Extra.with (Ports.logError error)
 
         Types.RequestPrime ->
-            { model | prime = Types.FetchingPrime }
+            { model | prime = Just (Types.InProgress []) }
                 |> (case model.nonPrime of
                         Just number ->
                             let
@@ -143,60 +143,38 @@ update msg model =
                             Cmd.Extra.pure
                    )
 
-        Types.PrimeGenerated primeResult ->
-            { model | prime = primeResult }
-                |> Cmd.Extra.with (resizeImageNumber ())
-                |> Cmd.Extra.add
-                    (case primeResult of
-                        Types.PrimeError error ->
-                            Ports.logError error
-
-                        _ ->
-                            Cmd.none
-                    )
-
-        Types.Primeresponse payload ->
+        Types.PrimeResponse payload ->
             let
                 decoded =
                     Json.Decode.decodeValue PrimeWorker.primeResponseDataDecoder payload
             in
             case decoded of
                 Ok response ->
-                    case response of
-                        PrimeWorker.InProgress statusUpdate ->
-                            let
-                                _ =
-                                    Debug.log "status update" statusUpdate
-                            in
-                            model
-                                |> Cmd.Extra.pure
+                    { model | prime = Just response }
+                        |> Cmd.Extra.with
+                            (case response of
+                                Types.InProgress statusUpdate ->
+                                    let
+                                        _ =
+                                            Debug.log "status update" statusUpdate
+                                    in
+                                    Cmd.none
 
-                        PrimeWorker.FoundPrime { log2ProbPrime, primeNumber } ->
-                            let
-                                primeResult =
-                                    (if log2ProbPrime >= 0 then
-                                        Types.DefinatelyPrime
+                                Types.FoundPrime _ ->
+                                    resizeImageNumber ()
 
-                                     else
-                                        Types.ProbablyPrime
-                                    )
-                                        primeNumber
-                            in
-                            { model | prime = primeResult }
-                                |> Cmd.Extra.with (resizeImageNumber ())
-
-                        PrimeWorker.Error string ->
-                            let
-                                err =
-                                    "Error generating:\n" ++ string
-                            in
-                            { model | prime = Types.PrimeError err }
-                                |> Cmd.Extra.with (Ports.logError err)
+                                Types.PrimeError string ->
+                                    let
+                                        err =
+                                            "Error generating:\n" ++ string
+                                    in
+                                    Ports.logError err
+                            )
 
                 Err decodeError ->
                     let
                         err =
                             "Error decoding prime response:\n" ++ Json.Decode.errorToString decodeError
                     in
-                    { model | prime = Types.PrimeError err }
+                    { model | prime = Just (Types.PrimeError err) }
                         |> Cmd.Extra.with (Ports.logError err)

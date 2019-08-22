@@ -30,6 +30,6 @@ subscriptions _ =
     Sub.batch
         [ Ports.nonPrimeGenerated (NumberString.fromString >> Types.NonPrimeGenerated)
         , Ports.nonPrimeError Types.NonPrimeError
-        , Ports.onPrimeResponse Types.Primeresponse
+        , Ports.onPrimeResponse Types.PrimeResponse
         , Browser.Events.onKeyDown keyDecoder
         ]
