@@ -31,8 +31,12 @@ subscriptions _ =
         [ Ports.fileContentRead Types.ImageRead
         , Ports.nonPrimeGenerated (NumberString.fromString >> Types.NonPrimeGenerated)
         , Ports.nonPrimeError Types.NonPrimeError
-        , Ports.probablyPrimeGenerated (NumberString.fromString >> Types.ProbablyPrime >> Types.PrimeGenerated)
-        , Ports.definatelyPrimeGenerated (NumberString.fromString >> Types.DefinatelyPrime >> Types.PrimeGenerated)
-        , Ports.requestPrimeError (Types.PrimeError >> Types.PrimeGenerated)
+        , Ports.onPrimeResponse Types.Primeresponse
         , Browser.Events.onKeyDown keyDecoder
         ]
+
+
+
+-- , Ports.probablyPrimeGenerated (NumberString.fromString >> Types.ProbablyPrime >> Types.PrimeGenerated)
+-- , Ports.definatelyPrimeGenerated (NumberString.fromString >> Types.DefinatelyPrime >> Types.PrimeGenerated)
+-- , Ports.requestPrimeError (Types.PrimeError >> Types.PrimeGenerated)

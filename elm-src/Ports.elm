@@ -1,5 +1,10 @@
-port module Ports exposing (definatelyPrimeGenerated, fileContentRead, fileSelected, logError, nonPrimeError, nonPrimeGenerated, probablyPrimeGenerated, requestNonPrime, requestPrime, requestPrimeError, resizeImageNumber, setCssProp)
+port module Ports exposing (definatelyPrimeGenerated, fileContentRead,
+    fileSelected, logError, nonPrimeError, nonPrimeGenerated,
+     onPrimeResponse, probablyPrimeGenerated, requestNonPrime,
+    requestPrime, requestPrimeError, resizeImageNumber, setCssProp)
 
+import Json.Encode
+import Json.Decode
 import ToNumberConfig.Types
 import Types
 
@@ -21,7 +26,10 @@ port nonPrimeGenerated : (String -> msg) -> Sub msg
 
 {-| requestPrime (url, nonPrimeNumber) = ...
 -}
-port requestPrime : ( String, String ) -> Cmd msg
+
+
+
+-- port requestPrime : ( String, String ) -> Cmd msg
 
 
 port requestPrimeError : (String -> msg) -> Sub msg
@@ -42,8 +50,12 @@ port logError : String -> Cmd msg
 port resizeImageNumber : () -> Cmd msg
 
 
-
---                 selector prop    value
-
-
+{-| setCssProp (selector, prop, value) = ...
+-}
 port setCssProp : ( String, String, String ) -> Cmd msg
+
+
+port requestPrime : Json.Encode.Value -> Cmd never
+
+
+port onPrimeResponse : (Json.Decode.Value -> msg) -> Sub msg

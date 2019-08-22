@@ -8,6 +8,7 @@ module Types exposing
     )
 
 import File exposing (File)
+import Json.Decode
 import NumberString
 import ToNumberConfig.Types
 
@@ -59,3 +60,4 @@ type Msg
     | NonPrimeError String
     | RequestPrime
     | PrimeGenerated PrimeResult
+    | Primeresponse Json.Decode.Value

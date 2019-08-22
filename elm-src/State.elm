@@ -6,6 +6,7 @@ module State exposing
 import Cmd.Extra
 import Config
 import File
+import Json.Decode
 import Lib
 import NumberString
 import Ports
@@ -14,6 +15,7 @@ import Ports
         , resizeImageNumber
         , setCssProp
         )
+import PrimeWorker
 import Task
 import ToNumberConfig.State
 import ToNumberConfig.Types
@@ -131,7 +133,12 @@ update msg model =
             { model | prime = Types.FetchingPrime }
                 |> (case model.nonPrime of
                         Just number ->
-                            Cmd.Extra.with (Ports.requestPrime ( model.primeEndPoint, number |> NumberString.toString ))
+                            let
+                                payload =
+                                    PrimeWorker.Start (NumberString.toString number)
+                                        |> PrimeWorker.encodePrimeRequestData
+                            in
+                            Cmd.Extra.with (Ports.requestPrime payload)
 
                         Nothing ->
                             Cmd.Extra.pure
@@ -152,3 +159,49 @@ update msg model =
         Types.SetPrimeEndPoint newEndpoint ->
             { model | primeEndPoint = newEndpoint }
                 |> Cmd.Extra.pure
+
+        Types.Primeresponse payload ->
+            let
+                decoded =
+                    Json.Decode.decodeValue PrimeWorker.primeResponseDataDecoder payload
+            in
+            case decoded of
+                Ok response ->
+                    case response of
+                        PrimeWorker.InProgress statusUpdate ->
+                            let
+                                _ =
+                                    Debug.log "status update" statusUpdate
+                            in
+                            model
+                                |> Cmd.Extra.pure
+
+                        PrimeWorker.FoundPrime { log2ProbPrime, primeNumber } ->
+                            let
+                                primeResult =
+                                    (if log2ProbPrime >= 0 then
+                                        Types.DefinatelyPrime
+
+                                     else
+                                        Types.ProbablyPrime
+                                    )
+                                        primeNumber
+                            in
+                            { model | prime = primeResult }
+                                |> Cmd.Extra.with (resizeImageNumber ())
+
+                        PrimeWorker.Error string ->
+                            let
+                                err =
+                                    "Error generating:\n" ++ string
+                            in
+                            { model | prime = Types.PrimeError err }
+                                |> Cmd.Extra.with (Ports.logError err)
+
+                Err decodeError ->
+                    let
+                        err =
+                            "Error decoding prime response:\n" ++ Json.Decode.errorToString decodeError
+                    in
+                    { model | prime = Types.PrimeError err }
+                        |> Cmd.Extra.with (Ports.logError err)
