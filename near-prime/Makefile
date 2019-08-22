@@ -2,8 +2,19 @@
 CFLAGS		= -Wall -Werror -lgmp -O0
 EMCFLAGS	= --profiling \
 			-s ALLOW_MEMORY_GROWTH=1 \
-			-s EXPORTED_FUNCTIONS='["_find_candidate_with_progress", "_malloc", "_free"]' \
-			-s EXTRA_EXPORTED_RUNTIME_METHODS='["stringToUTF8", "UTF8ToString", "lengthBytesUTF8"]' \
+			-s EXPORTED_FUNCTIONS=' \
+				[ "_find_candidate_with_progress" \
+				, "find_candidate_using_bitmask" \
+				, "_biset_size" \
+				, "_biset_set" \
+				, "_malloc" \
+				, "_free" \
+				]' \
+			-s EXTRA_EXPORTED_RUNTIME_METHODS='\
+				[ "stringToUTF8" \
+				, "UTF8ToString" \
+				, "lengthBytesUTF8" \
+				]' \
 			-s MODULARIZE=1 \
 			-s EXPORT_ES6=0 \
 			-s 'EXPORT_NAME="prime_search"'

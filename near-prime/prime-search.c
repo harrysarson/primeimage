@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define OVERWRITE 0
 #define PROGRESS_TEXT \
@@ -74,18 +75,27 @@ static int miller_rabin(const char *img, int reps)
   return ret;
 }
 
-static int bitset_get(uint8_t *bitset, int i)
-{
-  return bitset[i / 8] & (1UL << (i % 8));
+// BIT SETS //
+
+
+size_t bitset_size(size_t N) {
+  return (len - 1) / 8 + 1;
 }
 
-static void bitset_set(uint8_t *bitset, int i, int new_value)
+bool bitset_get(uint8_t const *bitset, int i)
 {
-  unsigned long newbit = !!new_value;
-  bitset[i / 8] ^= (-newbit ^ bitset[i / 8]) & (1UL << (i % 8));
+  return bitset.bytes[i / 8] & (1UL << (i % 8));
 }
 
-static int prev_perm(uint8_t *bitset, int N)
+void bitset_set(uint8_t *bitset, int i, bool new_value)
+{
+  unsigned long newbit = new_value;
+  bitset.bytes[i / 8] ^= (-newbit ^ bitset.bytes[i / 8]) & (1UL << (i % 8));
+}
+
+// //
+
+static int prev_perm(uint8_t *const bitset, const int N)
 {
   int pivot = N - 1;
 
@@ -203,7 +213,7 @@ int find_candidate_with_progress(char *input, int reps)
   str[len] = '\0';
 
   // Create bitmask with more bits in than there are bytes in input.
-  uint8_t *const bitmask = malloc((len - 1) / 8 + 1);
+  uint8_t *const bitmask = malloc(bitset_size(len));
 
   fprintf(stderr, "Comencing search for a prime candidate"
                   ", target is %d digits long.\n",

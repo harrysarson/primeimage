@@ -3,6 +3,21 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
+
+
+/* Calculate size in bytes of a bitset containing N elements.
+ */
+size_t bitset_size(size_t N);
+
+/* Get the nth element in a bitset to val
+ */
+bool bitset_get(uint8_t const* bitset, int i)
+
+/* Set the nth element in a bitset to val
+ */
+void bitset_set(uint8_t * bitset, size_t n, bool val);
+
 
 /* Find a candidate prime with similar digits to `input`, the result is stored in
  * `input` if found. The probability of the resulting number being prime is
