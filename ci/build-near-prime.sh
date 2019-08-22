@@ -2,6 +2,16 @@
 
 set -e
 
+if ! command -v lzip ; then
+    echo "Building near prime's dependancies requires lzip"
+    exit 1
+fi
+
+if ! command -v m4 ; then
+    echo "Building near prime's dependancies requires m4"
+    exit 1
+fi
+
 mkdir -p ci/build
 pushd ci/build
 
@@ -11,7 +21,9 @@ if [[ ! -d emsdk ]]; then
 fi
 git pull
 pushd emsdk
-./emsdk install sdk-1.38.30-64bit
+if [[ ! -d emscripten/1.38.30 ]] ; then
+    ./emsdk install sdk-1.38.30-64bit
+fi
 ./emsdk activate sdk-1.38.30-64bit
 source ./emsdk_env.sh
 popd
@@ -39,8 +51,11 @@ if [[ ! -d gmp-wasm ]]; then
 
     if [[ ! -d $EMSDK/clang/lib/clang/6.0.1/include ]]; then
         mkdir -p $EMSDK/clang/lib/clang/6.0.1/include
-        ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include/* $EMSDK/clang/lib/clang/6.0.1/include
-        ln -s /usr/lib/gcc/x86_64-linux-gnu/5/include-fixed/* $EMSDK/clang/lib/clang/6.0.1/include
+        GCCVER=$(gcc -dumpversion)
+        echo "symlinking usr/lib/gcc/x86_64-linux-gnu/$GCCVER/include/*"
+        ln -s /usr/lib/gcc/x86_64-linux-gnu/$GCCVER/include/* $EMSDK/clang/lib/clang/6.0.1/include
+        echo "symlinking usr/lib/gcc/x86_64-linux-gnu/$GCCVER/include-fixed/*"
+        ln -s /usr/lib/gcc/x86_64-linux-gnu/$GCCVER/include-fixed/* $EMSDK/clang/lib/clang/6.0.1/include
     fi
 
     make -j 2

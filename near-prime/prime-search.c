@@ -78,19 +78,20 @@ static int miller_rabin(const char *img, int reps)
 // BIT SETS //
 
 
-size_t bitset_size(size_t N) {
-  return (len - 1) / 8 + 1;
-}
-
-bool bitset_get(uint8_t const *bitset, int i)
+size_t bitset_size(size_t N)
 {
-  return bitset.bytes[i / 8] & (1UL << (i % 8));
+  return (N - 1) / 8 + 1;
 }
 
-void bitset_set(uint8_t *bitset, int i, bool new_value)
+bool bitset_get(uint8_t const *bitset, size_t i)
+{
+  return bitset[i / 8] & (1UL << (i % 8));
+}
+
+void bitset_set(uint8_t *bitset, size_t i, bool new_value)
 {
   unsigned long newbit = new_value;
-  bitset.bytes[i / 8] ^= (-newbit ^ bitset.bytes[i / 8]) & (1UL << (i % 8));
+  bitset[i / 8] ^= (-newbit ^ bitset[i / 8]) & (1UL << (i % 8));
 }
 
 // //

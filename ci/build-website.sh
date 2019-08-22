@@ -1,3 +1,6 @@
+#!/bin/bash
+
+set -e
 
 if [[ "$TRAVIS_TAG" == "" ]]; then
     echo "DRAFT BUILD"

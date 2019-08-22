@@ -12,7 +12,7 @@ size_t bitset_size(size_t N);
 
 /* Get the nth element in a bitset to val
  */
-bool bitset_get(uint8_t const* bitset, int i)
+bool bitset_get(uint8_t const* bitset, size_t i);
 
 /* Set the nth element in a bitset to val
  */
