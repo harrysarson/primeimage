@@ -37,7 +37,6 @@ props =
                 |> Random.Extra.andMap randomBool
                 |> Random.Extra.andMap randomBool
                 |> Random.Extra.andMap (Random.constant sampleToNumberConfig)
-                |> Random.Extra.andMap (Random.constant "prime end point")
                 |> Random.Extra.andMap (Random.constant Nothing)
                 |> Random.Extra.andMap Random.Extra.bool
 

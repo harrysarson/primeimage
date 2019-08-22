@@ -12,12 +12,12 @@ const PrimeSearch = exports.prime_search({
   }
 });
 
-onmessage = function ({ data: payload }) {
+onmessage = function ({data: payload}) {
   PrimeSearch.then(() => {
     switch (payload.type) {
       case 'Start': {
         const reps = 10;
-        const { nonPrimeNumber } = payload;
+        const {nonPrimeNumber} = payload;
 
         const allocAmount = PrimeSearch.lengthBytesUTF8(nonPrimeNumber) + 1;
         const buffer = PrimeSearch._malloc(allocAmount);
@@ -25,7 +25,7 @@ onmessage = function ({ data: payload }) {
         try {
           PrimeSearch.stringToUTF8(nonPrimeNumber, buffer, allocAmount);
           // Const res = PrimeSearch._find_candidate_with_progress(buffer, reps);
-          const [res, primeNumber] = find_candidate_with_progress(nonPrimeNumber, reps);
+          const [res, primeNumber] = findCandidateWithProgress(nonPrimeNumber, reps);
           switch (res) {
             case 1:
             case 2: {
@@ -33,7 +33,7 @@ onmessage = function ({ data: payload }) {
               postMessage({
                 type: 'FoundPrime',
                 log2ProbPrime,
-                primeNumber, // : PrimeSearch.UTF8ToString(buffer) // eslint-disable-line new-cap
+                primeNumber // : PrimeSearch.UTF8ToString(buffer) // eslint-disable-line new-cap
               });
               break;
             }
@@ -70,7 +70,7 @@ onmessage = function ({ data: payload }) {
   });
 };
 
-function find_candidate_with_progress(input, reps) {
+function findCandidateWithProgress(input, reps) {
   let res = [0, ''];
 
   const trimmed = input.trim();
@@ -97,22 +97,22 @@ function find_candidate_with_progress(input, reps) {
 
       const numberOfPermuations = nCr(len, i);
 
-      let total_iteration_count = 0;
+      let totalIterationCount = 0;
 
-      console.warn(progressToString(i, total_iteration_count, numberOfPermuations));
+      console.warn(progressToString(i, totalIterationCount, numberOfPermuations));
 
-      let find_res;
+      let findRes;
       do {
-        find_res = PrimeSearch._find_candidate_using_bitmask(str, reps, bitmask, MAX_ITERATIONS_BETWEEN_PRINT);
-        total_iteration_count += MAX_ITERATIONS_BETWEEN_PRINT;
-        console.warn(progressToString(i, total_iteration_count, numberOfPermuations));
-      } while (find_res === 0);
+        findRes = PrimeSearch._find_candidate_using_bitmask(str, reps, bitmask, MAX_ITERATIONS_BETWEEN_PRINT);
+        totalIterationCount += MAX_ITERATIONS_BETWEEN_PRINT;
+        console.warn(progressToString(i, totalIterationCount, numberOfPermuations));
+      } while (findRes === 0);
 
-      if (find_res === 1 || find_res === 2) {
-        res = [find_res, PrimeSearch.UTF8ToString(str)]; // eslint-disable-line new-cap
+      if (findRes === 1 || findRes === 2) {
+        res = [findRes, PrimeSearch.UTF8ToString(str)]; // eslint-disable-line new-cap
         console.warn(': Found prime!');
         break;
-      } else if (find_res === -1) {
+      } else if (findRes === -1) {
         console.warn(': Could not find any primes.');
       }
     }
