@@ -25,7 +25,6 @@ import Types
 initialState : ( Types.Model, Cmd Types.Msg )
 initialState =
     { stage = 0
-    , primeEndPoint = ""
     , image = Nothing
     , toNumberConfig = ToNumberConfig.State.initialState
     , nonPrime = Nothing
@@ -155,10 +154,6 @@ update msg model =
                         _ ->
                             Cmd.none
                     )
-
-        Types.SetPrimeEndPoint newEndpoint ->
-            { model | primeEndPoint = newEndpoint }
-                |> Cmd.Extra.pure
 
         Types.Primeresponse payload ->
             let

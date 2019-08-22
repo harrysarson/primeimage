@@ -34,7 +34,6 @@ type alias ImageNumber =
 type alias Model =
     { stage : Int
     , image : Maybe Image
-    , primeEndPoint : String
     , toNumberConfig : ToNumberConfig.Types.Model
     , nonPrime : Maybe NumberString.T
     , prime : PrimeResult
@@ -52,7 +51,6 @@ type PrimeResult
 type Msg
     = Noop
     | ChangeStage Int
-    | SetPrimeEndPoint String
     | ImageSelected File
     | ImageRead Image
     | UpdateNumberConfig ToNumberConfig.Types.Msg

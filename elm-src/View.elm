@@ -46,7 +46,6 @@ view model =
             , canGoNext = canGoNext
             , canGoBack = Lib.saturateStageChange model -1 == -1
             , toNumberConfig = model.toNumberConfig
-            , primeEndPoint = model.primeEndPoint
             , primeError =
                 case model.prime of
                     Types.PrimeError e ->

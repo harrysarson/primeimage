@@ -1,10 +1,21 @@
-port module Ports exposing (definatelyPrimeGenerated, fileContentRead,
-    fileSelected, logError, nonPrimeError, nonPrimeGenerated,
-     onPrimeResponse, probablyPrimeGenerated, requestNonPrime,
-    requestPrime, requestPrimeError, resizeImageNumber, setCssProp)
+port module Ports exposing
+    ( definatelyPrimeGenerated
+    , fileContentRead
+    , fileSelected
+    , logError
+    , nonPrimeError
+    , nonPrimeGenerated
+    , onPrimeResponse
+    , probablyPrimeGenerated
+    , requestNonPrime
+    , requestPrime
+    , requestPrimeError
+    , resizeImageNumber
+    , setCssProp
+    )
 
-import Json.Encode
 import Json.Decode
+import Json.Encode
 import ToNumberConfig.Types
 import Types
 
