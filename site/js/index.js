@@ -27,36 +27,12 @@ app.ports.logError.subscribe(description => {
   console.error(description);
 });
 
-app.ports.requestPrime.subscribe(async ([_, nonPrime]) => {
-  primeSearchWorker.postMessage(nonPrime);
+app.ports.requestPrime.subscribe(payload => {
+  primeSearchWorker.postMessage(payload);
 });
 
 primeSearchWorker.addEventListener('message', ({data}) => {
-  switch (data.type) {
-    case 'probablyPrimeGenerated':
-    {
-      app.ports.probablyPrimeGenerated.send(data.payload);
-      break;
-    }
-
-    case 'definatelyPrimeGenerated':
-    {
-      app.ports.definatelyPrimeGenerated.send(data.payload);
-      break;
-    }
-
-    case 'requestPrimeError':
-    {
-      app.ports.requestPrimeError.send(data.payload);
-      break;
-    }
-
-    default:
-    {
-      app.ports.requestPrimeError.send(`Unexpected message from prime search web worker: ${data}`);
-      break;
-    }
-  }
+  app.ports.onPrimeResponse.send(data);
 });
 
 app.ports.requestNonPrime.subscribe(debounce(async ({toNumberConfig, image}) => {

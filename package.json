@@ -18,8 +18,8 @@
     "test:js": "karma start --single-run --browsers FirefoxHeadless",
     "test": "npm run test:elm && npm run test:js",
     "build": "elm make elm-src/Main.elm --output site/built/elm.js && node util/elm2esm site/built/elm.js && sass site/sass/main.scss site/built/main.css",
-    "watch": "chokidar elm-src site/sass -c \"npm run build\"",
-    "serve": "http-server site"
+    "watch": "chokidar elm-src site/sass -c \"npm run build\" --initial --debounce 1200",
+    "serve": "serve site"
   },
   "private": true,
   "dependencies": {},
@@ -30,7 +30,6 @@
     "elm-format": "0.8.2",
     "elm-test": "0.19.0-rev6",
     "eslint-plugin-html": "6.0.0",
-    "http-server": "0.11.1",
     "karma": "4.2.0",
     "karma-chai": "0.1.0",
     "karma-firefox-launcher": "1.2.0",
@@ -39,6 +38,7 @@
     "karma-webpack": "4.0.2",
     "mocha": "6.2.0",
     "sass": "1.22.10",
+    "serve": "11.1.0",
     "stylelint": "10.1.0",
     "stylelint-config-rational-order": "0.1.2",
     "stylelint-config-standard": "18.3.0",

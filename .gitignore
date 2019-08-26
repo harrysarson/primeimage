@@ -2,6 +2,7 @@ _site/
 elm-stuff/
 node_modules/
 site/built/
+site/version.txt
 
 vendor/
 .vscode/

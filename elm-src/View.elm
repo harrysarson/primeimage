@@ -28,16 +28,16 @@ view model =
                         )
             , primeImage =
                 case model.prime of
-                    Types.ProbablyPrime number ->
-                        Types.Loaded { number = number, width = model.toNumberConfig.width.value }
+                    Just (Types.FoundPrime { primeNumber }) ->
+                        Types.Loaded { number = primeNumber, width = model.toNumberConfig.width.value }
 
-                    Types.DefinatelyPrime number ->
-                        Types.Loaded { number = number, width = model.toNumberConfig.width.value }
-
-                    Types.FetchingPrime ->
+                    Just (Types.InProgress _) ->
                         Types.Loading
 
-                    _ ->
+                    Just (Types.PrimeError _) ->
+                        Types.NotLoading
+
+                    Nothing ->
                         Types.NotLoading
             }
 
@@ -46,17 +46,16 @@ view model =
             , canGoNext = canGoNext
             , canGoBack = Lib.saturateStageChange model -1 == -1
             , toNumberConfig = model.toNumberConfig
-            , primeEndPoint = model.primeEndPoint
             , primeError =
                 case model.prime of
-                    Types.PrimeError e ->
+                    Just (Types.PrimeError e) ->
                         Just e
 
                     _ ->
                         Nothing
             , fetchingPrime =
                 case model.prime of
-                    Types.FetchingPrime ->
+                    Just (Types.InProgress _) ->
                         True
 
                     _ ->

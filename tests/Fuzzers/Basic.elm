@@ -30,10 +30,9 @@ model =
         Types.Model
         (Fuzz.intRange 0 (Config.maxStage - 1))
         |> Fuzz.andMap image
-        |> Fuzz.andMap (Fuzz.constant "prime end point")
         |> Fuzz.andMap Fuzzers.ToNumberConfig.model
         |> Fuzz.andMap (Fuzz.maybe imageNumber)
-        |> Fuzz.andMap (Fuzz.constant Types.NothingYet)
+        |> Fuzz.andMap (Fuzz.maybe (Fuzz.constant (Types.InProgress [])))
 
 
 image =

@@ -6,6 +6,7 @@ module State exposing
 import Cmd.Extra
 import Config
 import File
+import Json.Decode
 import Lib
 import NumberString
 import Ports
@@ -14,6 +15,7 @@ import Ports
         , resizeImageNumber
         , setCssProp
         )
+import PrimeWorker
 import Task
 import ToNumberConfig.State
 import ToNumberConfig.Types
@@ -23,11 +25,10 @@ import Types
 initialState : ( Types.Model, Cmd Types.Msg )
 initialState =
     { stage = 0
-    , primeEndPoint = ""
     , image = Nothing
     , toNumberConfig = ToNumberConfig.State.initialState
     , nonPrime = Nothing
-    , prime = Types.NothingYet
+    , prime = Nothing
     }
         |> Cmd.Extra.pure
 
@@ -128,27 +129,52 @@ update msg model =
                 |> Cmd.Extra.with (Ports.logError error)
 
         Types.RequestPrime ->
-            { model | prime = Types.FetchingPrime }
+            { model | prime = Just (Types.InProgress []) }
                 |> (case model.nonPrime of
                         Just number ->
-                            Cmd.Extra.with (Ports.requestPrime ( model.primeEndPoint, number |> NumberString.toString ))
+                            let
+                                payload =
+                                    PrimeWorker.Start (NumberString.toString number)
+                                        |> PrimeWorker.encodePrimeRequestData
+                            in
+                            Cmd.Extra.with (Ports.requestPrime payload)
 
                         Nothing ->
                             Cmd.Extra.pure
                    )
 
-        Types.PrimeGenerated primeResult ->
-            { model | prime = primeResult }
-                |> Cmd.Extra.with (resizeImageNumber ())
-                |> Cmd.Extra.add
-                    (case primeResult of
-                        Types.PrimeError error ->
-                            Ports.logError error
+        Types.PrimeResponse payload ->
+            let
+                decoded =
+                    Json.Decode.decodeValue PrimeWorker.primeResponseDataDecoder payload
+            in
+            case decoded of
+                Ok response ->
+                    { model | prime = Just response }
+                        |> Cmd.Extra.with
+                            (case response of
+                                Types.InProgress statusUpdate ->
+                                    let
+                                        _ =
+                                            Debug.log "status update" statusUpdate
+                                    in
+                                    Cmd.none
 
-                        _ ->
-                            Cmd.none
-                    )
+                                Types.FoundPrime _ ->
+                                    resizeImageNumber ()
 
-        Types.SetPrimeEndPoint newEndpoint ->
-            { model | primeEndPoint = newEndpoint }
-                |> Cmd.Extra.pure
+                                Types.PrimeError string ->
+                                    let
+                                        err =
+                                            "Error generating:\n" ++ string
+                                    in
+                                    Ports.logError err
+                            )
+
+                Err decodeError ->
+                    let
+                        err =
+                            "Error decoding prime response:\n" ++ Json.Decode.errorToString decodeError
+                    in
+                    { model | prime = Just (Types.PrimeError err) }
+                        |> Cmd.Extra.with (Ports.logError err)

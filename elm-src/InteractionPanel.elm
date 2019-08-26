@@ -18,7 +18,6 @@ type alias Props =
     , canGoBack : Bool
     , canGoNext : Bool
     , toNumberConfig : ToNumberConfig.Types.Model
-    , primeEndPoint : String
     , primeError : Maybe String
     , fetchingPrime : Bool
     }

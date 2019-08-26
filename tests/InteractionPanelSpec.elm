@@ -37,17 +37,15 @@ props =
                 |> Random.Extra.andMap randomBool
                 |> Random.Extra.andMap randomBool
                 |> Random.Extra.andMap (Random.constant sampleToNumberConfig)
-                |> Random.Extra.andMap (Random.constant "prime end point")
                 |> Random.Extra.andMap (Random.constant Nothing)
                 |> Random.Extra.andMap Random.Extra.bool
 
         shrinker =
-            \{ stage, canGoBack, canGoNext, toNumberConfig, primeEndPoint, primeError, fetchingPrime } ->
+            \{ stage, canGoBack, canGoNext, toNumberConfig, primeError, fetchingPrime } ->
                 Shrink.map Props (Shrink.int stage)
                     |> Shrink.andMap (Shrink.bool canGoBack)
                     |> Shrink.andMap (Shrink.bool canGoNext)
                     |> Shrink.andMap (Shrink.noShrink toNumberConfig)
-                    |> Shrink.andMap (Shrink.noShrink primeEndPoint)
                     |> Shrink.andMap (Shrink.maybe Shrink.noShrink primeError)
                     |> Shrink.andMap (Shrink.bool fetchingPrime)
     in
