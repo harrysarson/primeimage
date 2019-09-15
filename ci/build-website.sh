@@ -21,5 +21,5 @@ make -C near-prime install-website
 
 # stage built files
 git add site/built -f
-git add site/version.txt
+git add site/version.txt -f
 git status
