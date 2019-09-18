@@ -1,0 +1,32 @@
+& {
+  flex: 1 1 auto;
+  width: calc(100% - var(--padding) / 2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+h1 {
+  margin-top: 0;
+  color: white;
+  font-size: 1.3em;
+}
+
+p {
+  margin: var(--padding) 0;
+  padding: var(--box-padding);
+  background: white padding-box;
+  border-right: solid calc(var(--padding) / 2) transparent;
+
+  li {
+    padding: 0 var(--padding);
+    list-style-type: none;
+
+    &:not(:first-child) {
+      padding-top: var(--padding);
+    }
+
+    > button {
+      width: 100%;
+    }
+  }
+}

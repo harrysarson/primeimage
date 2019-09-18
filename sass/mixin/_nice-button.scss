@@ -1,0 +1,21 @@
+@mixin nice-button($selector: '', $border-width: 3px) {
+  &#{$selector} {
+    padding: 0 var(--padding);
+    color: grey;
+    font: inherit;
+    background: white;
+    border: $border-width solid grey;
+  }
+
+  &:not(.disabled) {
+    &#{$selector} {
+      color: black;
+    }
+
+    &:hover#{$selector} {
+      color: grey;
+      background-color: black;
+      cursor: pointer;
+    }
+  }
+}

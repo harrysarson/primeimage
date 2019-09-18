@@ -1,0 +1,26 @@
+
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="built/main.css" />
+
+  <!--
+    These _should_ be esm imports but clipboard doesn't bundle a
+    dependency-less module and we cannot use static import as we want
+    to be able to recover from network issues [1]. As Edge does not
+    support `import()` we have to use legacy script loading.
+
+    [1]: https://stackoverflow.com/questions/38946112/es6-import-error-handling
+  -->
+  <script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+  <script type=module src="js/index.js"></script>
+
+</head>
+
+<body>
+</body>
+
+</html>

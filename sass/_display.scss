@@ -1,0 +1,79 @@
+& {
+  --show-stage: 0;
+  --stages-to-show-at-a-time: 2;
+  --position-of-selected-stage: 0.5;
+  --arrow-size: 20px;
+  --padding-between-stages: calc(var(--padding) * 1.1);
+  --spacing-between-stages:
+    calc(
+      var(--arrow-size) + 2 * var(--padding-between-stages)
+    );
+
+  @import "spinner";
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--padding);
+  overflow: visible;
+  transform:
+    translateY(
+      calc(
+        -1 / var(--stages-to-show-at-a-time) *
+        (
+          100% - 2 * var(--padding) + var(--spacing-between-stages)
+        ) * (var(--show-stage) - var(--position-of-selected-stage))
+      )
+    );
+  transition: transform 0.5s linear;
+  pointer-events: none;
+
+  > .current-stage {
+    background-color: #ddd;
+  }
+
+  > * {
+    --height: calc((100% + var(--spacing-between-stages)) / var(--stages-to-show-at-a-time));
+
+    position: relative;
+    display: flex;
+    flex: 0 0 var(--height);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: var(--height);
+    max-height: var(--height);
+    margin: 0 auto;
+    overflow: visible;
+    font-size: 2em;
+    text-align: center;
+    background: grey content-box;
+    transition-timing-function: inherit;
+    transition-duration: inherit;
+    transition-property: flex-basis;
+
+    > * {
+      margin: 0 auto;
+      border: 1em solid transparent;
+
+      &:not(.auto-resize) {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
+    &:not(:last-child) {
+      --border-width: 2px;
+
+      border: 0 solid transparent;
+      border-bottom-width: var(--spacing-between-stages);
+    }
+  }
+}
+
+.image-number {
+  font-size: 0.8em;
+  line-height: 0.85em;
+  white-space: pre;
+  text-align: center;
+}
