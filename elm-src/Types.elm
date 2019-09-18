@@ -1,5 +1,6 @@
 module Types exposing
-    ( Image
+    ( ExampleOption(..)
+    , Image
     , ImageNumber
     , LoadedResource(..)
     , Model
@@ -58,6 +59,12 @@ type PrimeResult
     | PrimeError String
 
 
+type ExampleOption
+    = Archer
+    | Sunflower
+    | Corpus
+
+
 type Msg
     = Noop
     | ChangeStage Int
@@ -68,3 +75,4 @@ type Msg
     | NonPrimeError String
     | RequestPrime
     | PrimeResponse Json.Decode.Value
+    | SelectExampleImage ExampleOption

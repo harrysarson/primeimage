@@ -16,4 +16,17 @@ p {
   padding: var(--box-padding);
   background: white padding-box;
   border-right: solid calc(var(--padding) / 2) transparent;
+
+  li {
+    padding: 0 var(--padding);
+    list-style-type: none;
+
+    &:not(:first-child) {
+      padding-top: var(--padding);
+    }
+
+    > button {
+      width: 100%;
+    }
+  }
 }

@@ -5,6 +5,7 @@ module State exposing
 
 import Cmd.Extra
 import Config
+import Examples
 import File
 import Json.Decode
 import Lib
@@ -74,6 +75,11 @@ update msg model =
             model
                 |> Cmd.Extra.with
                     (Task.perform Types.ImageRead task)
+
+        Types.SelectExampleImage option ->
+            model
+                |> Cmd.Extra.with
+                    (Task.perform Types.ImageRead (Task.succeed (Examples.getImage option)))
 
         Types.ImageRead image ->
             { model | image = Just image }

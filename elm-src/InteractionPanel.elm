@@ -3,7 +3,7 @@ module InteractionPanel exposing (Props, view)
 import Array
 import Config
 import File
-import Html exposing (Html, br, button, div, h1, input, label, p, section, strong, text)
+import Html exposing (Html, br, button, div, h1, input, label, li, p, section, strong, text, ul)
 import Html.Attributes exposing (attribute, class, id, name, type_)
 import Html.Events exposing (on, onClick)
 import Json.Decode as Decode
@@ -96,7 +96,14 @@ instructions props =
           ]
         , [ h1 [] [ text "Select Image" ]
           , p [] [ text "First you must select an image to turn into a prime number." ]
-          , p [] [ text "Use the box below to open an image." ]
+          , p []
+                [ text "Either use the box below to upload an image from your computer or select one of the following examples:"
+                , ul []
+                    [ li [ onClick (Types.SelectExampleImage Types.Archer) ] [ button [] [ text "English cricketer Jofra Archer" ] ]
+                    , li [ onClick (Types.SelectExampleImage Types.Sunflower) ] [ button [] [ text "A sunflower" ] ]
+                    , li [ onClick (Types.SelectExampleImage Types.Corpus) ] [ button [] [ text "Corpus Christi College Cambridge" ] ]
+                    ]
+                ]
           , p []
                 [ text "Once you have opened an image, click "
                 , stageButton 1 props [ text "Next" ]
