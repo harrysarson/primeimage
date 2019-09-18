@@ -10,11 +10,6 @@ import Json.Decode
 import Lib
 import NumberString
 import Ports
-    exposing
-        ( requestNonPrime
-        , resizeImageNumber
-        , setCssProp
-        )
 import PrimeWorker
 import Task
 import ToNumberConfig.State
@@ -49,7 +44,7 @@ update msg model =
                     if newStage == Config.nonPrimeStage then
                         case model.image of
                             Just image ->
-                                requestNonPrime
+                                Ports.requestNonPrime
                                     { toNumberConfig = model.toNumberConfig
                                     , image = image
                                     }
@@ -62,7 +57,7 @@ update msg model =
             in
             { model | stage = newStage }
                 |> Cmd.Extra.with
-                    (setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
+                    (Ports.setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
                 |> Cmd.Extra.add requestNonPrimeCmd
 
         Types.ImageSelected file ->
@@ -85,7 +80,7 @@ update msg model =
                 |> Cmd.Extra.with
                     (case model.nonPrime of
                         Just _ ->
-                            requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
+                            Ports.requestNonPrime { toNumberConfig = model.toNumberConfig, image = image }
 
                         Nothing ->
                             Cmd.none
@@ -115,14 +110,14 @@ update msg model =
                 updatedModel
                     |> Cmd.Extra.with
                         (model.image
-                            |> Maybe.map (\i -> requestNonPrime { toNumberConfig = toNumberConfig, image = i })
+                            |> Maybe.map (\i -> Ports.requestNonPrime { toNumberConfig = toNumberConfig, image = i })
                             |> Maybe.withDefault Cmd.none
                         )
                     |> Cmd.Extra.add cmd
 
         Types.NonPrimeGenerated nonPrime ->
             { model | nonPrime = Just nonPrime }
-                |> Cmd.Extra.with (resizeImageNumber ())
+                |> Cmd.Extra.with (Ports.resizeImageNumber ())
 
         Types.NonPrimeError error ->
             { model | nonPrime = Nothing }
@@ -161,7 +156,7 @@ update msg model =
                                     Cmd.none
 
                                 Types.FoundPrime _ ->
-                                    resizeImageNumber ()
+                                    Ports.resizeImageNumber ()
 
                                 Types.PrimeError string ->
                                     let
