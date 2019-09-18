@@ -16,12 +16,20 @@ import Types
 
 
 port requestNonPrime :
-    { toNumberConfig : ToNumberConfig.Types.Model
+    { toNumberConfig : Maybe ToNumberConfig.Types.Model
     , image : Types.Image
-    } -> Cmd msg
+    }
+    -> Cmd msg
 
 
-port nonPrimeGenerated : (String -> msg) -> Sub msg
+port nonPrimeGenerated :
+    ({ nonPrime : String
+     , width : Int
+     , levels : List Int
+     }
+     -> msg
+    )
+    -> Sub msg
 
 
 port nonPrimeError : (String -> msg) -> Sub msg

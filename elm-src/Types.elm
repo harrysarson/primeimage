@@ -35,7 +35,7 @@ type alias ImageNumber =
 type alias Model =
     { stage : Int
     , image : Maybe Image
-    , toNumberConfig : ToNumberConfig.Types.Model
+    , toNumberConfig : Maybe ToNumberConfig.Types.Model
     , nonPrime : Maybe NumberString.T
     , prime : Maybe PrimeResult
     }
@@ -64,7 +64,7 @@ type Msg
     | ImageSelected File
     | ImageRead Image
     | UpdateNumberConfig ToNumberConfig.Types.Msg
-    | NonPrimeGenerated NumberString.T
+    | NonPrimeGenerated NumberString.T ToNumberConfig.Types.Model
     | NonPrimeError String
     | RequestPrime
     | PrimeResponse Json.Decode.Value

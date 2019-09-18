@@ -15,6 +15,11 @@ export async function getImageData(url, width) {
 
   const aspectRatio = img.height / img.width;
 
+  if (width === null) {
+    // Aim for 500 digits, width * height = 500 => width**2 * aspectRatio = 500
+    width = Math.floor(Math.sqrt(500 / aspectRatio));
+  }
+
   const height = width * aspectRatio;
 
   canvas.width = width;
@@ -43,4 +48,27 @@ export function quantise(input, output, levels) {
   }
 
   return output;
+}
+
+export function guessLevels(imageData, numLevels) {
+  console.log(imageData);
+
+  const bins = new Uint32Array(256);
+
+  for (const pixel of imageData.data) {
+    bins[pixel] += 1;
+  }
+
+  const threshold = Math.ceil(imageData.data.length / (numLevels + 1));
+
+  const [, levels] = bins.reduce(([oldPixelCount, levels], numPixels, pixelValue) => {
+    const newPixelCount = oldPixelCount + numPixels;
+    if (newPixelCount > threshold) {
+      return [newPixelCount - threshold, [...levels, pixelValue]];
+    }
+
+    return [newPixelCount, levels];
+  }, [0, []]);
+
+  return levels;
 }

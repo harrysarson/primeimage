@@ -21,7 +21,7 @@ initialState : ( Types.Model, Cmd Types.Msg )
 initialState =
     { stage = 0
     , image = Nothing
-    , toNumberConfig = ToNumberConfig.State.initialState
+    , toNumberConfig = Nothing
     , nonPrime = Nothing
     , prime = Nothing
     }
@@ -89,7 +89,7 @@ update msg model =
         Types.UpdateNumberConfig updateNumberConfigMsg ->
             let
                 ( toNumberConfig, numberConfigCmd ) =
-                    ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig
+                    ToNumberConfig.State.update updateNumberConfigMsg (Maybe.withDefault ToNumberConfig.State.initialState model.toNumberConfig)
 
                 cmd =
                     Cmd.map Types.UpdateNumberConfig numberConfigCmd
@@ -100,7 +100,7 @@ update msg model =
                         |> not
 
                 updatedModel =
-                    { model | toNumberConfig = toNumberConfig }
+                    { model | toNumberConfig = Just toNumberConfig }
             in
             if isError then
                 { updatedModel | nonPrime = Nothing }
@@ -110,13 +110,16 @@ update msg model =
                 updatedModel
                     |> Cmd.Extra.with
                         (model.image
-                            |> Maybe.map (\i -> Ports.requestNonPrime { toNumberConfig = toNumberConfig, image = i })
+                            |> Maybe.map (\i -> Ports.requestNonPrime { toNumberConfig = Just toNumberConfig, image = i })
                             |> Maybe.withDefault Cmd.none
                         )
                     |> Cmd.Extra.add cmd
 
-        Types.NonPrimeGenerated nonPrime ->
-            { model | nonPrime = Just nonPrime }
+        Types.NonPrimeGenerated nonPrime toNumberConfig ->
+            { model
+                | nonPrime = Just nonPrime
+                , toNumberConfig = Just (Maybe.withDefault toNumberConfig model.toNumberConfig)
+            }
                 |> Cmd.Extra.with (Ports.resizeImageNumber ())
 
         Types.NonPrimeError error ->

@@ -9,7 +9,7 @@ import Ports
 import Random
 import State exposing (initialState, update)
 import Task
-import Test exposing (Test, describe, fuzz, fuzz2, test)
+import Test exposing (Test, describe, fuzz, fuzz2, fuzz3, test)
 import ToNumberConfig.State
 import ToNumberConfig.Types
 import Types
@@ -37,12 +37,12 @@ tests =
                         |> Tuple.first
                         |> .nonPrime
                         |> Expect.equal Nothing
-            , test ".toNumberConfig is equal to ToNumberConfig.State.initialState" <|
+            , test ".toNumberConfig is equal to Nothing" <|
                 \() ->
                     initialState
                         |> Tuple.first
                         |> .toNumberConfig
-                        |> Expect.equal ToNumberConfig.State.initialState
+                        |> Expect.equal Nothing
 
             -- , test ".initialState produces the setInitialValues command" <|
             --     \() ->
@@ -137,24 +137,47 @@ tests =
                     "UpdateNumberConfig message changes state.toNumberConfig"
                   <|
                     \model updateNumberConfigMsg ->
+                        let
+                            toNumberConfig =
+                                Maybe.withDefault ToNumberConfig.State.initialState model.toNumberConfig
+                        in
                         update (Types.UpdateNumberConfig updateNumberConfigMsg) model
                             |> Tuple.first
                             |> .toNumberConfig
                             |> Expect.equal
-                                (Tuple.first <| ToNumberConfig.State.update updateNumberConfigMsg model.toNumberConfig)
+                                (Just (Tuple.first (ToNumberConfig.State.update updateNumberConfigMsg toNumberConfig)))
                 ]
             , describe "NonPrimeGenerated message"
-                [ fuzz2
+                [ fuzz3
                     model
                     Fuzzers.Basic.imageNumber
-                    "ImageSelected message does not change state"
+                    (Fuzz.tuple ( Fuzzers.ToNumberConfig.model, Fuzzers.ToNumberConfig.model ))
+                    "With number config already set"
                   <|
-                    \model imageNumber ->
-                        update (Types.NonPrimeGenerated imageNumber) model
+                    \model imageNumber ( toNumberConfig1, toNumberConfig2 ) ->
+                        let
+                            tweakedModel =
+                                { model | toNumberConfig = Just toNumberConfig2 }
+                        in
+                        update (Types.NonPrimeGenerated imageNumber toNumberConfig1) tweakedModel
+                            |> Tuple.first
+                            |> Expect.equal
+                                { tweakedModel
+                                    | nonPrime = Just imageNumber
+                                }
+                , fuzz3
+                    model
+                    Fuzzers.Basic.imageNumber
+                    Fuzzers.ToNumberConfig.model
+                    "Update sets number config if not yet set"
+                  <|
+                    \model imageNumber toNumberConfig ->
+                        update (Types.NonPrimeGenerated imageNumber toNumberConfig) { model | toNumberConfig = Nothing }
                             |> Tuple.first
                             |> Expect.equal
                                 { model
                                     | nonPrime = Just imageNumber
+                                    , toNumberConfig = Just toNumberConfig
                                 }
                 ]
             ]

@@ -4,6 +4,7 @@ import DisplayPanel
 import Html exposing (Html, node)
 import InteractionPanel
 import Lib
+import ToNumberConfig.State
 import Types
 
 
@@ -14,6 +15,9 @@ view model =
         canGoNext =
             Lib.saturateStageChange model 1 == 1
 
+        toNumberConfig =
+            Maybe.withDefault ToNumberConfig.State.initialState model.toNumberConfig
+
         displayProps =
             { stage = model.stage
             , canGoNext = canGoNext
@@ -23,13 +27,13 @@ view model =
                     |> Maybe.map
                         (\number ->
                             { number = number
-                            , width = model.toNumberConfig.width.value
+                            , width = toNumberConfig.width.value
                             }
                         )
             , primeImage =
                 case model.prime of
                     Just (Types.FoundPrime { primeNumber }) ->
-                        Types.Loaded { number = primeNumber, width = model.toNumberConfig.width.value }
+                        Types.Loaded { number = primeNumber, width = toNumberConfig.width.value }
 
                     Just (Types.InProgress _) ->
                         Types.Loading
@@ -45,7 +49,7 @@ view model =
             { stage = model.stage
             , canGoNext = canGoNext
             , canGoBack = Lib.saturateStageChange model -1 == -1
-            , toNumberConfig = model.toNumberConfig
+            , toNumberConfig = toNumberConfig
             , primeError =
                 case model.prime of
                     Just (Types.PrimeError e) ->

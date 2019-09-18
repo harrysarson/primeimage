@@ -30,7 +30,7 @@ model =
         Types.Model
         (Fuzz.intRange 0 (Config.maxStage - 1))
         |> Fuzz.andMap image
-        |> Fuzz.andMap Fuzzers.ToNumberConfig.model
+        |> Fuzz.andMap (Fuzz.maybe Fuzzers.ToNumberConfig.model)
         |> Fuzz.andMap (Fuzz.maybe imageNumber)
         |> Fuzz.andMap (Fuzz.maybe (Fuzz.constant (Types.InProgress [])))
 

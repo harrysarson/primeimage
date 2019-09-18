@@ -1,6 +1,6 @@
 /* global _, ClipboardJS */
 import {Elm} from '../built/elm.js'; // eslint-disable-line import/no-unresolved
-import {getImageData, quantise} from './create-non-prime.js';
+import {getImageData, quantise, guessLevels} from './create-non-prime.js';
 import {GreyImageData} from './grey-image-data.js';
 import {resizeText} from './resize-text.js';
 import {runWhen} from './run-when.js';
@@ -36,34 +36,48 @@ primeSearchWorker.addEventListener('message', ({data}) => {
 });
 
 app.ports.requestNonPrime.subscribe(debounce(async ({toNumberConfig, image}) => {
-  const {
-    width: {value: width},
-    levels: errorableLevels
-  } = toNumberConfig;
-
   const numberLookup = [8, 6, 5, 7];
-
-  const levels = errorableLevels.map(x => x.value);
-
-  if (levels.length + 1 !== numberLookup.length) {
-    app.ports.nonPrimeError.send(
-      `Incorrect number of levels (${levels.length}), expected ${numberLookup.length}`,
-    );
-    return;
-  }
-
+  const expectedNumLevels = numberLookup.length - 1;
   let number;
+  let width;
+  let levels;
   try {
-    const color = await getImageData(image.contents, width);
+    let color;
+    if (toNumberConfig === null) {
+      color = await getImageData(image.contents, null);
+      width = color.width;
+    } else {
+      width = toNumberConfig.width.value;
+      color = await getImageData(image.contents, width);
+    }
+
     const grey = GreyImageData.fromColorImage(color);
+    if (toNumberConfig === null) {
+      levels = guessLevels(grey, expectedNumLevels);
+    } else {
+      const errorableLevels = toNumberConfig.levels;
+      levels = errorableLevels.map(x => x.value);
+    }
+
+    if (levels.length !== expectedNumLevels) {
+      app.ports.nonPrimeError.send(
+        `Incorrect number of levels (${levels.length}), expected ${expectedNumLevels}`,
+      );
+      return;
+    }
+
     const quantised = quantise(grey.data, new Uint8Array(grey.data.length), levels);
     number = quantised.map(x => numberLookup[x]);
   } catch (error) {
     app.ports.nonPrimeError.send(`${error}`);
-    return;
+    throw error;
   }
 
-  app.ports.nonPrimeGenerated.send(number.join(''));
+  app.ports.nonPrimeGenerated.send({
+    nonPrime: number.join(''),
+    width,
+    levels
+  });
 }), 100);
 
 app.ports.setCssProp.subscribe(([selector, prop, value]) => {

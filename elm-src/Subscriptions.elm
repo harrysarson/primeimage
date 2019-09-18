@@ -1,5 +1,6 @@
 module Subscriptions exposing (subscriptions)
 
+import Array
 import Browser.Events
 import Json.Decode
 import NumberString
@@ -28,7 +29,17 @@ toDirection string =
 subscriptions : Types.Model -> Sub Types.Msg
 subscriptions _ =
     Sub.batch
-        [ Ports.nonPrimeGenerated (NumberString.fromString >> Types.NonPrimeGenerated)
+        [ Ports.nonPrimeGenerated
+            (\{ nonPrime, width, levels } ->
+                Types.NonPrimeGenerated
+                    (NumberString.fromString nonPrime)
+                    { width = { value = width, attemptedValue = String.fromInt width, error = Nothing }
+                    , levels =
+                        levels
+                            |> Array.fromList
+                            |> Array.map (\level -> { value = level, attemptedValue = String.fromInt level, error = Nothing })
+                    }
+            )
         , Ports.nonPrimeError Types.NonPrimeError
         , Ports.onPrimeResponse Types.PrimeResponse
         , Browser.Events.onKeyDown keyDecoder
