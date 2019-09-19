@@ -1,6 +1,12 @@
 & {
   display: flex;
   flex-direction: column;
+
+  > * {
+    flex: 1 0 auto;
+    height: 100%;
+    overflow: hidden;
+  }
 }
 
 .image-display {
@@ -50,6 +56,7 @@
     width: 100%;
     max-width: calc(var(--panel-width) * 2);
     height: var(--height);
+    max-height: var(--height);
     margin: 0 auto;
     overflow: visible;
     font-size: 2em;
@@ -86,11 +93,13 @@
 }
 
 .menu-bar {
+  position: absolute;
   right: 0;
   bottom: 0;
   z-index: 2;
   display: flex;
   justify-content: flex-end;
+  width: 100%;
   padding: calc(1.5 * var(--padding));
   background: black;
 

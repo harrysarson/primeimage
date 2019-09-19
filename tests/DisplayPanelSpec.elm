@@ -70,11 +70,16 @@ tests =
                     [ Query.has [ class "main-panel" ]
                     , Query.children []
                         >> Expect.all
-                            [ Query.count (Expect.equal 2)
+                            [ Query.count (Expect.equal 1)
                             , Query.index 0
-                                >> Query.has [ class "image-display" ]
-                            , Query.index 1
-                                >> Query.has [ class "menu-bar" ]
+                                >> Query.children []
+                                >> Expect.all
+                                    [ Query.count (Expect.equal 2)
+                                    , Query.index 0
+                                        >> Query.has [ class "image-display" ]
+                                    , Query.index 1
+                                        >> Query.has [ class "menu-bar" ]
+                                    ]
                             ]
                     ]
         , fuzz props "Displays should have the correct contents" <|

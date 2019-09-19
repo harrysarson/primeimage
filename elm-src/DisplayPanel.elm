@@ -27,21 +27,24 @@ view props =
     in
     div [ class "main-panel" ]
         [ div
-            [ class "image-display stage-selecting"
-            ]
-            (List.map
-                (div <|
-                    [ onClick (Types.ChangeStage 1) ]
-                        ++ (if not props.canGoNext then
-                                [ class "disabled" ]
+            []
+            [ div
+                [ class "image-display"
+                ]
+                (List.map
+                    (div <|
+                        [ onClick (Types.ChangeStage 1) ]
+                            ++ (if not props.canGoNext then
+                                    [ class "disabled" ]
 
-                            else
-                                []
-                           )
+                                else
+                                    []
+                            )
+                    )
+                    (displays props)
                 )
-                (displays props)
-            )
-        , menuView menuProps
+            , menuView menuProps
+            ]
         ]
 
 
