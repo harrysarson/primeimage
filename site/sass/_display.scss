@@ -21,7 +21,7 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
-  padding: var(--padding);
+  padding: var(--padding) calc(7 * var(--padding));
   overflow: visible;
   transform:
     translateY(
@@ -48,8 +48,8 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: var(--height);
-    max-height: var(--height);
+    max-width: calc(var(--panel-width) * 2);
+    height: var(--height);
     margin: 0 auto;
     overflow: visible;
     font-size: 2em;
