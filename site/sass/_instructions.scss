@@ -29,4 +29,15 @@ p {
       width: 100%;
     }
   }
+
+  .prime-progress {
+    position: relative;
+    height: 1.4em;
+    margin: var(--padding) 0;
+    overflow: hidden;
+    background-image: linear-gradient(to left, black 50%, transparent 50%);
+    background-position: right calc((var(--prime-progress) - 1) * 100%) bottom 0;
+    background-size: 200%;
+    border: 0.2em solid black;
+  }
 }

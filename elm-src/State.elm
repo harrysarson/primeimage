@@ -154,15 +154,58 @@ update msg model =
             in
             case decoded of
                 Ok response ->
+                    let
+                        _ =
+                            Debug.log "status update" response
+                    in
                     { model | prime = Just response }
                         |> Cmd.Extra.with
                             (case response of
-                                Types.InProgress statusUpdate ->
+                                Types.InProgress status ->
                                     let
-                                        _ =
-                                            Debug.log "status update" statusUpdate
+                                        checked =
+                                            status
+                                                |> List.indexedMap Tuple.pair
+                                                |> List.foldr
+                                                    (\( _, swapsStatus ) checkedBySwapsSoFar ->
+                                                        checkedBySwapsSoFar
+                                                            + (swapsStatus
+                                                                |> Maybe.map .combinationsChecked
+                                                                |> Maybe.withDefault 0
+                                                              )
+                                                    )
+                                                    0
+
+                                        expected =
+                                            model.nonPrime
+                                                |> Maybe.map
+                                                    (\img ->
+                                                        let
+                                                            digits =
+                                                                String.length (NumberString.toString img)
+                                                        in
+                                                        expectedChecks digits
+                                                    )
+                                                |> Maybe.withDefault 0
+
+                                        fraction =
+                                            toFloat checked / toFloat (checked + expected)
+
+                                        {- Why do we square the fraction?
+
+                                           It gives a more linear estimate of progress (looks nicer and
+                                           is less fustrating for users)
+                                        -}
+                                        squaredFraction =
+                                            fraction ^ 2
                                     in
-                                    Cmd.none
+                                    Cmd.batch
+                                        [ Ports.setCssProp
+                                            ( ".prime-progress"
+                                            , "--prime-progress"
+                                            , String.fromFloat squaredFraction
+                                            )
+                                        ]
 
                                 Types.FoundPrime _ ->
                                     Ports.resizeImageNumber ()
@@ -182,3 +225,52 @@ update msg model =
                     in
                     { model | prime = Just (Types.PrimeError err) }
                         |> Cmd.Extra.with (Ports.logError err)
+
+
+
+-- case model.prime of
+--                     Just (Types.InProgress status) ->
+--                         Just
+--                             { checked =
+--                                 status
+--                                     |> List.indexedMap Tuple.pair
+--                                     |> List.foldr
+--                                         (\(_, swapsStatus) checked ->
+--                                             checked + (swapsStatus
+--                                                 |> Maybe.map .combinationsChecked
+--                                                 |> Maybe.withDefault 0
+--                                             )
+--                                         )
+--                                         0
+--                             , expected =
+--                                 model.nonPrime
+--                                     |> Maybe.map
+--                                         (\img ->
+--                                             let
+--                                                 digits = String.length (NumberString.toString img)
+--                                             in
+--                                                 expectedChecks digits
+--                                         )
+--                                     |> Maybe.withDefault 0
+--                             }
+--                     _ ->
+--                         Nothing
+
+
+expectedChecks : Int -> Int
+expectedChecks digits =
+    let
+        primeProb =
+            logBase 10 e / toFloat digits
+
+        weOnlyCheckOddNumbers =
+            2
+
+        roundSignificantFigures sigFigs x =
+            let
+                factor =
+                    10 ^ (floor (logBase 10 x) + 1 - sigFigs)
+            in
+            round (x / toFloat factor) * factor
+    in
+    roundSignificantFigures 2 (1 / primeProb / weOnlyCheckOddNumbers)

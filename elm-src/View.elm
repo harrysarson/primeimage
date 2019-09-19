@@ -64,6 +64,13 @@ view model =
 
                     _ ->
                         False
+            , primeFoundLog2Prob =
+                case model.prime of
+                    Just (Types.FoundPrime { log2ProbPrime }) ->
+                        Just log2ProbPrime
+
+                    _ ->
+                        Nothing
             }
     in
     node "main"

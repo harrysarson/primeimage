@@ -1,6 +1,6 @@
 /* eslint-env worker */
 
-const MAX_ITERATIONS_BETWEEN_PRINT = 50;
+const MAX_ITERATIONS_BETWEEN_PRINT = 10;
 
 const exports = {};
 
@@ -145,7 +145,9 @@ function * findCandidateWithProgress(input, {reps, startingSwaps, swapStride}) {
       } while (findRes === 0);
 
       if (findRes === 1 || findRes === 2) {
-        const log2ProbPrime = findRes === 2 ? 0 : 0.25 ** reps;
+        // TODO: fix up naming here. This variable stores the base 2 log of the
+        // probabilty that the number is **not** prime
+        const log2ProbPrime = findRes === 2 ? -Infinity : -2 * reps;
         return {
           log2ProbPrime,
           primeNumber: PrimeSearch.UTF8ToString(str) // eslint-disable-line new-cap

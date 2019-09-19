@@ -20,6 +20,7 @@ type alias Props =
     , toNumberConfig : ToNumberConfig.Types.Model
     , primeError : Maybe String
     , fetchingPrime : Bool
+    , primeFoundLog2Prob : Maybe Float
     }
 
 
@@ -128,32 +129,44 @@ instructions props =
             :: (ToNumberConfig.Types.errorsInModel props.toNumberConfig
                     |> List.map makeErrorP
                )
-        , [ h1 [] [ text "Create a Prime Number" ]
-          , p [] [ text "Click below to find a prime number similar to the current number." ]
-          , p [] [ text "Please be aware that if the width is much more than 20, then this could take a very long time." ]
-          ]
-            ++ (props.primeError
-                    |> Maybe.map
-                        (\error ->
-                            [ p
-                                [ class "error-in-field" ]
-                                [ text <| "Error finding a prime:"
-                                , br [] []
-                                , text <| error
-                                ]
+        , [ Just <| h1 [] [ text "Create a Prime Number" ]
+          , Just <| p [] [ text "Click below to find a prime number similar to the current number." ]
+          , Just <| p [] [ text "Please be aware that if the width is much more than 20, then this could take a very long time." ]
+          , props.primeError
+                |> Maybe.map
+                    (\error ->
+                        p
+                            [ class "error-in-field" ]
+                            [ text <| "Error finding a prime:"
+                            , br [] []
+                            , text <| error
                             ]
-                        )
-                    |> Maybe.withDefault []
-               )
-            ++ (if props.fetchingPrime then
-                    [ p
-                        []
-                        [ text "Calculating prime number..." ]
-                    ]
+                    )
+          , if props.fetchingPrime then
+                Just
+                    (p []
+                        [ text "Calculating prime number ..."
+                        , div
+                            [ class "prime-progress"
+                            ]
+                            []
+                        ]
+                    )
 
-                else
-                    []
-               )
+            else
+                Nothing
+          , props.primeFoundLog2Prob
+                |> Maybe.map
+                    (\prob ->
+                        p []
+                            [ text "Found a prime number!"
+                            , text "(The probability that the number is not prime is less than 1/10^"
+                            , text (String.fromInt (round (-1 * logBase 10 e * prob)))
+                            , text ".)"
+                            ]
+                    )
+          ]
+            |> List.filterMap identity
         ]
 
 

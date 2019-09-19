@@ -39,15 +39,17 @@ props =
                 |> Random.Extra.andMap (Random.constant sampleToNumberConfig)
                 |> Random.Extra.andMap (Random.constant Nothing)
                 |> Random.Extra.andMap Random.Extra.bool
+                |> Random.Extra.andMap (Random.Extra.maybe Random.Extra.bool (Random.float -50 50))
 
         shrinker =
-            \{ stage, canGoBack, canGoNext, toNumberConfig, primeError, fetchingPrime } ->
+            \{ stage, canGoBack, canGoNext, toNumberConfig, primeError, fetchingPrime, primeFoundLog2Prob } ->
                 Shrink.map Props (Shrink.int stage)
                     |> Shrink.andMap (Shrink.bool canGoBack)
                     |> Shrink.andMap (Shrink.bool canGoNext)
                     |> Shrink.andMap (Shrink.noShrink toNumberConfig)
                     |> Shrink.andMap (Shrink.maybe Shrink.noShrink primeError)
                     |> Shrink.andMap (Shrink.bool fetchingPrime)
+                    |> Shrink.andMap (Shrink.maybe Shrink.float primeFoundLog2Prob)
     in
     Fuzz.custom generator shrinker
 
