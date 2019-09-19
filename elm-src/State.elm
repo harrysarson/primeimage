@@ -58,7 +58,7 @@ update msg model =
             in
             { model | stage = newStage }
                 |> Cmd.Extra.with
-                    (Ports.setCssProp ( ".display-panel", "--show-stage", String.fromInt newStage ))
+                    (Ports.setCssProp ( ".image-display", "--show-stage", String.fromInt newStage ))
                 |> Cmd.Extra.add requestNonPrimeCmd
 
         Types.ImageSelected file ->

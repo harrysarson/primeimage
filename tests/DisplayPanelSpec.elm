@@ -67,11 +67,12 @@ tests =
             view
                 >> Query.fromHtml
                 >> Expect.all
-                    [ Query.children []
+                    [ Query.has [ class "main-panel" ]
+                    , Query.children []
                         >> Expect.all
                             [ Query.count (Expect.equal 2)
                             , Query.index 0
-                                >> Query.has [ class "display-panel" ]
+                                >> Query.has [ class "image-display" ]
                             , Query.index 1
                                 >> Query.has [ class "menu-bar" ]
                             ]
@@ -79,7 +80,7 @@ tests =
         , fuzz props "Displays should have the correct contents" <|
             view
                 >> Query.fromHtml
-                >> Query.find [ class "display-panel" ]
+                >> Query.find [ class "image-display" ]
                 >> Query.children []
                 >> queryInOrder
                     [ Query.find [ class "image-number" ]

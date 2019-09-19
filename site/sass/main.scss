@@ -31,6 +31,7 @@ main {
   --horizontal-spacing: 1em;
   --padding: 10px;
   --border-width: 3px;
+  --interaction-font-size: 1.5em;
 
   display: flex;
   flex: 1 0;
@@ -40,7 +41,6 @@ main {
 
   > * {
     position: relative;
-    flex: 3 1 auto;
     margin: calc(var(--horizontal-spacing) / 2);
     overflow: hidden;
     background: black;
@@ -61,20 +61,12 @@ button {
   flex: 0 0 var(--panel-width);
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--padding) / 2);
+  padding: var(--padding);
 
   & > * {
     margin: calc(var(--padding) / 2);
     overflow: hidden;
   }
-}
-
-.menu-bar {
-  position: absolute;
-  right: var(--border-width);
-  bottom: var(--border-width);
-  background: grey;
-  border-top: var(--border-width) solid black;
 }
 
 .interaction-control {
@@ -86,7 +78,7 @@ button {
   > button {
     position: relative;
     flex: 0 1;
-    font-size: 2em;
+    font-size: var(--interaction-font-size);
   }
 }
 
@@ -98,7 +90,9 @@ button {
   @import "interface";
 }
 
-.display-panel {
+.main-panel {
+  flex: 1 0 auto;
+
   @import "display";
 }
 

@@ -1,4 +1,9 @@
 & {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-display {
   --show-stage: 0;
   --stages-to-show-at-a-time: 2;
   --position-of-selected-stage: 0.5;
@@ -11,9 +16,11 @@
 
   @import "spinner";
 
+  z-index: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
   padding: var(--padding);
   overflow: visible;
   transform:
@@ -76,4 +83,24 @@
   line-height: 0.85em;
   white-space: pre;
   text-align: center;
+}
+
+.menu-bar {
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding: calc(1.5 * var(--padding));
+  background: black;
+
+  > button {
+    flex: 1;
+    flex-grow: 0;
+    font-size: var(--interaction-font-size);
+
+    &:not(:last-child) {
+      margin-right: calc(1.5 * var(--padding));
+    }
+  }
 }

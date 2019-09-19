@@ -96,7 +96,7 @@ function resizeAllTexts() {
 
 (async () => {
   try {
-    await runWhen(() => document.querySelector('.display-panel') !== null, 5);
+    await runWhen(() => document.querySelector('.image-display') !== null, 5);
   } catch (error) {
     console.log(`Given up trying to automatically resize image number text due to error:\n${error}`);
     return;

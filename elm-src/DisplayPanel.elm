@@ -1,7 +1,7 @@
 module DisplayPanel exposing (Props, view)
 
 import Config
-import Html exposing (button, div, img, span, text)
+import Html exposing (Html, button, div, img, span, text)
 import Html.Attributes exposing (attribute, class, src, title)
 import Html.Events exposing (onClick)
 import NumberString
@@ -19,11 +19,15 @@ type alias Props =
     }
 
 
-view : Props -> Html.Html Types.Msg
+view : Props -> Html Types.Msg
 view props =
-    div []
+    let
+        menuProps =
+            { stage = props.stage }
+    in
+    div [ class "main-panel" ]
         [ div
-            [ class "display-panel stage-selecting"
+            [ class "image-display stage-selecting"
             ]
             (List.map
                 (div <|
@@ -37,28 +41,11 @@ view props =
                 )
                 (displays props)
             )
-        , div
-            [ class "menu-bar" ]
-            [ button
-                [ attribute "data-clipboard-target"
-                    (".display-panel > div:nth-child("
-                        ++ String.fromInt (props.stage + 1)
-                        ++ ") > *"
-                    )
-                , class
-                    (if Set.member props.stage Config.copyableStages then
-                        "copy-me"
-
-                     else
-                        "disabled"
-                    )
-                ]
-                [ text "COPY" ]
-            ]
+        , menuView menuProps
         ]
 
 
-displays : Props -> List (List (Html.Html Types.Msg))
+displays : Props -> List (List (Html Types.Msg))
 displays props =
     let
         imagePreview =
@@ -155,3 +142,29 @@ imageNumber2displayString imageNumber =
     imageNumber
         |> imageNumber2rows
         |> String.join "\n"
+
+
+type alias MenuProps =
+    { stage : Int }
+
+
+menuView : MenuProps -> Html Types.Msg
+menuView props =
+    div
+        [ class "menu-bar" ]
+        [ button
+            [ attribute "data-clipboard-target"
+                (".image-display > div:nth-child("
+                    ++ String.fromInt (props.stage + 1)
+                    ++ ") > *"
+                )
+            , class
+                (if Set.member props.stage Config.copyableStages then
+                    "copy-me"
+
+                 else
+                    "disabled"
+                )
+            ]
+            [ text "COPY" ]
+        ]
