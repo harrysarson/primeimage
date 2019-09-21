@@ -39,6 +39,7 @@ type alias Model =
     , toNumberConfig : Maybe ToNumberConfig.Types.Model
     , nonPrime : Maybe NumberString.T
     , prime : Maybe PrimeResult
+    , showingInfo : Bool
     }
 
 
@@ -76,3 +77,5 @@ type Msg
     | RequestPrime
     | PrimeResponse Json.Decode.Value
     | SelectExampleImage ExampleOption
+    | ToggleInfo
+    | CloseInfo

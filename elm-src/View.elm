@@ -43,6 +43,8 @@ view model =
 
                     Nothing ->
                         Types.NotLoading
+            , showingInfo =
+                model.showingInfo
             }
 
         interactionProps =

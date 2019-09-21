@@ -33,6 +33,7 @@ model =
         |> Fuzz.andMap (Fuzz.maybe Fuzzers.ToNumberConfig.model)
         |> Fuzz.andMap (Fuzz.maybe imageNumber)
         |> Fuzz.andMap (Fuzz.maybe (Fuzz.constant (Types.InProgress [])))
+        |> Fuzz.andMap Fuzz.bool
 
 
 image =

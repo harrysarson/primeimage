@@ -4,6 +4,7 @@ import Config
 import Html exposing (Html, button, div, img, span, text)
 import Html.Attributes exposing (attribute, class, src, title)
 import Html.Events exposing (onClick)
+import InfoPanel
 import NumberString
 import Resources
 import Set
@@ -16,6 +17,7 @@ type alias Props =
     , imagePreview : Maybe Types.Image
     , nonPrimeImage : Maybe Types.ImageNumber
     , primeImage : Types.LoadedResource Types.ImageNumber
+    , showingInfo : Bool
     }
 
 
@@ -26,26 +28,36 @@ view props =
             { stage = props.stage }
     in
     div [ class "main-panel" ]
-        [ div
-            []
-            [ div
-                [ class "image-display"
-                ]
-                (List.map
-                    (div <|
-                        [ onClick (Types.ChangeStage 1) ]
-                            ++ (if not props.canGoNext then
-                                    [ class "disabled" ]
+        (List.filterMap
+            identity
+            [ Just
+                (div
+                    [ class "display-panel" ]
+                    [ div
+                        [ class "image-display"
+                        ]
+                        (List.map
+                            (div <|
+                                [ onClick (Types.ChangeStage 1) ]
+                                    ++ (if not props.canGoNext then
+                                            [ class "disabled" ]
 
-                                else
-                                    []
+                                        else
+                                            []
+                                       )
                             )
-                    )
-                    (displays props)
+                            (displays props)
+                        )
+                    , menuView menuProps
+                    ]
                 )
-            , menuView menuProps
+            , if props.showingInfo then
+                Just <| InfoPanel.view
+
+              else
+                Nothing
             ]
-        ]
+        )
 
 
 displays : Props -> List (List (Html Types.Msg))
@@ -170,4 +182,7 @@ menuView props =
                 )
             ]
             [ text "COPY" ]
+        , button
+            [ onClick Types.ToggleInfo ]
+            [ text "INFO" ]
         ]

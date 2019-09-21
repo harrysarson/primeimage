@@ -5,6 +5,7 @@ import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer)
 import NumberString
 import Random
+import Random.Extra
 import Resources
 import Shrink
 import State
@@ -29,12 +30,13 @@ props =
             , contents = "A data url"
             }
 
-        constructProps state canGoNext imagePreview nonPrimeImage primeImage =
+        constructProps state canGoNext nonPrimeImage primeImage showingInfo =
             { stage = state
             , canGoNext = canGoNext
-            , imagePreview = imagePreview
+            , imagePreview = Just displayImage
             , nonPrimeImage = nonPrimeImage
             , primeImage = primeImage
+            , showingInfo = showingInfo
             }
 
         generator : Random.Generator Props
@@ -43,17 +45,17 @@ props =
                 constructProps
                 (Random.int 0 10)
                 randomBool
-                (Random.constant (Just displayImage))
                 (Random.constant (Just sampleNonPrimeImage))
                 (Random.constant (Types.Loaded sampleNonPrimeImage))
+                Random.Extra.bool
 
         shrinker =
-            \{ stage, canGoNext, imagePreview, nonPrimeImage, primeImage } ->
+            \{ stage, canGoNext, nonPrimeImage, primeImage, showingInfo } ->
                 Shrink.map constructProps (Shrink.int stage)
                     |> Shrink.andMap (Shrink.bool canGoNext)
-                    |> Shrink.andMap (Shrink.noShrink imagePreview)
                     |> Shrink.andMap (Shrink.noShrink nonPrimeImage)
                     |> Shrink.andMap (Shrink.noShrink primeImage)
+                    |> Shrink.andMap (Shrink.bool showingInfo)
     in
     Fuzz.custom
         generator
@@ -70,7 +72,9 @@ tests =
                     [ Query.has [ class "main-panel" ]
                     , Query.children []
                         >> Expect.all
-                            [ Query.count (Expect.equal 1)
+                            [ Query.count (Expect.equal if pr)
+                            , Query.index 0
+                                >> Query.has [ class "display-panel" ]
                             , Query.index 0
                                 >> Query.children []
                                 >> Expect.all
@@ -80,6 +84,8 @@ tests =
                                     , Query.index 1
                                         >> Query.has [ class "menu-bar" ]
                                     ]
+                            , Query.index 1
+                                >> Query.has [ class "information-panel" ]
                             ]
                     ]
         , fuzz props "Displays should have the correct contents" <|

@@ -43,9 +43,7 @@ main {
 
   > * {
     position: relative;
-    margin: calc(var(--horizontal-spacing) / 2);
     overflow: hidden;
-    background: black;
   }
 }
 
@@ -55,7 +53,8 @@ button {
   @include nice-button($border-width: var(--border-width));
 }
 
-.interaction-panel {
+.interaction-panel,
+.information-panel {
   --box-padding: 0.6em 0.3em;
 
   display: flex;
@@ -83,8 +82,16 @@ button {
   }
 }
 
-.interaction-instructions {
+.interaction-instructions,
+.information-panel > *:first-child {
   @import "instructions";
+}
+
+.interaction-panel,
+.information-panel,
+.display-panel {
+  margin: calc(var(--horizontal-spacing) / 2);
+  background: black;
 }
 
 .interaction-interface {

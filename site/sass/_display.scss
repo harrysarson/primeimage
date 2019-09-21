@@ -1,12 +1,16 @@
 & {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
-  > * {
-    flex: 1 0 auto;
-    height: 100%;
-    overflow: hidden;
+  @media (max-aspect-ratio: 5/4) {
+    flex-direction: column;
   }
+}
+
+.display-panel {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .image-display {

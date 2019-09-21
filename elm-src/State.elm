@@ -25,6 +25,7 @@ initialState =
     , toNumberConfig = Nothing
     , nonPrime = Nothing
     , prime = Nothing
+    , showingInfo = False
     }
         |> Cmd.Extra.pure
 
@@ -226,35 +227,13 @@ update msg model =
                     { model | prime = Just (Types.PrimeError err) }
                         |> Cmd.Extra.with (Ports.logError err)
 
+        Types.ToggleInfo ->
+            { model | showingInfo = not model.showingInfo }
+                |> Cmd.Extra.pure
 
-
--- case model.prime of
---                     Just (Types.InProgress status) ->
---                         Just
---                             { checked =
---                                 status
---                                     |> List.indexedMap Tuple.pair
---                                     |> List.foldr
---                                         (\(_, swapsStatus) checked ->
---                                             checked + (swapsStatus
---                                                 |> Maybe.map .combinationsChecked
---                                                 |> Maybe.withDefault 0
---                                             )
---                                         )
---                                         0
---                             , expected =
---                                 model.nonPrime
---                                     |> Maybe.map
---                                         (\img ->
---                                             let
---                                                 digits = String.length (NumberString.toString img)
---                                             in
---                                                 expectedChecks digits
---                                         )
---                                     |> Maybe.withDefault 0
---                             }
---                     _ ->
---                         Nothing
+        Types.CloseInfo ->
+            { model | showingInfo = False }
+                |> Cmd.Extra.pure
 
 
 expectedChecks : Int -> Int
