@@ -36,7 +36,7 @@
     "karma-mocha": "1.3.0",
     "karma-mocha-reporter": "2.2.5",
     "karma-webpack": "4.0.2",
-    "mocha": "6.2.2",
+    "mocha": "7.0.1",
     "sass": "1.24.4",
     "serve": "11.2.0",
     "stylelint": "12.0.1",
