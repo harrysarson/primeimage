@@ -39,7 +39,7 @@
     "mocha": "7.1.0",
     "sass": "1.26.2",
     "serve": "11.2.0",
-    "stylelint": "13.2.0",
+    "stylelint": "13.2.1",
     "stylelint-config-rational-order": "0.1.2",
     "stylelint-config-standard": "20.0.0",
     "stylelint-scss": "3.14.1",
