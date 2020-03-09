@@ -3,7 +3,7 @@
 Turn any image into an prime number.
 See https://harrysarson.github.io/primeimage.
 
-[![Build Status](https://travis-ci.com/harrysarson/primeimage.svg?branch=master)](https://travis-ci.com/harrysarson/primeimage) [![Greenkeeper badge](https://badges.greenkeeper.io/harrysarson/primeimage.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/harrysarson/primeimage.svg?branch=master)](https://travis-ci.com/harrysarson/primeimage) 
 
 ## Installation Instructions
 
