@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: elm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: ianmackenzie/elm-units
+    versions:
+    - 2.7.0
+    - 2.8.0
+  - dependency-name: GlobalWebIndex/cmd-extra
+    versions:
+    - 1.3.0
